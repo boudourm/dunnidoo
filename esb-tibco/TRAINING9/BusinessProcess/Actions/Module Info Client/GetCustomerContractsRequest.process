@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx3="http://www.ooredoo.dz/ws/party/getCustomerContracts" xmlns:pfx2="http://www.tibco.com/schemas/TRAINING/SharedResources/Schemas/XSD/Schema.xsd4" xmlns:pfx="http://www.ooredoo.dz/osp/notification">
+    <xsd:import namespace="http://www.ooredoo.dz/osp/notification" schemaLocation="/SharedResources/Schemas/XSD/HttpSmsRequest.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/schemas/TRAINING/SharedResources/Schemas/XSD/Schema.xsd4" schemaLocation="/SharedResources/Schemas/XSD/NotificationResponse.xsd"/>
+    <xsd:import namespace="http://www.ooredoo.dz/ws/party/getCustomerContracts" schemaLocation="/SharedResources/Schemas/PARTY/GetCustomerContracts.xsd"/>
+    <pd:name>BusinessProcess/Actions/Module Info Client/GetCustomerContractsRequest.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx3:getCustomerContractsRequest"/>
+    <pd:startX>135</pd:startX>
+    <pd:startY>112</pd:startY>
+    <pd:returnBindings>
+        <root>
+            <SEGMENT>
+                <xsl:value-of select="$GetCustomerContractsRequest/ns:ActivityOutput/Body/root/SEGMENT"/>
+            </SEGMENT>
+        </root>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx3:getCustomerContractsResponse"/>
+    <pd:endX>549</pd:endX>
+    <pd:endY>116</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1522147765702</pd:targetNamespace>
+    <pd:activity name="GetCustomerContractsRequest">
+        <pd:type>com.tibco.plugin.jms.JMSQueueRequestReplyActivity</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueRequestReplyActivity</pd:resourceType>
+        <pd:x>332</pd:x>
+        <pd:y>114</pd:y>
+        <config>
+            <PermittedMessageType>XML Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>%%ProcessConfig/GetCustomerContracts/GetCustomerContractsStarter%%</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/SharedResources/Connections/JMS/JMS_Tech_Connection_UAT.sharedjmscon</ConnectionReference>
+            <InDataxsdString ref="pfx3:getCustomerContractsRequest"/>
+            <OutDataxsdString ref="pfx3:getCustomerContractsResponse"/>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <Body>
+                    <root>
+                        <customer_id>
+                            <xsl:value-of select="$Start/root/customer_id"/>
+                        </customer_id>
+                    </root>
+                </Body>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>GetCustomerContractsRequest</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>GetCustomerContractsRequest</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

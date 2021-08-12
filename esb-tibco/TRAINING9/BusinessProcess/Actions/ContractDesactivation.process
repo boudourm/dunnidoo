@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.ooredoo.dz/common/header/v1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx4="http://www.ooredoo.dz/common/exception/v1" xmlns:pfx3="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pfx2="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:pfx="http://www.tibco.com/schemas/TRAINING/SharedResources/Schemas/XSD/Schema.xsd6">
+    <xsd:import namespace="http://www.tibco.com/schemas/TRAINING/SharedResources/Schemas/XSD/Schema.xsd6" schemaLocation="/SharedResources/Schemas/XSD/SetContractStatus.xsd"/>
+    <xsd:import namespace="http://www.ooredoo.dz/common/exception/v1" schemaLocation="/SharedResources/Schemas/XSD/COMMON/Exception.xsd"/>
+    <pd:name>BusinessProcess/Actions/ContractDesactivation.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx:setContractStatus"/>
+    <pd:startX>175</pd:startX>
+    <pd:startY>142</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>545</pd:endX>
+    <pd:endY>145</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1523524844833</pd:targetNamespace>
+    <pd:activity name="SetContractStatus Requestor">
+        <pd:type>com.tibco.plugin.jms.JMSQueueRequestReplyActivity</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueRequestReplyActivity</pd:resourceType>
+        <pd:x>362</pd:x>
+        <pd:y>152</pd:y>
+        <config>
+            <PermittedMessageType>XML Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>%%Application/JMS/SetContractDesactivation%%</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/SharedResources/Connections/JMS/JMS_Tech_Connection_UAT.sharedjmscon</ConnectionReference>
+            <InDataxsdString ref="pfx:setContractStatus"/>
+            <OutDataxsdString>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element ref="pfx:setContractStatusResponse" minOccurs="0"/>
+                            <xsd:element ref="pfx4:Exception" minOccurs="0"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </OutDataxsdString>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <JMSType>
+                    <xsl:value-of select="&quot;JMS Sync&quot;"/>
+                </JMSType>
+                <requestTimeout>
+                    <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/Application/JMS/RetryRequesterTimeOut"/>
+                </requestTimeout>
+                <Body>
+                    <xsl:copy-of select="$Start/pfx:setContractStatus"/>
+                </Body>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Log">
+        <pd:type>com.tibco.pe.core.WriteToLogActivity</pd:type>
+        <pd:resourceType>ae.activities.log</pd:resourceType>
+        <pd:x>363</pd:x>
+        <pd:y>329</pd:y>
+        <config>
+            <role>User</role>
+        </config>
+        <pd:inputBindings>
+            <pfx2:ActivityInput>
+                <message>
+                    <xsl:value-of select="$SetContractStatus-Requestor/ns:ActivityOutput/Body/root/pfx4:Exception/pfx4:Msg"/>
+                </message>
+                <xsl:if test="$SetContractStatus-Requestor/ns:ActivityOutput/Body/root/pfx4:Exception/pfx4:MsgCode">
+                    <msgCode>
+                        <xsl:value-of select="$SetContractStatus-Requestor/ns:ActivityOutput/Body/root/pfx4:Exception/pfx4:MsgCode"/>
+                    </msgCode>
+                </xsl:if>
+            </pfx2:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Generate Error">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>531</pd:x>
+        <pd:y>329</pd:y>
+        <config>
+            <faultName/>
+        </config>
+        <pd:inputBindings>
+            <pfx3:ActivityInput>
+                <xsl:if test="$SetContractStatus-Requestor/ns:ActivityOutput/Body/root/pfx4:Exception/pfx4:Msg">
+                    <message>
+                        <xsl:value-of select="$SetContractStatus-Requestor/ns:ActivityOutput/Body/root/pfx4:Exception/pfx4:Msg"/>
+                    </message>
+                </xsl:if>
+                <xsl:if test="$SetContractStatus-Requestor/ns:ActivityOutput/Body/root/pfx4:Exception/pfx4:MsgCode">
+                    <messageCode>
+                        <xsl:value-of select="$SetContractStatus-Requestor/ns:ActivityOutput/Body/root/pfx4:Exception/pfx4:MsgCode"/>
+                    </messageCode>
+                </xsl:if>
+            </pfx3:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>SetContractStatus Requestor</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SetContractStatus Requestor</pd:from>
+        <pd:to>End</pd:to>
+        <pd:xpathDescription>Otherwise</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SetContractStatus Requestor</pd:from>
+        <pd:to>Log</pd:to>
+        <pd:xpathDescription>Error</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>contains($SetContractStatus-Requestor/ns:ActivityOutput/Body , 'Exception')</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

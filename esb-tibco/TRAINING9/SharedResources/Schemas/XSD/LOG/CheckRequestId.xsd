@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns:tns="http://www.ooredoo.dz/log/checkRequestId"
+	 xmlns:ns0="http://www.ooredoo.dz/common/header/v1"
+	 targetNamespace="http://www.ooredoo.dz/log/checkRequestId"
+	 elementFormDefault="unqualified"
+	 attributeFormDefault="unqualified">
+	<xs:import namespace="http://www.ooredoo.dz/common/header/v1" schemaLocation="../COMMON/Header.xsd"/>
+	<xs:element name="checkRequestIdRequest" type="tns:CheckRequestIdRequest"/>
+	<xs:complexType name="CheckRequestIdRequest">
+		<xs:sequence>
+			<xs:element ref="ns0:Header" minOccurs="0"/>
+			<xs:element name="requestId" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="checkRequestIdResponse" type="tns:CheckRequestIdResponse"/>
+	<xs:complexType name="CheckRequestIdResponse">
+		<xs:sequence>
+			<xs:element name="NbrrequestId" type="xs:double" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

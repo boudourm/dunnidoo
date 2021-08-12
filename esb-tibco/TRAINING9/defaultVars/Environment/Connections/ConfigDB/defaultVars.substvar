@@ -1,0 +1,45 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<repository xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance" xmlns = "http://www.tibco.com/xmlns/repo/types/2002">
+	<globalVariables>
+		<globalVariable>
+			<name>Host</name>
+			<value>10.1.2.16</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1415349688598</modTime>
+		</globalVariable>
+		<globalVariable>
+			<name>Password</name>
+			<value>#!Axmg1766mCHzQsJpfGk0QVb7VYF1tO3jzSHSjl1uLJ4=</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>Password</type>
+			<modTime>1415349688677</modTime>
+		</globalVariable>
+		<globalVariable>
+			<name>Port</name>
+			<value>1521</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1410940553737</modTime>
+		</globalVariable>
+		<globalVariable>
+			<name>UserName</name>
+			<value>ESB_CONFIG</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1415349688724</modTime>
+		</globalVariable>
+		<globalVariable>
+			<name>db_instancename</name>
+			<value>TIBCODEV</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1415349688755</modTime>
+		</globalVariable>
+	</globalVariables>
+</repository>

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://www.tibco.com/schemas/TRAINING/SharedResources/Schemas/XSD/Schema.xsd3">
+    <xsd:import namespace="http://www.tibco.com/schemas/TRAINING/SharedResources/Schemas/XSD/Schema.xsd3"/>
+    <pd:name>SystemProcess/Actions/Bin/GetDunningEligibleCustomersInfo.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="CUSTOMER_ID" type="xsd:integer"/>
+    </pd:startType>
+    <pd:startX>114</pd:startX>
+    <pd:startY>140</pd:startY>
+    <pd:returnBindings>
+        <pfx:DunningEligibleCustomersInfo>
+            <pfx:CUSTCODE>
+                <xsl:value-of select="$JDBC-Query/resultSet/Record[1]/CUSTCODE"/>
+            </pfx:CUSTCODE>
+            <pfx:INVOICE_AMOUNT>
+                <xsl:value-of select="round($JDBC-Query/resultSet/Record[1]/INVOICE_AMOUNT)"/>
+            </pfx:INVOICE_AMOUNT>
+            <pfx:OPEN_AMOUNT>
+                <xsl:value-of select="$JDBC-Query/resultSet/Record[1]/OPEN_AMOUNT"/>
+            </pfx:OPEN_AMOUNT>
+            <pfx:DUE_DATE>
+                <xsl:value-of select="$JDBC-Query/resultSet/Record[1]/DUE_DATE"/>
+            </pfx:DUE_DATE>
+            <pfx:LBC_DATE>
+                <xsl:value-of select="$JDBC-Query/resultSet/Record[1]/LBC_DATE"/>
+            </pfx:LBC_DATE>
+            <pfx:CCLNAME>
+                <xsl:value-of select="$JDBC-Query/resultSet/Record[1]/CCLNAME"/>
+            </pfx:CCLNAME>
+            <pfx:MSISDN>
+                <xsl:value-of select="$JDBC-Query/resultSet/Record[1]/MSISDN"/>
+            </pfx:MSISDN>
+            <pfx:CCEMAIL>
+                <xsl:value-of select="$JDBC-Query/resultSet/Record[1]/CCEMAIL"/>
+            </pfx:CCEMAIL>
+        </pfx:DunningEligibleCustomersInfo>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx:DunningEligibleCustomersInfo"/>
+    <pd:endX>622</pd:endX>
+    <pd:endY>143</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1522143982122</pd:targetNamespace>
+    <pd:activity name="JDBC Query">
+        <pd:type>com.tibco.plugin.jdbc.JDBCQueryActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCQueryActivity</pd:resourceType>
+        <pd:x>349</pd:x>
+        <pd:y>140</pd:y>
+        <config>
+            <timeout>10</timeout>
+            <commit>false</commit>
+            <maxRows>100</maxRows>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <jdbcSharedConfig>/SharedResources/Connections/JDBC/DUNNIDOO_JDBC_Connection_ESB_CONFIG.sharedjdbc</jdbcSharedConfig>
+            <statement>SELECT  CUSTCODE   , INVOICE_AMOUNT, OPEN_AMOUNT  , DUE_DATE , LBC_DATE , CCLNAME , MSISDN , CCEMAIL
+FROM DUNNING_ELIGIBLE_CUSTOMERS
+WHERE CUSTOMER_ID = ?</statement>
+            <Prepared_Param_DataType>
+                <parameter>
+                    <parameterName>CUSTOMER_ID</parameterName>
+                    <dataType>INTEGER</dataType>
+                </parameter>
+            </Prepared_Param_DataType>
+            <oraObjects/>
+            <oraTables/>
+            <QueryOutputCachedSchemaColumns>CUSTCODE</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>INVOICE_AMOUNT</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>2</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>NUMBER</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>OPEN_AMOUNT</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>2</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>NUMBER</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>DUE_DATE</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>93</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>DATE</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>LBC_DATE</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>93</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>DATE</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>CCLNAME</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>MSISDN</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>CCEMAIL</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+        </config>
+        <pd:inputBindings>
+            <jdbcQueryActivityInput>
+                <CUSTOMER_ID>
+                    <xsl:value-of select="$Start/CUSTOMER_ID"/>
+                </CUSTOMER_ID>
+            </jdbcQueryActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>JDBC Query</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>JDBC Query</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

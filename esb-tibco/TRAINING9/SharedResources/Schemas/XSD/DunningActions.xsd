@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="http://www.tibco.com/schemas/TRAINING/SharedResources/Schemas/XSD/Schema.xsd2"
+	 targetNamespace="http://www.tibco.com/schemas/TRAINING/SharedResources/Schemas/XSD/Schema.xsd2"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:element name="DunningAction">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Header" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="TransactionID" type="xs:string" minOccurs="0"/>
+							<xs:element name="TimeStamp" type="xs:string" minOccurs="0"/>
+							<xs:element name="UserAdress" type="xs:string" minOccurs="0"/>
+							<xs:element name="UserName" type="xs:string" minOccurs="0"/>
+							<xs:element name="NotificationParam" minOccurs="0" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="NotificationTemplate" type="xs:string"/>
+										<xs:element name="Msisdn" type="xs:string"/>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="Msisdn" type="xs:string" minOccurs="0"/>
+							<xs:element name="Property1" type="xs:string" minOccurs="0"/>
+							<xs:element name="Property2" type="xs:string" minOccurs="0"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="ACTION_NAME" type="xs:string"/>
+				<xs:element name="ExtraData">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="ID" type="xs:string"/>
+							<xs:element name="VALUE" type="xs:string"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="DunningEligibleCustomersInfo">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="CUSTOMER_ID" type="xs:integer" minOccurs="0"/>
+							<xs:element name="CUSTCODE" type="xs:string" minOccurs="0"/>
+							<xs:element name="CO_ID" type="xs:long" minOccurs="0"/>
+							<xs:element name="INVOICE_AMOUNT" type="xs:integer" minOccurs="0"/>
+							<xs:element name="OPEN_AMOUNT" type="xs:float" minOccurs="0"/>
+							<xs:element name="DUE_DATE" type="xs:string" minOccurs="0"/>
+							<xs:element name="LBC_DATE" type="xs:string" minOccurs="0"/>
+							<xs:element name="CCLNAME" type="xs:string" minOccurs="0"/>
+							<xs:element name="MSISDN" type="xs:string" minOccurs="0"/>
+							<xs:element name="CCEMAIL" type="xs:string" minOccurs="0"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

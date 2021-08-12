@@ -1,0 +1,21 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<repository xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance" xmlns = "http://www.tibco.com/xmlns/repo/types/2002">
+	<globalVariables>
+		<globalVariable>
+			<name>RetryRequesterTimeOut</name>
+			<value>20</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1422958828074</modTime>
+		</globalVariable>
+		<globalVariable>
+			<name>SetContractDesactivation</name>
+			<value>Q.BP.SetContractStatus</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1523528964021</modTime>
+		</globalVariable>
+	</globalVariables>
+</repository>

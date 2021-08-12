@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx="http://www.tibco.com/schemas/TRAINING/SharedResources/Schemas/XSD/Schema.xsd7">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://www.tibco.com/schemas/TRAINING/SharedResources/Schemas/XSD/Schema.xsd7" schemaLocation="/SharedResources/Schemas/XSD/SetIVRFile.xsd"/>
+    <pd:name>BusinessProcess/Actions/SetIVRFile.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx:SetIVRFile"/>
+    <pd:startX>97</pd:startX>
+    <pd:startY>95</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>517</pd:endX>
+    <pd:endY>97</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1523543626196</pd:targetNamespace>
+    <pd:activity name="List Files">
+        <pd:type>com.tibco.plugin.file.ListFilesActivity</pd:type>
+        <pd:resourceType>ae.activities.ListFilesActivity</pd:resourceType>
+        <pd:x>202</pd:x>
+        <pd:y>95</pd:y>
+        <config>
+            <mode>files-and-directories</mode>
+        </config>
+        <pd:inputBindings>
+            <ns:ListFilesActivityConfig>
+                <fileName>
+                    <xsl:value-of select="concat( &quot;C:\IVR\list_dunny&quot; , tib:format-date( 'ddMMyyy',current-date()) , '.csv')"/>
+                </fileName>
+            </ns:ListFilesActivityConfig>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Wirte CSV">
+        <pd:type>com.tibco.plugin.file.FileWriteActivity</pd:type>
+        <pd:resourceType>ae.activities.FileWriteActivity</pd:resourceType>
+        <pd:x>409</pd:x>
+        <pd:y>96</pd:y>
+        <config>
+            <encoding>text</encoding>
+            <compressFile>None</compressFile>
+            <createMissingDirectories>true</createMissingDirectories>
+            <append>true</append>
+        </config>
+        <pd:inputBindings>
+            <ns:WriteActivityInputTextClass>
+                <fileName>
+                    <xsl:value-of select="concat( &quot;C:\IVR\list_dunny&quot; , tib:format-date( 'ddMMyyy',current-date()) , '.csv')"/>
+                </fileName>
+                <xsl:choose>
+                    <xsl:when test="$List-Files/ns:ListFilesActivityOutput/files = &quot;&quot;">
+                        <textContent>
+                            <xsl:value-of select="concat(&quot;sep=,&quot;, &quot;&#xD;&#xA;&quot;,&quot;0&quot;,$Start/pfx:SetIVRFile/pfx:MSISDN ,&quot;,&quot;, $Get-IVRID/resultSet/Record[1]/NEXTVAL ,&quot;,&quot;, $Start/pfx:SetIVRFile/pfx:firstname ,&quot;,&quot;, $Start/pfx:SetIVRFile/pfx:lastrname, &quot;&#xD;&#xA;&quot;)"/>
+                        </textContent>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <textContent>
+                            <xsl:value-of select="concat(&quot;0&quot;,$Start/pfx:SetIVRFile/pfx:MSISDN ,&quot;,&quot;, $Get-IVRID/resultSet/Record[1]/NEXTVAL ,&quot;,&quot;, $Start/pfx:SetIVRFile/pfx:firstname ,&quot;,&quot;, $Start/pfx:SetIVRFile/pfx:lastrname, &quot;&#xD;&#xA;&quot;)"/>
+                        </textContent>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </ns:WriteActivityInputTextClass>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Get IVRID">
+        <pd:type>com.tibco.plugin.jdbc.JDBCQueryActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCQueryActivity</pd:resourceType>
+        <pd:x>303</pd:x>
+        <pd:y>97</pd:y>
+        <config>
+            <timeout>10</timeout>
+            <commit>false</commit>
+            <maxRows>100</maxRows>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <jdbcSharedConfig>/SharedResources/Connections/JDBC/DUNNIDOO_JDBC_Connection_ESB_BATCH.sharedjdbc</jdbcSharedConfig>
+            <statement>SELECT IVR_ID_SEQUENCE.NEXTVAL FROM DUAL</statement>
+            <oraObjects/>
+            <oraTables/>
+            <QueryOutputCachedSchemaColumns>NEXTVAL</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>2</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>NUMBER</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+        </config>
+        <pd:inputBindings>
+            <jdbcQueryActivityInput/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Wirte CSV</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>List Files</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>List Files</pd:from>
+        <pd:to>Get IVRID</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Get IVRID</pd:from>
+        <pd:to>Wirte CSV</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:pfx="http://www.tibco.com/schemas/TRAINING/SharedResources/Schemas/XSD/Schema.xsd2">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://www.tibco.com/schemas/TRAINING/SharedResources/Schemas/XSD/Schema.xsd2" schemaLocation="/SharedResources/Schemas/XSD/DunningActions.xsd"/>
+    <pd:name>BusinessProcess/Actions/TestBatchAction.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx:DunningAction"/>
+    <pd:startX>150</pd:startX>
+    <pd:startY>64</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>530</pd:endX>
+    <pd:endY>58</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1525335102365</pd:targetNamespace>
+    <pd:activity name="Write File">
+        <pd:type>com.tibco.plugin.file.FileWriteActivity</pd:type>
+        <pd:resourceType>ae.activities.FileWriteActivity</pd:resourceType>
+        <pd:x>328</pd:x>
+        <pd:y>63</pd:y>
+        <config>
+            <encoding>text</encoding>
+            <compressFile>None</compressFile>
+            <createMissingDirectories>true</createMissingDirectories>
+            <append>true</append>
+        </config>
+        <pd:inputBindings>
+            <ns:WriteActivityInputTextClass>
+                <fileName>
+                    <xsl:value-of select="&quot;C:\Users\BELLEBCIRA\Desktop\DUNNIDOO 2.0\TEST_TA3_SMSWith_AccentsMail_Nchallah_BARring_Desactivation_normalement_Dimanche_Tebra_Nchallah\BATCHTEST.txt&quot;"/>
+                </fileName>
+                <textContent>
+                    <xsl:value-of select="concat( &quot;&#xD;&#xA;&quot;,&#xA;&#x9;&#x9; &quot;-------------------------------------------------------------------------------------------------------------------&quot;,&#xA;&#x9;&#x9;&quot;&#xD;&#xA;&quot;,&#xA;&#x9;&#x9;$Start/pfx:DunningAction/pfx:ACTION_NAME,&#xA;&#x9;&#x9;&quot;&#xD;&#xA;&quot;,&#xA;&#x9;&#x9; &quot;-------------------------------------------------------------------------------------------------------------------&quot;,&#xA;&#x9;&#x9;&quot;&#xD;&#xA;&quot;,&#xA;&#x9;&#x9;$Start/pfx:DunningAction/pfx:DunningEligibleCustomersInfo/pfx:CUSTOMER_ID,&#xA;&quot;&#xD;&#xA;&quot;,&#xA;&#x9;&#x9;$Start/pfx:DunningAction/pfx:DunningEligibleCustomersInfo/pfx:CUSTCODE ,&#xA;&quot;&#xD;&#xA;&quot;,&#xA;&#x9;&#x9;$Start/pfx:DunningAction/pfx:DunningEligibleCustomersInfo/pfx:CO_ID ,&#xA;&quot;&#xD;&#xA;&quot;,&#xA;&#x9;&#x9;$Start/pfx:DunningAction/pfx:DunningEligibleCustomersInfo/pfx:INVOICE_AMOUNT,&#xA;&quot;&#xD;&#xA;&quot;,&#xA;&#x9;&#x9;$Start/pfx:DunningAction/pfx:DunningEligibleCustomersInfo/pfx:OPEN_AMOUNT,&#xA;&quot;&#xD;&#xA;&quot;,&#xA;&#x9;&#x9;$Start/pfx:DunningAction/pfx:DunningEligibleCustomersInfo/pfx:DUE_DATE,&#xA;&quot;&#xD;&#xA;&quot;,&#xA;&#x9;&#x9;$Start/pfx:DunningAction/pfx:DunningEligibleCustomersInfo/pfx:LBC_DATE,&#xA;&quot;&#xD;&#xA;&quot;,&#xA;&#x9;&#x9;$Start/pfx:DunningAction/pfx:DunningEligibleCustomersInfo/pfx:CCLNAME,&#xA;&quot;&#xD;&#xA;&quot;,&#xA;&#x9;&#x9;$Start/pfx:DunningAction/pfx:DunningEligibleCustomersInfo/pfx:MSISDN,&#xA;&quot;&#xD;&#xA;&quot;,&#xA;&#x9;&#x9;$Start/pfx:DunningAction/pfx:DunningEligibleCustomersInfo/pfx:CCEMAIL,&#xA;&#x9;&#x9; &quot;&#xD;&#xA;&quot;,&#xA;&#x9;&#x9; &quot;-------------------------------------------------------------------------------------------------------------------&quot;)"/>
+                </textContent>
+            </ns:WriteActivityInputTextClass>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Write File</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Write File</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

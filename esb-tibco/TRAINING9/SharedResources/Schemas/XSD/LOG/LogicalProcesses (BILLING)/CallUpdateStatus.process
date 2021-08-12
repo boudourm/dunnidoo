@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx3="http://www.ooredoo.dz/common/exception/v1" xmlns:pfx2="http://www.ooredoo.dz/osp/updateJobStatus" xmlns:pfx="http://www.tibco.com/schemas/Tibco/Resources/SchemaDefinitions/XSDs/Scheduler/Schema.xsd5">
+    <xsd:import namespace="http://www.tibco.com/schemas/Tibco/Resources/SchemaDefinitions/XSDs/Scheduler/Schema.xsd5" schemaLocation="/Resources/SchemaDefinitions/XSDs/Scheduler/UpdateJobStatus.xsd"/>
+    <xsd:import namespace="http://www.ooredoo.dz/osp/updateJobStatus" schemaLocation="/SharedResources/Schemas/XSD/Batch/UpdateJobStatus.xsd"/>
+    <xsd:import namespace="http://www.ooredoo.dz/common/exception/v1" schemaLocation="/SharedResources/Schemas/XSD/COMMON/Exception.xsd"/>
+    <pd:name>BusinessProcess/LogicalProcesses (BILLING)/CallUpdateStatus.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx2:updateJobStatusRequest"/>
+    <pd:startX>150</pd:startX>
+    <pd:startY>64</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>450</pd:endX>
+    <pd:endY>64</pd:endY>
+    <pd:errorSchemas>
+        <Schema0 ref="pfx3:Exception"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1386006703449</pd:targetNamespace>
+    <pd:activity name="UpdateStatusJMSQueueSender">
+        <pd:type>com.tibco.plugin.jms.JMSQueueSendActivity</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueSendActivity</pd:resourceType>
+        <pd:x>300</pd:x>
+        <pd:y>64</pd:y>
+        <config>
+            <PermittedMessageType>XML Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>%%ProcessConfig/Batch/JMS/UpdateJobStatus%%</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/SharedResources/Connections/JMS/JMS_Tech_Connection.sharedjmscon</ConnectionReference>
+            <InDataxsdString ref="pfx2:updateJobStatusRequest"/>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <Body>
+                    <xsl:copy-of select="$Start/pfx2:updateJobStatusRequest"/>
+                </Body>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>UpdateStatusJMSQueueSender</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>UpdateStatusJMSQueueSender</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns:tns="http://www.ooredoo.dz/log/logSchema"
+	 xmlns:ns0="http://www.ooredoo.dz/common/header/v1"
+	 targetNamespace="http://www.ooredoo.dz/log/logSchema"
+	 elementFormDefault="unqualified"
+	 attributeFormDefault="unqualified">
+	<xs:import namespace="http://www.ooredoo.dz/common/header/v1" schemaLocation="../COMMON/Header.xsd"/>
+	<xs:element name="putRequest" type="tns:PutRequest"/>
+	<xs:complexType name="PutRequest">
+		<xs:sequence>
+			<xs:element ref="ns0:Header" minOccurs="0"/>
+			<xs:element name="TRANSACTION_ID" type="xs:string" minOccurs="0"/>
+			<xs:element name="STATUS" type="xs:string" minOccurs="0"/>
+			<xs:element name="ADDITIONAL_INPUT" type="xs:string" minOccurs="0"/>
+			<xs:element name="MAIN_INPUT" type="xs:string" minOccurs="0"/>
+			<xs:element name="REQUESTXML" type="xs:string" minOccurs="0"/>
+			<xs:element name="PROCESS_SERVICES" type="xs:string" minOccurs="0"/>
+			<xs:element name="STATUS_DATE" type="xs:string" minOccurs="0"/>
+			<xs:element name="CREATION_DATE" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="updateRequest" type="tns:UpdateRequest"/>
+	<xs:complexType name="UpdateRequest">
+		<xs:sequence>
+			<xs:element ref="ns0:Header" minOccurs="0"/>
+			<xs:element name="Request" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="checkRequest" type="tns:CheckRequest"/>
+	<xs:complexType name="CheckRequest">
+		<xs:sequence>
+			<xs:element ref="ns0:Header" minOccurs="0"/>
+			<xs:element name="Request" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="getTransactionStatusRequest" type="tns:GetTransactionStatusRequest"/>
+	<xs:complexType name="GetTransactionStatusRequest">
+		<xs:sequence>
+			<xs:element ref="ns0:Header" minOccurs="0"/>
+			<xs:element name="transactionId" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="getTransactionStatusResponse" type="tns:GetTransactionStatusResponse"/>
+	<xs:complexType name="GetTransactionStatusResponse">
+		<xs:sequence>
+			<xs:element name="status" type="xs:string" minOccurs="0"/>
+			<xs:element name="status_date" type="xs:string" minOccurs="0"/>
+			<xs:element name="msgcode" type="xs:string" minOccurs="0"/>
+			<xs:element name="msg" type="xs:string" minOccurs="0"/>
+			<xs:element name="mainInput" type="xs:string" minOccurs="0"/>
+			<xs:element name="step" type="xs:string" minOccurs="0"/>
+			<xs:element name="creation_date" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="getTransactionStatusByMsisdnOrCoIdRequest" type="tns:GetTransactionStatusByMsisdnOrCoIdRequest"/>
+	<xs:complexType name="GetTransactionStatusByMsisdnOrCoIdRequest">
+		<xs:sequence>
+			<xs:element ref="ns0:Header" minOccurs="0"/>
+			<xs:element name="main_input" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="getTransactionStatusByMsisdnOrCoIdResponse" type="tns:GetTransactionStatusByMsisdnOrCoIdResponse"/>
+	<xs:complexType name="GetTransactionStatusByMsisdnOrCoIdResponse">
+		<xs:sequence>
+			<xs:element name="status" type="xs:string" minOccurs="0"/>
+			<xs:element name="status_date" type="xs:string" minOccurs="0"/>
+			<xs:element name="msgcode" type="xs:string" minOccurs="0"/>
+			<xs:element name="msg" type="xs:string" minOccurs="0"/>
+			<xs:element name="main_input" type="xs:string" minOccurs="0"/>
+			<xs:element name="step" type="xs:string" minOccurs="0"/>
+			<xs:element name="creation_date" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="checkResponse" type="tns:CheckResponse"/>
+	<xs:complexType name="CheckResponse">
+		<xs:sequence>
+			<xs:element name="REQ_NO" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

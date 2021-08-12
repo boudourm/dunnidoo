@@ -1,0 +1,2800 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:osp_utilies="java://OSPtechnicalUtilities" xmlns:pfx10="http://www.ooredoo.dz/ws/party/setCustomerAndContact" xmlns:ns5="http://www.ooredoo.dz/bscsdb/getDummyCust" xmlns:ns6="http://www.ooredoo.dz/crm/getCustomerSegment" xmlns:pfx="http://www.ooredoo.dz/ws/party/getCustomerAndContacts" xmlns:ns2="http://www.ooredoo.dz/ws/bscs/customerInfoRead" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.ooredoo.dz/common/header/v1" xmlns:ns4="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns3="http://www.tibco.com/pe/EngineTypes" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx5="http://www.ooredoo.dz/ws/bscs/contractsSearch" xmlns:pfx4="http://www.ooredoo.dz/ws/bscs/customersSearch" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://www.ooredoo.dz/ws/party/customerInfos" xmlns:pfx2="http://www.ooredoo.dz/bscsdb/custCodeById" xmlns:pfx9="http://www.ooredoo.dz/ws/bscs/PaymentArrangementAssignmentRead" xmlns:pfx8="http://www.ooredoo.dz/bscsdb/readAddresses" xmlns:pfx7="http://www.ooredoo.dz/ws/bscs/paymentArrangementsRead" xmlns:pfx6="http://www.ooredoo.dz/ws/bscs/customerRead">
+    <xsd:import namespace="http://www.ooredoo.dz/ws/party/getCustomerAndContacts" schemaLocation="/SharedResources/Schemas/XSD/PARTY/GetCustomerAndContacts.xsd"/>
+    <xsd:import namespace="http://www.ooredoo.dz/ws/party/customerInfos" schemaLocation="/SharedResources/Schemas/XSD/PARTY/CustomerInfos.xsd"/>
+    <xsd:import namespace="http://www.ooredoo.dz/ws/party/setCustomerAndContact" schemaLocation="/SharedResources/Schemas/PARTY/SetCustomerAndContact.xsd"/>
+    <pd:name>BusinessProcess/Actions/GetCustomerAndContacts.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx10:setCustomerAndContact"/>
+    <pd:startX>27</pd:startX>
+    <pd:startY>216</pd:startY>
+    <pd:returnBindings>
+        <pfx3:customerInfosResponse>
+            <Customer>
+                <xsl:if test="$Call-Customer-Read/pfx6:customerReadResponse/CS_ID_HIGH!=''">
+                    <xsl:if test="$Call-Customer-Read/pfx6:customerReadResponse/CS_ID_HIGH">
+                        <csIdHigh>
+                            <xsl:value-of select="$Call-Customer-Read/pfx6:customerReadResponse/CS_ID_HIGH"/>
+                        </csIdHigh>
+                    </xsl:if>
+                </xsl:if>
+                <xsl:if test="$Call-Customer-Read/pfx6:customerReadResponse/PRG_CODE!=''">
+                    <xsl:if test="$Call-Customer-Read/pfx6:customerReadResponse/PRG_CODE">
+                        <priceGroup>
+                            <xsl:value-of select="$Call-Customer-Read/pfx6:customerReadResponse/PRG_CODE"/>
+                        </priceGroup>
+                    </xsl:if>
+                </xsl:if>
+                <xsl:if test="$Map-TermCode/root/TermCode[1]!=''">
+                    <xsl:if test="$Map-TermCode/root/TermCode[1]">
+                        <termCode>
+                            <xsl:value-of select="$Map-TermCode/root/TermCode[1]"/>
+                        </termCode>
+                    </xsl:if>
+                </xsl:if>
+                <xsl:if test="$Call-Customer-Read/pfx6:customerReadResponse/CS_STATUS !=''">
+                    <xsl:if test="$Call-Customer-Read/pfx6:customerReadResponse/CS_STATUS">
+                        <status>
+                            <xsl:value-of select="$Call-Customer-Read/pfx6:customerReadResponse/CS_STATUS"/>
+                        </status>
+                    </xsl:if>
+                </xsl:if>
+                <xsl:if test="$Call-Customer-Read/pfx6:customerReadResponse/RS_CODE!='' and $Call-Customer-Read/pfx6:customerReadResponse/RS_CODE!=$_globalVariables/ns4:GlobalVariables/ProcessConfig/GetCustomerAndContacts/CMS_NULL_VALUE">
+                    <xsl:if test="$Call-Customer-Read/pfx6:customerReadResponse/RS_CODE">
+                        <reasonCode>
+                            <xsl:value-of select="$Call-Customer-Read/pfx6:customerReadResponse/RS_CODE"/>
+                        </reasonCode>
+                    </xsl:if>
+                </xsl:if>
+                <xsl:if test="$Call-Customer-Read/pfx6:customerReadResponse/RPCODE!='' and $Call-Customer-Read/pfx6:customerReadResponse/RPCODE!=$_globalVariables/ns4:GlobalVariables/ProcessConfig/GetCustomerAndContacts/CMS_NULL_VALUE">
+                    <xsl:if test="$Call-Customer-Read/pfx6:customerReadResponse/RPCODE">
+                        <occRpCode>
+                            <xsl:value-of select="$Call-Customer-Read/pfx6:customerReadResponse/RPCODE"/>
+                        </occRpCode>
+                    </xsl:if>
+                </xsl:if>
+                <xsl:if test="$Call-Customer-Read/pfx6:customerReadResponse/CS_PASSWORD!=''">
+                    <xsl:if test="$Call-Customer-Read/pfx6:customerReadResponse/CS_PASSWORD">
+                        <password>
+                            <xsl:value-of select="$Call-Customer-Read/pfx6:customerReadResponse/CS_PASSWORD"/>
+                        </password>
+                    </xsl:if>
+                </xsl:if>
+                <xsl:if test="$Call-Customer-Read/pfx6:customerReadResponse/CS_DEPOSIT!='' and substring-before($Call-Customer-Read/pfx6:customerReadResponse/CS_DEPOSIT, ' ')!=$_globalVariables/ns4:GlobalVariables/ProcessConfig/GetCustomerAndContacts/CMS_MONEY_NULL">
+                    <depositAmount>
+                        <xsl:value-of select="substring-before($Call-Customer-Read/pfx6:customerReadResponse/CS_DEPOSIT, ' ')"/>
+                    </depositAmount>
+                </xsl:if>
+                <xsl:if test="$Call-Customer-Read/pfx6:customerReadResponse/CS_CLIMIT!='' and substring-before($Call-Customer-Read/pfx6:customerReadResponse/CS_CLIMIT, ' ')!=$_globalVariables/ns4:GlobalVariables/ProcessConfig/GetCustomerAndContacts/CMS_MONEY_NULL">
+                    <creditLimit>
+                        <xsl:value-of select="substring-before($Call-Customer-Read/pfx6:customerReadResponse/CS_CLIMIT, ' ')"/>
+                    </creditLimit>
+                </xsl:if>
+                <xsl:if test="$Call-Customer-Read/pfx6:customerReadResponse/CS_LIMIT_TR1!='' and $Call-Customer-Read/pfx6:customerReadResponse/CS_LIMIT_TR1!=$_globalVariables/ns4:GlobalVariables/ProcessConfig/GetCustomerAndContacts/CMS_NULL_VALUE">
+                    <xsl:if test="$Call-Customer-Read/pfx6:customerReadResponse/CS_LIMIT_TR1">
+                        <openAmountThr1>
+                            <xsl:value-of select="$Call-Customer-Read/pfx6:customerReadResponse/CS_LIMIT_TR1"/>
+                        </openAmountThr1>
+                    </xsl:if>
+                </xsl:if>
+                <xsl:if test="$Call-Customer-Read/pfx6:customerReadResponse/CS_LIMIT_TR2!='' and $Call-Customer-Read/pfx6:customerReadResponse/CS_LIMIT_TR2!=$_globalVariables/ns4:GlobalVariables/ProcessConfig/GetCustomerAndContacts/CMS_NULL_VALUE">
+                    <xsl:if test="$Call-Customer-Read/pfx6:customerReadResponse/CS_LIMIT_TR2">
+                        <openAmountThr2>
+                            <xsl:value-of select="$Call-Customer-Read/pfx6:customerReadResponse/CS_LIMIT_TR2"/>
+                        </openAmountThr2>
+                    </xsl:if>
+                </xsl:if>
+                <xsl:if test="$Call-Customer-Read/pfx6:customerReadResponse/CS_LIMIT_TR3!='' and $Call-Customer-Read/pfx6:customerReadResponse/CS_LIMIT_TR3!=$_globalVariables/ns4:GlobalVariables/ProcessConfig/GetCustomerAndContacts/CMS_NULL_VALUE">
+                    <xsl:if test="$Call-Customer-Read/pfx6:customerReadResponse/CS_LIMIT_TR3">
+                        <openAmountThr3>
+                            <xsl:value-of select="$Call-Customer-Read/pfx6:customerReadResponse/CS_LIMIT_TR3"/>
+                        </openAmountThr3>
+                    </xsl:if>
+                </xsl:if>
+                <xsl:if test="$Call-Customer-Read/pfx6:customerReadResponse/CS_BILLCYCLE!=''">
+                    <xsl:if test="$Call-Customer-Read/pfx6:customerReadResponse/CS_BILLCYCLE">
+                        <billCycle>
+                            <xsl:value-of select="$Call-Customer-Read/pfx6:customerReadResponse/CS_BILLCYCLE"/>
+                        </billCycle>
+                    </xsl:if>
+                </xsl:if>
+                <xsl:if test="$Call-Customer-Read/pfx6:customerReadResponse/CS_DUNNING!=''">
+                    <dunning>
+                        <xsl:value-of select="if ($Call-Customer-Read/pfx6:customerReadResponse/CS_DUNNING='T')&#xA; then true() else false()"/>
+                    </dunning>
+                </xsl:if>
+                <xsl:if test="$Call-Customer-Read/pfx6:customerReadResponse/EXPECT_PAY_CURRENCY_ID!='' and $Call-Customer-Read/pfx6:customerReadResponse/EXPECT_PAY_CURRENCY_ID!=$_globalVariables/ns4:GlobalVariables/ProcessConfig/GetCustomerAndContacts/CMS_NULL_VALUE">
+                    <xsl:if test="$Call-Customer-Read/pfx6:customerReadResponse/EXPECT_PAY_CURRENCY_ID">
+                        <primaryCurrencyCode>
+                            <xsl:value-of select="$Call-Customer-Read/pfx6:customerReadResponse/EXPECT_PAY_CURRENCY_ID"/>
+                        </primaryCurrencyCode>
+                    </xsl:if>
+                </xsl:if>
+                <xsl:if test="$Call-Customer-Read/pfx6:customerReadResponse/CS_PREPAYMENT!=''">
+                    <prepayment>
+                        <xsl:value-of select="if ($Call-Customer-Read/pfx6:customerReadResponse/CS_PREPAYMENT='true')&#xA;then&#xA;true() else false()"/>
+                    </prepayment>
+                </xsl:if>
+                <xsl:if test="$Call-Customer-Read/pfx6:customerReadResponse/CS_REMARK1!=''">
+                    <xsl:if test="$Call-Customer-Read/pfx6:customerReadResponse/CS_REMARK1">
+                        <customerRemark1>
+                            <xsl:value-of select="$Call-Customer-Read/pfx6:customerReadResponse/CS_REMARK1"/>
+                        </customerRemark1>
+                    </xsl:if>
+                </xsl:if>
+                <xsl:if test="$Call-Customer-Read/pfx6:customerReadResponse/CS_REMARK2!=''">
+                    <xsl:if test="$Call-Customer-Read/pfx6:customerReadResponse/CS_REMARK2">
+                        <customerRemark2>
+                            <xsl:value-of select="$Call-Customer-Read/pfx6:customerReadResponse/CS_REMARK2"/>
+                        </customerRemark2>
+                    </xsl:if>
+                </xsl:if>
+                <xsl:if test="exists($Call-Payment-Arrangements-Read/pfx7:paymentArrangementsReadResponse/LIST_OF_PAYMENT_ARRANGEMENTS) and count($Call-Payment-Arrangements-Read/pfx7:paymentArrangementsReadResponse/LIST_OF_PAYMENT_ARRANGEMENTS)>0">
+                    <xsl:if test="$Call-Payment-Arrangements-Read/pfx7:paymentArrangementsReadResponse/LIST_OF_PAYMENT_ARRANGEMENTS[1]/CSP_PMNT_ID">
+                        <paymentType>
+                            <xsl:value-of select="$Call-Payment-Arrangements-Read/pfx7:paymentArrangementsReadResponse/LIST_OF_PAYMENT_ARRANGEMENTS[1]/CSP_PMNT_ID"/>
+                        </paymentType>
+                    </xsl:if>
+                </xsl:if>
+                <xsl:if test="$Call-Customer-Read/pfx6:customerReadResponse/CS_LAST_BC_DATE!=''">
+                    <lbcDate>
+                        <xsl:value-of select="tib:parse-dateTime('yyyy-MM-dd',tib:parse-date('yyyy-MM-dd',$Call-Customer-Read/pfx6:customerReadResponse/CS_LAST_BC_DATE))"/>
+                    </lbcDate>
+                </xsl:if>
+                <xsl:if test="$Call-Customer-Read/pfx6:customerReadResponse/PAYMENT_RESP!=''">
+                    <paymentResp>
+                        <xsl:value-of select="if ($Call-Customer-Read/pfx6:customerReadResponse/PAYMENT_RESP='true') then true() else false()"/>
+                    </paymentResp>
+                </xsl:if>
+                <xsl:if test="$Call-Customer-Read/pfx6:customerReadResponse/CS_CONTRESP!=''">
+                    <contractResp>
+                        <xsl:value-of select="if ($Call-Customer-Read/pfx6:customerReadResponse/CS_CONTRESP='true') then true() else false()"/>
+                    </contractResp>
+                </xsl:if>
+                <xsl:choose>
+                    <xsl:when test="$GetDummyCust/ns5:getDummyCustResponse/ANONYMOUS_CUSTOMER='X'">
+                        <isDummyCustomer>
+                            <xsl:value-of select="true()"/>
+                        </isDummyCustomer>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <isDummyCustomer>
+                            <xsl:value-of select="false()"/>
+                        </isDummyCustomer>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <xsl:if test="$CallGetCustomerSegment/ns6:getCustomerSegmentResponse/segment !=''">
+                    <xsl:if test="$CallGetCustomerSegment/ns6:getCustomerSegmentResponse/segment">
+                        <customerSegment>
+                            <xsl:value-of select="$CallGetCustomerSegment/ns6:getCustomerSegmentResponse/segment"/>
+                        </customerSegment>
+                    </xsl:if>
+                </xsl:if>
+                <CustomertInfo>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/CHECK01 !=''">
+                        <Check>
+                            <CheckId>
+                                <xsl:value-of select="1"/>
+                            </CheckId>
+                            <CheckValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/CHECK01"/>
+                            </CheckValue>
+                        </Check>
+                    </xsl:if>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/CHECK02 !=''">
+                        <Check>
+                            <CheckId>
+                                <xsl:value-of select="2"/>
+                            </CheckId>
+                            <CheckValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/CHECK02"/>
+                            </CheckValue>
+                        </Check>
+                    </xsl:if>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/CHECK03 !=''">
+                        <Check>
+                            <CheckId>
+                                <xsl:value-of select="3"/>
+                            </CheckId>
+                            <CheckValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/CHECK03"/>
+                            </CheckValue>
+                        </Check>
+                    </xsl:if>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/CHECK04 !=''">
+                        <Check>
+                            <CheckId>
+                                <xsl:value-of select="4"/>
+                            </CheckId>
+                            <CheckValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/CHECK04"/>
+                            </CheckValue>
+                        </Check>
+                    </xsl:if>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/CHECK05 !=''">
+                        <Check>
+                            <CheckId>
+                                <xsl:value-of select="5"/>
+                            </CheckId>
+                            <CheckValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/CHECK05"/>
+                            </CheckValue>
+                        </Check>
+                    </xsl:if>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/CHECK06 !=''">
+                        <Check>
+                            <CheckId>
+                                <xsl:value-of select="6"/>
+                            </CheckId>
+                            <CheckValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/CHECK06"/>
+                            </CheckValue>
+                        </Check>
+                    </xsl:if>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/CHECK07 !=''">
+                        <Check>
+                            <CheckId>
+                                <xsl:value-of select="7"/>
+                            </CheckId>
+                            <CheckValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/CHECK07"/>
+                            </CheckValue>
+                        </Check>
+                    </xsl:if>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/CHECK08 !=''">
+                        <Check>
+                            <CheckId>
+                                <xsl:value-of select="8"/>
+                            </CheckId>
+                            <CheckValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/CHECK08"/>
+                            </CheckValue>
+                        </Check>
+                    </xsl:if>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/CHECK09 !=''">
+                        <Check>
+                            <CheckId>
+                                <xsl:value-of select="9"/>
+                            </CheckId>
+                            <CheckValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/CHECK09"/>
+                            </CheckValue>
+                        </Check>
+                    </xsl:if>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/CHECK10 !=''">
+                        <Check>
+                            <CheckId>
+                                <xsl:value-of select="10"/>
+                            </CheckId>
+                            <CheckValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/CHECK10"/>
+                            </CheckValue>
+                        </Check>
+                    </xsl:if>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/CHECK11 !=''">
+                        <Check>
+                            <CheckId>
+                                <xsl:value-of select="11"/>
+                            </CheckId>
+                            <CheckValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/CHECK11"/>
+                            </CheckValue>
+                        </Check>
+                    </xsl:if>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/CHECK12 !=''">
+                        <Check>
+                            <CheckId>
+                                <xsl:value-of select="12"/>
+                            </CheckId>
+                            <CheckValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/CHECK12"/>
+                            </CheckValue>
+                        </Check>
+                    </xsl:if>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/CHECK13 !=''">
+                        <Check>
+                            <CheckId>
+                                <xsl:value-of select="13"/>
+                            </CheckId>
+                            <CheckValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/CHECK13"/>
+                            </CheckValue>
+                        </Check>
+                    </xsl:if>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/CHECK14 !=''">
+                        <Check>
+                            <CheckId>
+                                <xsl:value-of select="14"/>
+                            </CheckId>
+                            <CheckValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/CHECK14"/>
+                            </CheckValue>
+                        </Check>
+                    </xsl:if>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/CHECK15 !=''">
+                        <Check>
+                            <CheckId>
+                                <xsl:value-of select="15"/>
+                            </CheckId>
+                            <CheckValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/CHECK15"/>
+                            </CheckValue>
+                        </Check>
+                    </xsl:if>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/CHECK16 !=''">
+                        <Check>
+                            <CheckId>
+                                <xsl:value-of select="16"/>
+                            </CheckId>
+                            <CheckValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/CHECK16"/>
+                            </CheckValue>
+                        </Check>
+                    </xsl:if>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/CHECK17 !=''">
+                        <Check>
+                            <CheckId>
+                                <xsl:value-of select="17"/>
+                            </CheckId>
+                            <CheckValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/CHECK17"/>
+                            </CheckValue>
+                        </Check>
+                    </xsl:if>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/CHECK18 !=''">
+                        <Check>
+                            <CheckId>
+                                <xsl:value-of select="18"/>
+                            </CheckId>
+                            <CheckValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/CHECK18"/>
+                            </CheckValue>
+                        </Check>
+                    </xsl:if>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/CHECK19 !=''">
+                        <Check>
+                            <CheckId>
+                                <xsl:value-of select="19"/>
+                            </CheckId>
+                            <CheckValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/CHECK19"/>
+                            </CheckValue>
+                        </Check>
+                    </xsl:if>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/CHECK20 !=''">
+                        <Check>
+                            <CheckId>
+                                <xsl:value-of select="20"/>
+                            </CheckId>
+                            <CheckValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/CHECK20"/>
+                            </CheckValue>
+                        </Check>
+                    </xsl:if>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/COMBO01 !=''">
+                        <Combo>
+                            <ComboId>
+                                <xsl:value-of select="1"/>
+                            </ComboId>
+                            <ComboValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/COMBO01"/>
+                            </ComboValue>
+                        </Combo>
+                    </xsl:if>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/COMBO02 !=''">
+                        <Combo>
+                            <ComboId>
+                                <xsl:value-of select="2"/>
+                            </ComboId>
+                            <ComboValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/COMBO02"/>
+                            </ComboValue>
+                        </Combo>
+                    </xsl:if>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/COMBO03 !=''">
+                        <Combo>
+                            <ComboId>
+                                <xsl:value-of select="3"/>
+                            </ComboId>
+                            <ComboValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/COMBO03"/>
+                            </ComboValue>
+                        </Combo>
+                    </xsl:if>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/COMBO04 !=''">
+                        <Combo>
+                            <ComboId>
+                                <xsl:value-of select="4"/>
+                            </ComboId>
+                            <ComboValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/COMBO04"/>
+                            </ComboValue>
+                        </Combo>
+                    </xsl:if>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/COMBO05 !=''">
+                        <Combo>
+                            <ComboId>
+                                <xsl:value-of select="5"/>
+                            </ComboId>
+                            <ComboValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/COMBO05"/>
+                            </ComboValue>
+                        </Combo>
+                    </xsl:if>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/COMBO06 !=''">
+                        <Combo>
+                            <ComboId>
+                                <xsl:value-of select="6"/>
+                            </ComboId>
+                            <ComboValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/COMBO06"/>
+                            </ComboValue>
+                        </Combo>
+                    </xsl:if>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/COMBO07 !=''">
+                        <Combo>
+                            <ComboId>
+                                <xsl:value-of select="7"/>
+                            </ComboId>
+                            <ComboValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/COMBO07"/>
+                            </ComboValue>
+                        </Combo>
+                    </xsl:if>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/COMBO08 !=''">
+                        <Combo>
+                            <ComboId>
+                                <xsl:value-of select="8"/>
+                            </ComboId>
+                            <ComboValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/COMBO08"/>
+                            </ComboValue>
+                        </Combo>
+                    </xsl:if>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/COMBO09 !=''">
+                        <Combo>
+                            <ComboId>
+                                <xsl:value-of select="9"/>
+                            </ComboId>
+                            <ComboValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/COMBO09"/>
+                            </ComboValue>
+                        </Combo>
+                    </xsl:if>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/COMBO10 !=''">
+                        <Combo>
+                            <ComboId>
+                                <xsl:value-of select="10"/>
+                            </ComboId>
+                            <ComboValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/COMBO10"/>
+                            </ComboValue>
+                        </Combo>
+                    </xsl:if>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/COMBO11 !=''">
+                        <Combo>
+                            <ComboId>
+                                <xsl:value-of select="11"/>
+                            </ComboId>
+                            <ComboValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/COMBO11"/>
+                            </ComboValue>
+                        </Combo>
+                    </xsl:if>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/COMBO12 !=''">
+                        <Combo>
+                            <ComboId>
+                                <xsl:value-of select="12"/>
+                            </ComboId>
+                            <ComboValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/COMBO12"/>
+                            </ComboValue>
+                        </Combo>
+                    </xsl:if>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/COMBO13 !=''">
+                        <Combo>
+                            <ComboId>
+                                <xsl:value-of select="13"/>
+                            </ComboId>
+                            <ComboValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/COMBO13"/>
+                            </ComboValue>
+                        </Combo>
+                    </xsl:if>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/COMBO14 !=''">
+                        <Combo>
+                            <ComboId>
+                                <xsl:value-of select="14"/>
+                            </ComboId>
+                            <ComboValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/COMBO14"/>
+                            </ComboValue>
+                        </Combo>
+                    </xsl:if>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/COMBO15 !=''">
+                        <Combo>
+                            <ComboId>
+                                <xsl:value-of select="15"/>
+                            </ComboId>
+                            <ComboValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/COMBO15"/>
+                            </ComboValue>
+                        </Combo>
+                    </xsl:if>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/COMBO16 !=''">
+                        <Combo>
+                            <ComboId>
+                                <xsl:value-of select="16"/>
+                            </ComboId>
+                            <ComboValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/COMBO16"/>
+                            </ComboValue>
+                        </Combo>
+                    </xsl:if>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/COMBO17 !=''">
+                        <Combo>
+                            <ComboId>
+                                <xsl:value-of select="17"/>
+                            </ComboId>
+                            <ComboValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/COMBO17"/>
+                            </ComboValue>
+                        </Combo>
+                    </xsl:if>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/COMBO18 !=''">
+                        <Combo>
+                            <ComboId>
+                                <xsl:value-of select="18"/>
+                            </ComboId>
+                            <ComboValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/COMBO18"/>
+                            </ComboValue>
+                        </Combo>
+                    </xsl:if>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/COMBO19 !=''">
+                        <Combo>
+                            <ComboId>
+                                <xsl:value-of select="19"/>
+                            </ComboId>
+                            <ComboValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/COMBO19"/>
+                            </ComboValue>
+                        </Combo>
+                    </xsl:if>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/COMBO20 !=''">
+                        <Combo>
+                            <ComboId>
+                                <xsl:value-of select="20"/>
+                            </ComboId>
+                            <ComboValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/COMBO20"/>
+                            </ComboValue>
+                        </Combo>
+                    </xsl:if>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/TEXT01 !=''">
+                        <Text>
+                            <TextId>
+                                <xsl:value-of select="1"/>
+                            </TextId>
+                            <TextValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/TEXT01"/>
+                            </TextValue>
+                        </Text>
+                    </xsl:if>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/TEXT02 !=''">
+                        <Text>
+                            <TextId>
+                                <xsl:value-of select="2"/>
+                            </TextId>
+                            <TextValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/TEXT02"/>
+                            </TextValue>
+                        </Text>
+                    </xsl:if>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/TEXT03 !=''">
+                        <Text>
+                            <TextId>
+                                <xsl:value-of select="3"/>
+                            </TextId>
+                            <TextValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/TEXT03"/>
+                            </TextValue>
+                        </Text>
+                    </xsl:if>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/TEXT04 !=''">
+                        <Text>
+                            <TextId>
+                                <xsl:value-of select="4"/>
+                            </TextId>
+                            <TextValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/TEXT04"/>
+                            </TextValue>
+                        </Text>
+                    </xsl:if>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/TEXT05 !=''">
+                        <Text>
+                            <TextId>
+                                <xsl:value-of select="5"/>
+                            </TextId>
+                            <TextValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/TEXT05"/>
+                            </TextValue>
+                        </Text>
+                    </xsl:if>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/TEXT06 !=''">
+                        <Text>
+                            <TextId>
+                                <xsl:value-of select="6"/>
+                            </TextId>
+                            <TextValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/TEXT06"/>
+                            </TextValue>
+                        </Text>
+                    </xsl:if>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/TEXT07 !=''">
+                        <Text>
+                            <TextId>
+                                <xsl:value-of select="7"/>
+                            </TextId>
+                            <TextValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/TEXT07"/>
+                            </TextValue>
+                        </Text>
+                    </xsl:if>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/TEXT08 !=''">
+                        <Text>
+                            <TextId>
+                                <xsl:value-of select="8"/>
+                            </TextId>
+                            <TextValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/TEXT08"/>
+                            </TextValue>
+                        </Text>
+                    </xsl:if>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/TEXT09 !=''">
+                        <Text>
+                            <TextId>
+                                <xsl:value-of select="9"/>
+                            </TextId>
+                            <TextValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/TEXT09"/>
+                            </TextValue>
+                        </Text>
+                    </xsl:if>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/TEXT10 !=''">
+                        <Text>
+                            <TextId>
+                                <xsl:value-of select="10"/>
+                            </TextId>
+                            <TextValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/TEXT10"/>
+                            </TextValue>
+                        </Text>
+                    </xsl:if>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/TEXT11 !=''">
+                        <Text>
+                            <TextId>
+                                <xsl:value-of select="11"/>
+                            </TextId>
+                            <TextValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/TEXT11"/>
+                            </TextValue>
+                        </Text>
+                    </xsl:if>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/TEXT12 !=''">
+                        <Text>
+                            <TextId>
+                                <xsl:value-of select="12"/>
+                            </TextId>
+                            <TextValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/TEXT12"/>
+                            </TextValue>
+                        </Text>
+                    </xsl:if>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/TEXT13 !=''">
+                        <Text>
+                            <TextId>
+                                <xsl:value-of select="13"/>
+                            </TextId>
+                            <TextValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/TEXT13"/>
+                            </TextValue>
+                        </Text>
+                    </xsl:if>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/TEXT14 !=''">
+                        <Text>
+                            <TextId>
+                                <xsl:value-of select="14"/>
+                            </TextId>
+                            <TextValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/TEXT14"/>
+                            </TextValue>
+                        </Text>
+                    </xsl:if>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/TEXT15 !=''">
+                        <Text>
+                            <TextId>
+                                <xsl:value-of select="15"/>
+                            </TextId>
+                            <TextValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/TEXT15"/>
+                            </TextValue>
+                        </Text>
+                    </xsl:if>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/TEXT16 !=''">
+                        <Text>
+                            <TextId>
+                                <xsl:value-of select="16"/>
+                            </TextId>
+                            <TextValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/TEXT16"/>
+                            </TextValue>
+                        </Text>
+                    </xsl:if>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/TEXT17 !=''">
+                        <Text>
+                            <TextId>
+                                <xsl:value-of select="17"/>
+                            </TextId>
+                            <TextValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/TEXT17"/>
+                            </TextValue>
+                        </Text>
+                    </xsl:if>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/TEXT18 !=''">
+                        <Text>
+                            <TextId>
+                                <xsl:value-of select="18"/>
+                            </TextId>
+                            <TextValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/TEXT18"/>
+                            </TextValue>
+                        </Text>
+                    </xsl:if>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/TEXT19 !=''">
+                        <Text>
+                            <TextId>
+                                <xsl:value-of select="19"/>
+                            </TextId>
+                            <TextValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/TEXT19"/>
+                            </TextValue>
+                        </Text>
+                    </xsl:if>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/TEXT20 !=''">
+                        <Text>
+                            <TextId>
+                                <xsl:value-of select="20"/>
+                            </TextId>
+                            <TextValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/TEXT20"/>
+                            </TextValue>
+                        </Text>
+                    </xsl:if>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/TEXT21 !=''">
+                        <Text>
+                            <TextId>
+                                <xsl:value-of select="21"/>
+                            </TextId>
+                            <TextValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/TEXT21"/>
+                            </TextValue>
+                        </Text>
+                    </xsl:if>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/TEXT22 !=''">
+                        <Text>
+                            <TextId>
+                                <xsl:value-of select="22"/>
+                            </TextId>
+                            <TextValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/TEXT22"/>
+                            </TextValue>
+                        </Text>
+                    </xsl:if>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/TEXT23 !=''">
+                        <Text>
+                            <TextId>
+                                <xsl:value-of select="23"/>
+                            </TextId>
+                            <TextValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/TEXT23"/>
+                            </TextValue>
+                        </Text>
+                    </xsl:if>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/TEXT24 !=''">
+                        <Text>
+                            <TextId>
+                                <xsl:value-of select="24"/>
+                            </TextId>
+                            <TextValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/TEXT24"/>
+                            </TextValue>
+                        </Text>
+                    </xsl:if>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/TEXT25 !=''">
+                        <Text>
+                            <TextId>
+                                <xsl:value-of select="25"/>
+                            </TextId>
+                            <TextValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/TEXT25"/>
+                            </TextValue>
+                        </Text>
+                    </xsl:if>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/TEXT26 !=''">
+                        <Text>
+                            <TextId>
+                                <xsl:value-of select="26"/>
+                            </TextId>
+                            <TextValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/TEXT26"/>
+                            </TextValue>
+                        </Text>
+                    </xsl:if>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/TEXT27 !=''">
+                        <Text>
+                            <TextId>
+                                <xsl:value-of select="27"/>
+                            </TextId>
+                            <TextValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/TEXT27"/>
+                            </TextValue>
+                        </Text>
+                    </xsl:if>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/TEXT28 !=''">
+                        <Text>
+                            <TextId>
+                                <xsl:value-of select="28"/>
+                            </TextId>
+                            <TextValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/TEXT28"/>
+                            </TextValue>
+                        </Text>
+                    </xsl:if>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/TEXT29 !=''">
+                        <Text>
+                            <TextId>
+                                <xsl:value-of select="29"/>
+                            </TextId>
+                            <TextValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/TEXT29"/>
+                            </TextValue>
+                        </Text>
+                    </xsl:if>
+                    <xsl:if test="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/TEXT30 !=''">
+                        <Text>
+                            <TextId>
+                                <xsl:value-of select="30"/>
+                            </TextId>
+                            <TextValue>
+                                <xsl:value-of select="$Call-Customer-Info-Read/ns2:customerInfoReadResponse/TEXT30"/>
+                            </TextValue>
+                        </Text>
+                    </xsl:if>
+                </CustomertInfo>
+            </Customer>
+            <xsl:choose>
+                <xsl:when test="$Start/pfx3:customerInfos/contactSeqno!=''">
+                    <xsl:for-each select="$Call-Read-Addresses/pfx8:readAddressesResponse/Adresses[CCSEQ=$Start/pfx3:customerInfos/contactSeqno]">
+                        <ContactList>
+                            <xsl:if test="cctitle!='' and cctitle!='0'">
+                                <xsl:if test="cctitle">
+                                    <title>
+                                        <xsl:value-of select="cctitle"/>
+                                    </title>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="ccsmsno!=''">
+                                <smsNo>
+                                    <xsl:value-of select="ccsmsno"/>
+                                </smsNo>
+                            </xsl:if>
+                            <xsl:if test="ccfname!=''">
+                                <xsl:if test="ccfname">
+                                    <firstName>
+                                        <xsl:value-of select="ccfname"/>
+                                    </firstName>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="cclname!=''">
+                                <xsl:if test="cclname">
+                                    <lastName>
+                                        <xsl:value-of select="cclname"/>
+                                    </lastName>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="ccname!=''">
+                                <xsl:if test="ccname">
+                                    <companyName>
+                                        <xsl:value-of select="ccname"/>
+                                    </companyName>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="ccstreet!=''">
+                                <xsl:if test="ccstreet">
+                                    <street>
+                                        <xsl:value-of select="ccstreet"/>
+                                    </street>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="ccstreetno!=''">
+                                <xsl:if test="ccstreetno">
+                                    <streetNbr>
+                                        <xsl:value-of select="ccstreetno"/>
+                                    </streetNbr>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="cczip!=''">
+                                <xsl:if test="cczip">
+                                    <zip>
+                                        <xsl:value-of select="cczip"/>
+                                    </zip>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="CCCITY!=''">
+                                <city>
+                                    <xsl:value-of select="CCCITY"/>
+                                </city>
+                            </xsl:if>
+                            <xsl:if test="cclanguage!='' and cclanguage!='0'">
+                                <xsl:if test="cclanguage">
+                                    <languageCode>
+                                        <xsl:value-of select="cclanguage"/>
+                                    </languageCode>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="country!='' and country!='0'">
+                                <xsl:if test="country">
+                                    <countryId>
+                                        <xsl:value-of select="country"/>
+                                    </countryId>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="ccaddr1!=''">
+                                <xsl:if test="ccaddr1">
+                                    <adr1>
+                                        <xsl:value-of select="ccaddr1"/>
+                                    </adr1>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="ccaddr2!=''">
+                                <xsl:if test="ccaddr2">
+                                    <adr2>
+                                        <xsl:value-of select="ccaddr2"/>
+                                    </adr2>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="ccaddr3!=''">
+                                <xsl:if test="ccaddr3">
+                                    <adr3>
+                                        <xsl:value-of select="ccaddr3"/>
+                                    </adr3>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="ccjobdesc!=''">
+                                <xsl:if test="ccjobdesc">
+                                    <jobDescription>
+                                        <xsl:value-of select="ccjobdesc"/>
+                                    </jobDescription>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="phn!=''">
+                                <xsl:if test="phn">
+                                    <phone1>
+                                        <xsl:value-of select="phn"/>
+                                    </phone1>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="phn_area!=''">
+                                <xsl:if test="phn_area">
+                                    <phoneArea1>
+                                        <xsl:value-of select="phn_area"/>
+                                    </phoneArea1>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="phn2!=''">
+                                <xsl:if test="phn2">
+                                    <phone2>
+                                        <xsl:value-of select="phn2"/>
+                                    </phone2>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="phn2_area!=''">
+                                <xsl:if test="phn2_area">
+                                    <phoneArea2>
+                                        <xsl:value-of select="phn2_area"/>
+                                    </phoneArea2>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="taxno!=''">
+                                <xsl:if test="taxno">
+                                    <taxNbr>
+                                        <xsl:value-of select="taxno"/>
+                                    </taxNbr>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="CCFAX!=''">
+                                <xsl:if test="CCFAX">
+                                    <fax>
+                                        <xsl:value-of select="CCFAX"/>
+                                    </fax>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="CCFAX_AREA!=''">
+                                <xsl:if test="CCFAX_AREA">
+                                    <faxArea>
+                                        <xsl:value-of select="CCFAX_AREA"/>
+                                    </faxArea>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="CCEMAIL!=''">
+                                <xsl:if test="CCEMAIL">
+                                    <email>
+                                        <xsl:value-of select="CCEMAIL"/>
+                                    </email>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="CCSTATE!=''">
+                                <xsl:if test="CCSTATE">
+                                    <state>
+                                        <xsl:value-of select="CCSTATE"/>
+                                    </state>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="BIRTHDATE!=''">
+                                <birthDate>
+                                    <xsl:value-of select="tib:format-date('MM/dd/yyyy',tib:create-date(tib:get-year-from-dateTime(BIRTHDATE), tib:get-month-from-dateTime(BIRTHDATE), tib:get-day-from-dateTime(BIRTHDATE)))"/>
+                                </birthDate>
+                            </xsl:if>
+                            <xsl:if test="CSSOCIALSECNO!=''">
+                                <xsl:if test="CSSOCIALSECNO">
+                                    <socialSecurityNbr>
+                                        <xsl:value-of select="CSSOCIALSECNO"/>
+                                    </socialSecurityNbr>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="tib:trim(ccsex)!=''">
+                                <xsl:if test="ccsex">
+                                    <sex>
+                                        <xsl:value-of select="tib:trim(ccsex)"/>
+                                    </sex>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="tib:trim(CSCUSTTYPE)!=''">
+                                <xsl:if test="CSCUSTTYPE">
+                                    <custType>
+                                        <xsl:value-of select="tib:trim(CSCUSTTYPE)"/>
+                                    </custType>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="MARITAL_STATUS!='' and MARITAL_STATUS!='0'">
+                                <xsl:if test="MARITAL_STATUS">
+                                    <maritalStatus>
+                                        <xsl:value-of select="MARITAL_STATUS"/>
+                                    </maritalStatus>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="CSNATIONALITY!='' and CSNATIONALITY!='0'">
+                                <xsl:if test="CSNATIONALITY">
+                                    <nationality>
+                                        <xsl:value-of select="CSNATIONALITY"/>
+                                    </nationality>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="ID_TYPE!='' and ID_TYPE!='0'">
+                                <xsl:if test="ID_TYPE">
+                                    <identityTypeCode>
+                                        <xsl:value-of select="ID_TYPE"/>
+                                    </identityTypeCode>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="PASSPORTNO!=''">
+                                <xsl:if test="PASSPORTNO">
+                                    <identityValue>
+                                        <xsl:value-of select="PASSPORTNO"/>
+                                    </identityValue>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:choose>
+                                <xsl:when test="CCFORWARD!='' and CCFORWARD='X'">
+                                    <adrForward>
+                                        <xsl:value-of select="true()"/>
+                                    </adrForward>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <adrForward>
+                                        <xsl:value-of select="false()"/>
+                                    </adrForward>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                            <xsl:choose>
+                                <xsl:when test="CCURGENT!='' and CCURGENT='X'">
+                                    <adrUrgent>
+                                        <xsl:value-of select="true()"/>
+                                    </adrUrgent>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <adrUrgent>
+                                        <xsl:value-of select="false()"/>
+                                    </adrUrgent>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                            <xsl:if test="CCVALIDDATE!=''">
+                                <xsl:if test="CCVALIDDATE">
+                                    <adrValiddate>
+                                        <xsl:value-of select="CCVALIDDATE"/>
+                                    </adrValiddate>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="CSCOMPREGNO!=''">
+                                <xsl:if test="CSCOMPREGNO">
+                                    <adrCompno>
+                                        <xsl:value-of select="CSCOMPREGNO"/>
+                                    </adrCompno>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:choose>
+                                <xsl:when test="CCREMARK!=''">
+                                    <xsl:if test="CCREMARK">
+                                        <adrRemark>
+                                            <xsl:value-of select="CCREMARK"/>
+                                        </adrRemark>
+                                    </xsl:if>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <adrRemark>
+                                        <xsl:value-of select="' '"/>
+                                    </adrRemark>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                            <xsl:choose>
+                                <xsl:when test="CCBILL!='' and CCBILL='X'">
+                                    <adrBill>
+                                        <xsl:value-of select="true()"/>
+                                    </adrBill>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <adrBill>
+                                        <xsl:value-of select="false()"/>
+                                    </adrBill>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                            <xsl:choose>
+                                <xsl:when test="CCBILL_PREVIOUS!='' and CCBILL_PREVIOUS='X'">
+                                    <adrPrevious>
+                                        <xsl:value-of select="true()"/>
+                                    </adrPrevious>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <adrPrevious>
+                                        <xsl:value-of select="false()"/>
+                                    </adrPrevious>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                            <xsl:choose>
+                                <xsl:when test="CCBILLTEMP!='' and CCBILLTEMP='X'">
+                                    <adrTemporary>
+                                        <xsl:value-of select="true()"/>
+                                    </adrTemporary>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <adrTemporary>
+                                        <xsl:value-of select="false()"/>
+                                    </adrTemporary>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                            <xsl:choose>
+                                <xsl:when test="CCCONTRACT!='' and CCCONTRACT='X'">
+                                    <adrContact>
+                                        <xsl:value-of select="true()"/>
+                                    </adrContact>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <adrContact>
+                                        <xsl:value-of select="false()"/>
+                                    </adrContact>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                            <xsl:choose>
+                                <xsl:when test="CCMAGAZINE!='' and CCMAGAZINE='X'">
+                                    <adrMagazine>
+                                        <xsl:value-of select="true()"/>
+                                    </adrMagazine>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <adrMagazine>
+                                        <xsl:value-of select="false()"/>
+                                    </adrMagazine>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                            <xsl:choose>
+                                <xsl:when test="CCDIRECTORY!='' and CCDIRECTORY='X'">
+                                    <adrDirectory>
+                                        <xsl:value-of select="true()"/>
+                                    </adrDirectory>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <adrDirectory>
+                                        <xsl:value-of select="false()"/>
+                                    </adrDirectory>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                            <xsl:choose>
+                                <xsl:when test="CCSHIP!='' and CCSHIP='X'">
+                                    <adrShipment>
+                                        <xsl:value-of select="true()"/>
+                                    </adrShipment>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <adrShipment>
+                                        <xsl:value-of select="false()"/>
+                                    </adrShipment>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                            <xsl:choose>
+                                <xsl:when test="CCUSER!='' and CCUSER='X'">
+                                    <adrUser>
+                                        <xsl:value-of select="true()"/>
+                                    </adrUser>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <adrUser>
+                                        <xsl:value-of select="false()"/>
+                                    </adrUser>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                            <xsl:if test="CCSEQ!=''">
+                                <xsl:if test="CCSEQ">
+                                    <adrSeqno>
+                                        <xsl:value-of select="CCSEQ"/>
+                                    </adrSeqno>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="CCADDITIONAL!=''">
+                                <IdentityIssueDate>
+                                    <xsl:value-of select="CCADDITIONAL"/>
+                                </IdentityIssueDate>
+                            </xsl:if>
+                        </ContactList>
+                    </xsl:for-each>
+                </xsl:when>
+                <xsl:when test="$Start/pfx3:customerInfos/contactType!=''">
+                    <xsl:for-each select="$Call-Read-Addresses/pfx8:readAddressesResponse/Adresses[*[local-name() = $Map-ContactType/ContactType] = &quot;X&quot;]">
+                        <ContactList>
+                            <xsl:if test="cctitle!='' and cctitle!='0'">
+                                <xsl:if test="cctitle">
+                                    <title>
+                                        <xsl:value-of select="cctitle"/>
+                                    </title>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="ccsmsno!=''">
+                                <smsNo>
+                                    <xsl:value-of select="ccsmsno"/>
+                                </smsNo>
+                            </xsl:if>
+                            <xsl:if test="ccfname!=''">
+                                <xsl:if test="ccfname">
+                                    <firstName>
+                                        <xsl:value-of select="ccfname"/>
+                                    </firstName>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="cclname!=''">
+                                <xsl:if test="cclname">
+                                    <lastName>
+                                        <xsl:value-of select="cclname"/>
+                                    </lastName>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="ccname!=''">
+                                <xsl:if test="ccname">
+                                    <companyName>
+                                        <xsl:value-of select="ccname"/>
+                                    </companyName>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="ccstreet!=''">
+                                <xsl:if test="ccstreet">
+                                    <street>
+                                        <xsl:value-of select="ccstreet"/>
+                                    </street>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="ccstreetno!=''">
+                                <xsl:if test="ccstreetno">
+                                    <streetNbr>
+                                        <xsl:value-of select="ccstreetno"/>
+                                    </streetNbr>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="cczip!=''">
+                                <xsl:if test="cczip">
+                                    <zip>
+                                        <xsl:value-of select="cczip"/>
+                                    </zip>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="CCSEQ!=''">
+                                <xsl:if test="CCSEQ">
+                                    <city>
+                                        <xsl:value-of select="CCSEQ"/>
+                                    </city>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="cclanguage!='' and cclanguage!='0'">
+                                <xsl:if test="cclanguage">
+                                    <languageCode>
+                                        <xsl:value-of select="cclanguage"/>
+                                    </languageCode>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="country!='' and country!='0'">
+                                <xsl:if test="country">
+                                    <countryId>
+                                        <xsl:value-of select="country"/>
+                                    </countryId>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="ccaddr1!=''">
+                                <xsl:if test="ccaddr1">
+                                    <adr1>
+                                        <xsl:value-of select="ccaddr1"/>
+                                    </adr1>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="ccaddr2!=''">
+                                <xsl:if test="ccaddr2">
+                                    <adr2>
+                                        <xsl:value-of select="ccaddr2"/>
+                                    </adr2>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="ccaddr3!=''">
+                                <xsl:if test="ccaddr3">
+                                    <adr3>
+                                        <xsl:value-of select="ccaddr3"/>
+                                    </adr3>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="ccjobdesc!=''">
+                                <xsl:if test="ccjobdesc">
+                                    <jobDescription>
+                                        <xsl:value-of select="ccjobdesc"/>
+                                    </jobDescription>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="phn!=''">
+                                <xsl:if test="phn">
+                                    <phone1>
+                                        <xsl:value-of select="phn"/>
+                                    </phone1>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="phn_area!=''">
+                                <xsl:if test="phn_area">
+                                    <phoneArea1>
+                                        <xsl:value-of select="phn_area"/>
+                                    </phoneArea1>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="phn2!=''">
+                                <xsl:if test="phn2">
+                                    <phone2>
+                                        <xsl:value-of select="phn2"/>
+                                    </phone2>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="phn2_area!=''">
+                                <xsl:if test="phn2_area">
+                                    <phoneArea2>
+                                        <xsl:value-of select="phn2_area"/>
+                                    </phoneArea2>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="taxno!=''">
+                                <xsl:if test="taxno">
+                                    <taxNbr>
+                                        <xsl:value-of select="taxno"/>
+                                    </taxNbr>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="CCFAX!=''">
+                                <xsl:if test="CCFAX">
+                                    <fax>
+                                        <xsl:value-of select="CCFAX"/>
+                                    </fax>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="CCFAX_AREA!=''">
+                                <xsl:if test="CCFAX_AREA">
+                                    <faxArea>
+                                        <xsl:value-of select="CCFAX_AREA"/>
+                                    </faxArea>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="CCEMAIL!=''">
+                                <xsl:if test="CCEMAIL">
+                                    <email>
+                                        <xsl:value-of select="CCEMAIL"/>
+                                    </email>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="CCSTATE!=''">
+                                <xsl:if test="CCSTATE">
+                                    <state>
+                                        <xsl:value-of select="CCSTATE"/>
+                                    </state>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="BIRTHDATE!=''">
+                                <birthDate>
+                                    <xsl:value-of select="tib:format-date('MM/dd/yyyy',tib:create-date(tib:get-year-from-dateTime(BIRTHDATE), tib:get-month-from-dateTime(BIRTHDATE), tib:get-day-from-dateTime(BIRTHDATE)))"/>
+                                </birthDate>
+                            </xsl:if>
+                            <xsl:if test="CSSOCIALSECNO!=''">
+                                <xsl:if test="CSSOCIALSECNO">
+                                    <socialSecurityNbr>
+                                        <xsl:value-of select="CSSOCIALSECNO"/>
+                                    </socialSecurityNbr>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="tib:trim(ccsex)!=''">
+                                <xsl:if test="ccsex">
+                                    <sex>
+                                        <xsl:value-of select="tib:trim(ccsex)"/>
+                                    </sex>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="tib:trim(CSCUSTTYPE)!=''">
+                                <xsl:if test="CSCUSTTYPE">
+                                    <custType>
+                                        <xsl:value-of select="tib:trim(CSCUSTTYPE)"/>
+                                    </custType>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="MARITAL_STATUS!='' and MARITAL_STATUS!='0'">
+                                <xsl:if test="MARITAL_STATUS">
+                                    <maritalStatus>
+                                        <xsl:value-of select="MARITAL_STATUS"/>
+                                    </maritalStatus>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="CSNATIONALITY!='' and CSNATIONALITY!='0'">
+                                <xsl:if test="CSNATIONALITY">
+                                    <nationality>
+                                        <xsl:value-of select="CSNATIONALITY"/>
+                                    </nationality>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="ID_TYPE!='' and ID_TYPE!='0'">
+                                <xsl:if test="ID_TYPE">
+                                    <identityTypeCode>
+                                        <xsl:value-of select="ID_TYPE"/>
+                                    </identityTypeCode>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="PASSPORTNO!=''">
+                                <xsl:if test="PASSPORTNO">
+                                    <identityValue>
+                                        <xsl:value-of select="PASSPORTNO"/>
+                                    </identityValue>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:choose>
+                                <xsl:when test="CCFORWARD!='' and CCFORWARD='X'">
+                                    <adrForward>
+                                        <xsl:value-of select="true()"/>
+                                    </adrForward>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <adrForward>
+                                        <xsl:value-of select="false()"/>
+                                    </adrForward>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                            <xsl:choose>
+                                <xsl:when test="CCURGENT!='' and CCURGENT='X'">
+                                    <adrUrgent>
+                                        <xsl:value-of select="true()"/>
+                                    </adrUrgent>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <adrUrgent>
+                                        <xsl:value-of select="false()"/>
+                                    </adrUrgent>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                            <xsl:if test="CCVALIDDATE!=''">
+                                <xsl:if test="CCVALIDDATE">
+                                    <adrValiddate>
+                                        <xsl:value-of select="CCVALIDDATE"/>
+                                    </adrValiddate>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="CSCOMPREGNO!=''">
+                                <xsl:if test="CSCOMPREGNO">
+                                    <adrCompno>
+                                        <xsl:value-of select="CSCOMPREGNO"/>
+                                    </adrCompno>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:choose>
+                                <xsl:when test="CCREMARK!=''">
+                                    <xsl:if test="CCREMARK">
+                                        <adrRemark>
+                                            <xsl:value-of select="CCREMARK"/>
+                                        </adrRemark>
+                                    </xsl:if>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <adrRemark>
+                                        <xsl:value-of select="' '"/>
+                                    </adrRemark>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                            <xsl:choose>
+                                <xsl:when test="CCBILL!='' and CCBILL='X'">
+                                    <adrBill>
+                                        <xsl:value-of select="true()"/>
+                                    </adrBill>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <adrBill>
+                                        <xsl:value-of select="false()"/>
+                                    </adrBill>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                            <xsl:choose>
+                                <xsl:when test="CCBILL_PREVIOUS!='' and CCBILL_PREVIOUS='X'">
+                                    <adrPrevious>
+                                        <xsl:value-of select="true()"/>
+                                    </adrPrevious>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <adrPrevious>
+                                        <xsl:value-of select="false()"/>
+                                    </adrPrevious>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                            <xsl:choose>
+                                <xsl:when test="CCBILLTEMP!='' and CCBILLTEMP='X'">
+                                    <adrTemporary>
+                                        <xsl:value-of select="true()"/>
+                                    </adrTemporary>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <adrTemporary>
+                                        <xsl:value-of select="false()"/>
+                                    </adrTemporary>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                            <xsl:choose>
+                                <xsl:when test="CCCONTRACT!='' and CCCONTRACT='X'">
+                                    <adrContact>
+                                        <xsl:value-of select="true()"/>
+                                    </adrContact>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <adrContact>
+                                        <xsl:value-of select="false()"/>
+                                    </adrContact>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                            <xsl:choose>
+                                <xsl:when test="CCMAGAZINE!='' and CCMAGAZINE='X'">
+                                    <adrMagazine>
+                                        <xsl:value-of select="true()"/>
+                                    </adrMagazine>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <adrMagazine>
+                                        <xsl:value-of select="false()"/>
+                                    </adrMagazine>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                            <xsl:choose>
+                                <xsl:when test="CCDIRECTORY!='' and CCDIRECTORY='X'">
+                                    <adrDirectory>
+                                        <xsl:value-of select="true()"/>
+                                    </adrDirectory>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <adrDirectory>
+                                        <xsl:value-of select="false()"/>
+                                    </adrDirectory>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                            <xsl:choose>
+                                <xsl:when test="CCSHIP!='' and CCSHIP='X'">
+                                    <adrShipment>
+                                        <xsl:value-of select="true()"/>
+                                    </adrShipment>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <adrShipment>
+                                        <xsl:value-of select="false()"/>
+                                    </adrShipment>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                            <xsl:choose>
+                                <xsl:when test="CCUSER!='' and CCUSER='X'">
+                                    <adrUser>
+                                        <xsl:value-of select="true()"/>
+                                    </adrUser>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <adrUser>
+                                        <xsl:value-of select="false()"/>
+                                    </adrUser>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                            <xsl:if test="CCSEQ!=''">
+                                <xsl:if test="CCSEQ">
+                                    <adrSeqno>
+                                        <xsl:value-of select="CCSEQ"/>
+                                    </adrSeqno>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="CCADDITIONAL!=''">
+                                <IdentityIssueDate>
+                                    <xsl:value-of select="CCADDITIONAL"/>
+                                </IdentityIssueDate>
+                            </xsl:if>
+                        </ContactList>
+                    </xsl:for-each>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:for-each select="$Call-Read-Addresses/pfx8:readAddressesResponse/Adresses">
+                        <ContactList>
+                            <xsl:if test="cctitle!='' and cctitle!='0'">
+                                <xsl:if test="cctitle">
+                                    <title>
+                                        <xsl:value-of select="cctitle"/>
+                                    </title>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="ccsmsno!=''">
+                                <smsNo>
+                                    <xsl:value-of select="ccsmsno"/>
+                                </smsNo>
+                            </xsl:if>
+                            <xsl:if test="ccfname!=''">
+                                <xsl:if test="ccfname">
+                                    <firstName>
+                                        <xsl:value-of select="ccfname"/>
+                                    </firstName>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="cclname!=''">
+                                <xsl:if test="cclname">
+                                    <lastName>
+                                        <xsl:value-of select="cclname"/>
+                                    </lastName>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="ccname!=''">
+                                <xsl:if test="ccname">
+                                    <companyName>
+                                        <xsl:value-of select="ccname"/>
+                                    </companyName>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="ccstreet!=''">
+                                <xsl:if test="ccstreet">
+                                    <street>
+                                        <xsl:value-of select="ccstreet"/>
+                                    </street>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="ccstreetno!=''">
+                                <xsl:if test="ccstreetno">
+                                    <streetNbr>
+                                        <xsl:value-of select="ccstreetno"/>
+                                    </streetNbr>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="cczip!=''">
+                                <xsl:if test="cczip">
+                                    <zip>
+                                        <xsl:value-of select="cczip"/>
+                                    </zip>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="CCCITY!=''">
+                                <city>
+                                    <xsl:value-of select="CCCITY"/>
+                                </city>
+                            </xsl:if>
+                            <xsl:if test="cclanguage!='' and cclanguage!='0'">
+                                <xsl:if test="cclanguage">
+                                    <languageCode>
+                                        <xsl:value-of select="cclanguage"/>
+                                    </languageCode>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="country!='' and country!='0'">
+                                <xsl:if test="country">
+                                    <countryId>
+                                        <xsl:value-of select="country"/>
+                                    </countryId>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="ccaddr1!=''">
+                                <xsl:if test="ccaddr1">
+                                    <adr1>
+                                        <xsl:value-of select="ccaddr1"/>
+                                    </adr1>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="ccaddr2!=''">
+                                <xsl:if test="ccaddr2">
+                                    <adr2>
+                                        <xsl:value-of select="ccaddr2"/>
+                                    </adr2>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="ccaddr3!=''">
+                                <xsl:if test="ccaddr3">
+                                    <adr3>
+                                        <xsl:value-of select="ccaddr3"/>
+                                    </adr3>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="ccjobdesc!=''">
+                                <xsl:if test="ccjobdesc">
+                                    <jobDescription>
+                                        <xsl:value-of select="ccjobdesc"/>
+                                    </jobDescription>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="phn!=''">
+                                <xsl:if test="phn">
+                                    <phone1>
+                                        <xsl:value-of select="phn"/>
+                                    </phone1>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="phn_area!=''">
+                                <xsl:if test="phn_area">
+                                    <phoneArea1>
+                                        <xsl:value-of select="phn_area"/>
+                                    </phoneArea1>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="phn2!=''">
+                                <xsl:if test="phn2">
+                                    <phone2>
+                                        <xsl:value-of select="phn2"/>
+                                    </phone2>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="phn2_area!=''">
+                                <xsl:if test="phn2_area">
+                                    <phoneArea2>
+                                        <xsl:value-of select="phn2_area"/>
+                                    </phoneArea2>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="taxno!=''">
+                                <xsl:if test="taxno">
+                                    <taxNbr>
+                                        <xsl:value-of select="taxno"/>
+                                    </taxNbr>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="CCFAX!=''">
+                                <xsl:if test="CCFAX">
+                                    <fax>
+                                        <xsl:value-of select="CCFAX"/>
+                                    </fax>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="CCFAX_AREA!=''">
+                                <xsl:if test="CCFAX_AREA">
+                                    <faxArea>
+                                        <xsl:value-of select="CCFAX_AREA"/>
+                                    </faxArea>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="CCEMAIL!=''">
+                                <xsl:if test="CCEMAIL">
+                                    <email>
+                                        <xsl:value-of select="CCEMAIL"/>
+                                    </email>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="CCSTATE!=''">
+                                <xsl:if test="CCSTATE">
+                                    <state>
+                                        <xsl:value-of select="CCSTATE"/>
+                                    </state>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="BIRTHDATE!=''">
+                                <birthDate>
+                                    <xsl:value-of select="tib:format-date('MM/dd/yyyy',tib:create-date(tib:get-year-from-dateTime(BIRTHDATE), tib:get-month-from-dateTime(BIRTHDATE), tib:get-day-from-dateTime(BIRTHDATE)))"/>
+                                </birthDate>
+                            </xsl:if>
+                            <xsl:if test="CSSOCIALSECNO!=''">
+                                <xsl:if test="CSSOCIALSECNO">
+                                    <socialSecurityNbr>
+                                        <xsl:value-of select="CSSOCIALSECNO"/>
+                                    </socialSecurityNbr>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="ccsex!=''">
+                                <xsl:if test="tib:trim(ccsex)!=''">
+                                    <sex>
+                                        <xsl:value-of select="tib:trim(ccsex)"/>
+                                    </sex>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="CSCUSTTYPE!=''">
+                                <xsl:if test="tib:trim(CSCUSTTYPE)!=''">
+                                    <custType>
+                                        <xsl:value-of select="tib:trim(CSCUSTTYPE)"/>
+                                    </custType>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="MARITAL_STATUS!='' and MARITAL_STATUS!='0'">
+                                <xsl:if test="MARITAL_STATUS">
+                                    <maritalStatus>
+                                        <xsl:value-of select="MARITAL_STATUS"/>
+                                    </maritalStatus>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="CSNATIONALITY!='' and CSNATIONALITY!='0'">
+                                <xsl:if test="CSNATIONALITY">
+                                    <nationality>
+                                        <xsl:value-of select="CSNATIONALITY"/>
+                                    </nationality>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="ID_TYPE!='' and ID_TYPE!='0'">
+                                <xsl:if test="ID_TYPE">
+                                    <identityTypeCode>
+                                        <xsl:value-of select="ID_TYPE"/>
+                                    </identityTypeCode>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="PASSPORTNO!=''">
+                                <xsl:if test="PASSPORTNO">
+                                    <identityValue>
+                                        <xsl:value-of select="PASSPORTNO"/>
+                                    </identityValue>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:choose>
+                                <xsl:when test="CCFORWARD!='' and CCFORWARD='X'">
+                                    <adrForward>
+                                        <xsl:value-of select="true()"/>
+                                    </adrForward>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <adrForward>
+                                        <xsl:value-of select="false()"/>
+                                    </adrForward>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                            <xsl:choose>
+                                <xsl:when test="CCURGENT!='' and CCURGENT='X'">
+                                    <adrUrgent>
+                                        <xsl:value-of select="true()"/>
+                                    </adrUrgent>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <adrUrgent>
+                                        <xsl:value-of select="false()"/>
+                                    </adrUrgent>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                            <xsl:if test="CCVALIDDATE!=''">
+                                <xsl:if test="CCVALIDDATE">
+                                    <adrValiddate>
+                                        <xsl:value-of select="CCVALIDDATE"/>
+                                    </adrValiddate>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="CSCOMPREGNO!=''">
+                                <xsl:if test="CSCOMPREGNO">
+                                    <adrCompno>
+                                        <xsl:value-of select="CSCOMPREGNO"/>
+                                    </adrCompno>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:choose>
+                                <xsl:when test="CCREMARK!=''">
+                                    <xsl:if test="CCREMARK">
+                                        <adrRemark>
+                                            <xsl:value-of select="CCREMARK"/>
+                                        </adrRemark>
+                                    </xsl:if>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <adrRemark>
+                                        <xsl:value-of select="' '"/>
+                                    </adrRemark>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                            <xsl:choose>
+                                <xsl:when test="CCBILL!='' and CCBILL='X'">
+                                    <adrBill>
+                                        <xsl:value-of select="true()"/>
+                                    </adrBill>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <adrBill>
+                                        <xsl:value-of select="false()"/>
+                                    </adrBill>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                            <xsl:choose>
+                                <xsl:when test="CCBILL_PREVIOUS!='' and CCBILL_PREVIOUS='X'">
+                                    <adrPrevious>
+                                        <xsl:value-of select="true()"/>
+                                    </adrPrevious>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <adrPrevious>
+                                        <xsl:value-of select="false()"/>
+                                    </adrPrevious>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                            <xsl:choose>
+                                <xsl:when test="CCBILLTEMP!='' and CCBILLTEMP='X'">
+                                    <adrTemporary>
+                                        <xsl:value-of select="true()"/>
+                                    </adrTemporary>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <adrTemporary>
+                                        <xsl:value-of select="false()"/>
+                                    </adrTemporary>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                            <xsl:choose>
+                                <xsl:when test="CCCONTRACT!='' and CCCONTRACT='X'">
+                                    <adrContact>
+                                        <xsl:value-of select="true()"/>
+                                    </adrContact>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <adrContact>
+                                        <xsl:value-of select="false()"/>
+                                    </adrContact>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                            <xsl:choose>
+                                <xsl:when test="CCMAGAZINE!='' and CCMAGAZINE='X'">
+                                    <adrMagazine>
+                                        <xsl:value-of select="true()"/>
+                                    </adrMagazine>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <adrMagazine>
+                                        <xsl:value-of select="false()"/>
+                                    </adrMagazine>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                            <xsl:choose>
+                                <xsl:when test="CCDIRECTORY!='' and CCDIRECTORY='X'">
+                                    <adrDirectory>
+                                        <xsl:value-of select="true()"/>
+                                    </adrDirectory>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <adrDirectory>
+                                        <xsl:value-of select="false()"/>
+                                    </adrDirectory>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                            <xsl:choose>
+                                <xsl:when test="CCSHIP!='' and CCSHIP='X'">
+                                    <adrShipment>
+                                        <xsl:value-of select="true()"/>
+                                    </adrShipment>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <adrShipment>
+                                        <xsl:value-of select="false()"/>
+                                    </adrShipment>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                            <xsl:choose>
+                                <xsl:when test="CCUSER!='' and CCUSER='X'">
+                                    <adrUser>
+                                        <xsl:value-of select="true()"/>
+                                    </adrUser>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <adrUser>
+                                        <xsl:value-of select="false()"/>
+                                    </adrUser>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                            <xsl:if test="CCSEQ!=''">
+                                <xsl:if test="CCSEQ">
+                                    <adrSeqno>
+                                        <xsl:value-of select="CCSEQ"/>
+                                    </adrSeqno>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:if test="CCADDITIONAL!=''">
+                                <IdentityIssueDate>
+                                    <xsl:value-of select="CCADDITIONAL"/>
+                                </IdentityIssueDate>
+                            </xsl:if>
+                        </ContactList>
+                    </xsl:for-each>
+                </xsl:otherwise>
+            </xsl:choose>
+        </pfx3:customerInfosResponse>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx3:customerInfosResponse"/>
+    <pd:endX>1401</pd:endX>
+    <pd:endY>193</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1425400092573</pd:targetNamespace>
+    <pd:activity name="Call Contract Search">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>448</pd:x>
+        <pd:y>228</pd:y>
+        <config>
+            <processName>/BusinessProcess/LogicalProcesses/BSCSCMS/CallContractsSearch.process</processName>
+        </config>
+        <pd:inputBindings>
+            <pfx5:contractsSearchRequest>
+                <xsl:copy-of select="$Start/pfx3:customerInfos/ns1:Header"/>
+                <CONTRACTS.SEARCH>
+                    <xsl:if test="$Start/pfx3:customerInfos/msisdn!=''">
+                        <DIRNUM>
+                            <xsl:value-of select="substring($Start/pfx3:customerInfos/msisdn, 4, 9)"/>
+                        </DIRNUM>
+                    </xsl:if>
+                </CONTRACTS.SEARCH>
+            </pfx5:contractsSearchRequest>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Call Customer Info Read">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>966</pd:x>
+        <pd:y>369</pd:y>
+        <config>
+            <processName>/BusinessProcess/LogicalProcesses/BSCSCMS/CallCustomerInfoRead.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns2:customerInfoReadRequest>
+                <xsl:copy-of select="$Start/pfx3:customerInfos/ns1:Header"/>
+                <CUSTOMER_INFO.READ>
+                    <CS_ID>
+                        <xsl:value-of select="$Map-CsId-And-CustCode/root/CsId"/>
+                    </CS_ID>
+                </CUSTOMER_INFO.READ>
+            </ns2:customerInfoReadRequest>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Call Customer Read">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>966</pd:x>
+        <pd:y>35</pd:y>
+        <config>
+            <processName>/BusinessProcess/LogicalProcesses/BSCSCMS/CallCustomerRead.process</processName>
+        </config>
+        <pd:inputBindings>
+            <pfx6:customerReadRequest>
+                <xsl:copy-of select="$Start/pfx3:customerInfos/ns1:Header"/>
+                <CS_ID>
+                    <xsl:value-of select="$Map-CsId-And-CustCode/root/CsId"/>
+                </CS_ID>
+                <SYNC_WITH_DB>
+                    <xsl:value-of select="(1=1)"/>
+                </SYNC_WITH_DB>
+            </pfx6:customerReadRequest>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Call Customer Search">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>290</pd:x>
+        <pd:y>63</pd:y>
+        <config>
+            <processName>/BusinessProcess/LogicalProcesses/BSCSCMS/CallCustomerSearch.process</processName>
+        </config>
+        <pd:inputBindings>
+            <pfx4:customersSearchRequest>
+                <xsl:copy-of select="$Start/pfx3:customerInfos/ns1:Header"/>
+                <CUSTOMERS.SEARCH>
+                    <xsl:if test="$Start/pfx3:customerInfos/custCode">
+                        <CS_CODE>
+                            <xsl:value-of select="$Start/pfx3:customerInfos/custCode"/>
+                        </CS_CODE>
+                    </xsl:if>
+                </CUSTOMERS.SEARCH>
+            </pfx4:customersSearchRequest>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Call GetCustCodeById">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>278</pd:x>
+        <pd:y>407</pd:y>
+        <config>
+            <processName>/BusinessProcess/LogicalProcesses/BSCSDB/CallGetCustCodeById.process</processName>
+        </config>
+        <pd:inputBindings>
+            <pfx2:custCodeByIdRequest>
+                <xsl:copy-of select="$Start/pfx3:customerInfos/ns1:Header"/>
+                <customer_id>
+                    <xsl:value-of select="$Start/pfx3:customerInfos/customerId"/>
+                </customer_id>
+            </pfx2:custCodeByIdRequest>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Call Payment Arrangement Assignment Read">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>966</pd:x>
+        <pd:y>124</pd:y>
+        <config>
+            <processName>/BusinessProcess/LogicalProcesses/BSCSCMS/CallPaymentArrangementAssignment Read.process</processName>
+        </config>
+        <pd:inputBindings>
+            <pfx9:caymentArrangementAssignmentReadRequest>
+                <xsl:copy-of select="$Start/pfx3:customerInfos/ns1:Header"/>
+                <pfx9:PAYMENT_ARRANGEMENT_ASSIGNMENT.READ>
+                    <pfx9:CS_ID>
+                        <xsl:value-of select="$Map-CsId-And-CustCode/root/CsId"/>
+                    </pfx9:CS_ID>
+                </pfx9:PAYMENT_ARRANGEMENT_ASSIGNMENT.READ>
+            </pfx9:caymentArrangementAssignmentReadRequest>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Call Payment Arrangements Read">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>971</pd:x>
+        <pd:y>199</pd:y>
+        <config>
+            <processName>/BusinessProcess/LogicalProcesses/BSCSCMS/CallPaymentArrangementsRead.process</processName>
+        </config>
+        <pd:inputBindings>
+            <pfx7:paymentArrangementsReadRequest>
+                <xsl:copy-of select="$Start/pfx3:customerInfos/ns1:Header"/>
+                <CS_ID>
+                    <xsl:value-of select="$Map-CsId-And-CustCode/root/CsId"/>
+                </CS_ID>
+                <FLAG_CURRENT>
+                    <xsl:value-of select="(1=1)"/>
+                </FLAG_CURRENT>
+            </pfx7:paymentArrangementsReadRequest>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Call Read Addresses">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>967</pd:x>
+        <pd:y>282</pd:y>
+        <config>
+            <processName>/BusinessProcess/LogicalProcesses/BSCSDB/ReadAddresses.process</processName>
+        </config>
+        <pd:inputBindings>
+            <pfx8:readAddressesRequest>
+                <xsl:copy-of select="$Start/pfx3:customerInfos/ns1:Header"/>
+                <CUSTOMER_ID>
+                    <xsl:value-of select="$Map-CsId-And-CustCode/root/CsId"/>
+                </CUSTOMER_ID>
+            </pfx8:readAddressesRequest>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="CsId NoExist">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>287</pd:x>
+        <pd:y>219</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Mandatory Parameter Exception">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>63</pd:x>
+        <pd:y>390</pd:y>
+        <config>
+            <faultName/>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <message>
+                    <xsl:value-of select="concat(&quot;At least one of the following criteria must be used:#msisdn#&quot; , $Start/pfx3:customerInfos/msisdn  , &quot;#csId#&quot; , $Start/pfx3:customerInfos/customerId ,&quot;#custCode#&quot; , $Start/pfx3:customerInfos/custCode ,&quot; #template#&quot; , $Start/pfx3:customerInfos/templateName)"/>
+                </message>
+                <messageCode>
+                    <xsl:value-of select="'MandatoryParameterException'"/>
+                </messageCode>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Map CsId And CustCode">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>693</pd:x>
+        <pd:y>201</pd:y>
+        <config>
+            <element>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="CsId" type="xsd:long"/>
+                            <xsd:element name="CustCode" type="xsd:string"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <xsl:choose>
+                <xsl:when test="$Start/pfx3:customerInfos/customerId!=''">
+                    <root>
+                        <CsId>
+                            <xsl:value-of select="$Start/pfx3:customerInfos/customerId"/>
+                        </CsId>
+                        <CustCode>
+                            <xsl:value-of select="$Call-GetCustCodeById/pfx2:custCodeByIdResponse/custcode"/>
+                        </CustCode>
+                    </root>
+                </xsl:when>
+                <xsl:when test="$Start/pfx3:customerInfos/custCode!=''">
+                    <root>
+                        <CsId>
+                            <xsl:value-of select="$Call-Customer-Search/pfx4:customersSearchResponse/SEARCH_RESULT[1]/CS_ID"/>
+                        </CsId>
+                        <CustCode>
+                            <xsl:value-of select="$Start/pfx3:customerInfos/custCode"/>
+                        </CustCode>
+                    </root>
+                </xsl:when>
+                <xsl:otherwise>
+                    <root>
+                        <CsId>
+                            <xsl:value-of select="$Call-Contract-Search/pfx5:contractsSearchResponse/Contracts[CO_ID=$Call-LastCoId/Contracts/CO_ID]/CS_ID"/>
+                        </CsId>
+                        <CustCode>
+                            <xsl:value-of select="$Call-Contract-Search/pfx5:contractsSearchResponse/Contracts[CO_ID=$Call-LastCoId/Contracts/CO_ID]/CS_CODE"/>
+                        </CustCode>
+                    </root>
+                </xsl:otherwise>
+            </xsl:choose>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Null">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>139</pd:x>
+        <pd:y>217</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Search Customer Exception Width CsCode">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>709</pd:x>
+        <pd:y>70</pd:y>
+        <config>
+            <faultName/>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <message>
+                    <xsl:value-of select="concat(&quot;No custmer found for criteria #customerId#&quot; , $Start/pfx3:customerInfos/customerId , &quot;#Msisdn#&quot; , $Start/pfx3:customerInfos/msisdn ,&quot;#custCode# &quot; , $Start/pfx3:customerInfos/custCode)"/>
+                </message>
+                <messageCode>
+                    <xsl:value-of select="'SearchCustomerException '"/>
+                </messageCode>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Search Customer Exception Width CsId">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>282</pd:x>
+        <pd:y>552</pd:y>
+        <config>
+            <faultName/>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <message>
+                    <xsl:value-of select="concat(&quot;No custmer found for criteria #customerId#&quot; , $Start/pfx3:customerInfos/customerId , &quot;#Msisdn#&quot; , $Start/pfx3:customerInfos/msisdn ,&quot;#custCode# &quot; , $Start/pfx3:customerInfos/custCode)"/>
+                </message>
+                <messageCode>
+                    <xsl:value-of select="'SearchCustomerException '"/>
+                </messageCode>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Search Customer Exception Width msisdn">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>609</pd:x>
+        <pd:y>344</pd:y>
+        <config>
+            <faultName/>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <message>
+                    <xsl:value-of select="concat(&quot;No custmer found for criteria #customerId#&quot; , $Start/pfx3:customerInfos/customerId , &quot;#Msisdn#&quot; , $Start/pfx3:customerInfos/msisdn ,&quot;#custCode# &quot; , $Start/pfx3:customerInfos/custCode)"/>
+                </message>
+                <messageCode>
+                    <xsl:value-of select="'SearchCustomerException '"/>
+                </messageCode>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Map TermCode">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>1266</pd:x>
+        <pd:y>194</pd:y>
+        <config>
+            <element>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="TermCode" type="xsd:long" minOccurs="0" maxOccurs="unbounded"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <xsl:if test="$Call-Payment-Arrangement-Assignment-Read/pfx9:caymentArrangementAssignmentReadResponse/pfx9:PAYMENT_ARRANGEMENT_LIST[pfx9:CURRENT='true']/pfx9:TERM_CODE!=''  and $Call-Payment-Arrangement-Assignment-Read/pfx9:caymentArrangementAssignmentReadResponse/pfx9:PAYMENT_ARRANGEMENT_LIST[pfx9:CURRENT='true']/pfx9:TERM_CODE!=$_globalVariables/ns4:GlobalVariables/ProcessConfig/GetCustomerAndContacts/CMS_NULL_VALUE">
+                    <xsl:if test="$Call-Payment-Arrangement-Assignment-Read/pfx9:caymentArrangementAssignmentReadResponse/pfx9:PAYMENT_ARRANGEMENT_LIST[pfx9:CURRENT='true']/pfx9:TERM_CODE">
+                        <TermCode>
+                            <xsl:value-of select="$Call-Payment-Arrangement-Assignment-Read/pfx9:caymentArrangementAssignmentReadResponse/pfx9:PAYMENT_ARRANGEMENT_LIST[pfx9:CURRENT='true']/pfx9:TERM_CODE"/>
+                        </TermCode>
+                    </xsl:if>
+                </xsl:if>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Call LastCoId">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>581</pd:x>
+        <pd:y>193</pd:y>
+        <config>
+            <processName>/BusinessProcess/LogicalProcesses/LastCoId.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <xsl:for-each xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="$Call-Contract-Search/pfx5:contractsSearchResponse/Contracts">
+                    <Contracts>
+                        <CO_ID>
+                            <xsl:value-of select="CO_ID"/>
+                        </CO_ID>
+                        <xsl:if test="exists(CO_ACTIVATED)">
+                            <xsl:if test="CO_ACTIVATED">
+                                <ACTIVATED_DATE>
+                                    <xsl:value-of select="CO_ACTIVATED"/>
+                                </ACTIVATED_DATE>
+                            </xsl:if>
+                        </xsl:if>
+                        <CO_STATUS>
+                            <xsl:value-of select="CO_STATUS"/>
+                        </CO_STATUS>
+                    </Contracts>
+                </xsl:for-each>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Map ContactType">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>1267</pd:x>
+        <pd:y>327</pd:y>
+        <config>
+            <element>
+                <xsd:element name="ContactType" type="xsd:string"/>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <xsl:choose>
+                <xsl:when test="$Start/pfx3:customerInfos/contactType='BILL'">
+                    <ContactType>
+                        <xsl:value-of select="&quot;CCBILL&quot;"/>
+                    </ContactType>
+                </xsl:when>
+                <xsl:when test="$Start/pfx3:customerInfos/contactType='PREVIOUS'">
+                    <ContactType>
+                        <xsl:value-of select="'CCBILL_PREVIOUS'"/>
+                    </ContactType>
+                </xsl:when>
+                <xsl:when test="$Start/pfx3:customerInfos/contactType='TEMPORARY'">
+                    <ContactType>
+                        <xsl:value-of select="'CCBILLTEMP'"/>
+                    </ContactType>
+                </xsl:when>
+                <xsl:when test="$Start/pfx3:customerInfos/contactType='CONTRACT'">
+                    <ContactType>
+                        <xsl:value-of select="'CCCONTRACT'"/>
+                    </ContactType>
+                </xsl:when>
+                <xsl:when test="$Start/pfx3:customerInfos/contactType='MAGAZINE'">
+                    <ContactType>
+                        <xsl:value-of select="'CCMAGAZINE'"/>
+                    </ContactType>
+                </xsl:when>
+                <xsl:when test="$Start/pfx3:customerInfos/contactType='DIRECTORY'">
+                    <ContactType>
+                        <xsl:value-of select="'CCDIRECTORY'"/>
+                    </ContactType>
+                </xsl:when>
+                <xsl:when test="$Start/pfx3:customerInfos/contactType='SHIPMENT'">
+                    <ContactType>
+                        <xsl:value-of select="'CCSHIP'"/>
+                    </ContactType>
+                </xsl:when>
+                <xsl:otherwise>
+                    <ContactType>
+                        <xsl:value-of select="'CCUSER'"/>
+                    </ContactType>
+                </xsl:otherwise>
+            </xsl:choose>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>713</pd:x>
+        <pd:y>619</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Generate Error">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>890</pd:x>
+        <pd:y>621</pd:y>
+        <config>
+            <faultName/>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <xsl:choose>
+                    <xsl:when test="$_error/ns3:ErrorReport/MsgCode='SearchContractException'">
+                        <message>
+                            <xsl:value-of select="concat(&quot;No custmer found for criteria #customerId#&quot; , $Start/pfx3:customerInfos/customerId , &quot;#Msisdn#&quot; , $Start/pfx3:customerInfos/msisdn ,&quot;#custCode# &quot; , $Start/pfx3:customerInfos/custCode)"/>
+                        </message>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:if test="$_error/ns3:ErrorReport/Msg">
+                            <message>
+                                <xsl:value-of select="$_error/ns3:ErrorReport/Msg"/>
+                            </message>
+                        </xsl:if>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <xsl:choose>
+                    <xsl:when test="$_error/ns3:ErrorReport/MsgCode='SearchContractException'">
+                        <messageCode>
+                            <xsl:value-of select="'SearchCustomerException'"/>
+                        </messageCode>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:if test="$_error/ns3:ErrorReport/MsgCode">
+                            <messageCode>
+                                <xsl:value-of select="$_error/ns3:ErrorReport/MsgCode"/>
+                            </messageCode>
+                        </xsl:if>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="GetDummyCust">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>966</pd:x>
+        <pd:y>454</pd:y>
+        <config>
+            <processName>/BusinessProcess/LogicalProcesses/BSCSDB/GetDummyCust.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns5:getDummyCustRequest>
+                <xsl:copy-of select="$Start/pfx3:customerInfos/ns1:Header"/>
+                <CUSTOMER_ID>
+                    <xsl:value-of select="$Map-CsId-And-CustCode/root/CsId"/>
+                </CUSTOMER_ID>
+            </ns5:getDummyCustRequest>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="CallGetCustomerSegment">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>966</pd:x>
+        <pd:y>538</pd:y>
+        <config>
+            <processName>/BusinessProcess/LogicalProcesses/CRM/CallGetCustomerSegment.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns6:getCustomerSegmentRequest>
+                <customer_id>
+                    <xsl:value-of select="$Map-CsId-And-CustCode/root/CsId"/>
+                </customer_id>
+            </ns6:getCustomerSegmentRequest>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="ParallelStart">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>800</pd:x>
+        <pd:y>191</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="ParallelEnd">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>1152</pd:x>
+        <pd:y>193</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Null</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Mandatory Parameter Exception</pd:to>
+        <pd:xpathDescription>Null Inputs</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>not($Start/pfx3:customerInfos/msisdn!='') and not($Start/pfx3:customerInfos/customerId!='') and not($Start/pfx3:customerInfos/custCode!='')</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call GetCustCodeById</pd:from>
+        <pd:to>Map CsId And CustCode</pd:to>
+        <pd:xpathDescription>CustCode Exist</pd:xpathDescription>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Call-GetCustCodeById/pfx2:custCodeByIdResponse/custcode!=''</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null</pd:from>
+        <pd:to>Call GetCustCodeById</pd:to>
+        <pd:xpathDescription>CsId Exist</pd:xpathDescription>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Start/pfx3:customerInfos/customerId!=''</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null</pd:from>
+        <pd:to>CsId NoExist</pd:to>
+        <pd:xpathDescription/>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map CsId And CustCode</pd:from>
+        <pd:to>ParallelStart</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call GetCustCodeById</pd:from>
+        <pd:to>Search Customer Exception Width CsId</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call Contract Search</pd:from>
+        <pd:to>Call LastCoId</pd:to>
+        <pd:xpathDescription>Contract Exist</pd:xpathDescription>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>exists($Call-Contract-Search/pfx5:contractsSearchResponse/Contracts) and count($Call-Contract-Search/pfx5:contractsSearchResponse/Contracts)&gt;0</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call Customer Search</pd:from>
+        <pd:to>Map CsId And CustCode</pd:to>
+        <pd:xpathDescription>Customer Exist</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>exists($Call-Customer-Search/pfx4:customersSearchResponse/SEARCH_RESULT) and count($Call-Customer-Search/pfx4:customersSearchResponse/SEARCH_RESULT)&gt;0</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CsId NoExist</pd:from>
+        <pd:to>Call Customer Search</pd:to>
+        <pd:xpathDescription>CsId NotExist And CustCode Exist</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Start/pfx3:customerInfos/custCode!=''</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CsId NoExist</pd:from>
+        <pd:to>Call Contract Search</pd:to>
+        <pd:xpathDescription>CsId And CustCode NotExist</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call Customer Search</pd:from>
+        <pd:to>Search Customer Exception Width CsCode</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call Contract Search</pd:from>
+        <pd:to>Search Customer Exception Width msisdn</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map TermCode</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call LastCoId</pd:from>
+        <pd:to>Map CsId And CustCode</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map TermCode</pd:from>
+        <pd:to>Map ContactType</pd:to>
+        <pd:xpathDescription>contactType</pd:xpathDescription>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Start/pfx3:customerInfos/contactType!=''</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map ContactType</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ParallelStart</pd:from>
+        <pd:to>Call Customer Read</pd:to>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ParallelStart</pd:from>
+        <pd:to>Call Payment Arrangement Assignment Read</pd:to>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ParallelStart</pd:from>
+        <pd:to>Call Payment Arrangements Read</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ParallelStart</pd:from>
+        <pd:to>Call Read Addresses</pd:to>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ParallelStart</pd:from>
+        <pd:to>Call Customer Info Read</pd:to>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ParallelStart</pd:from>
+        <pd:to>GetDummyCust</pd:to>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ParallelStart</pd:from>
+        <pd:to>CallGetCustomerSegment</pd:to>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call Customer Read</pd:from>
+        <pd:to>ParallelEnd</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call Payment Arrangement Assignment Read</pd:from>
+        <pd:to>ParallelEnd</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call Payment Arrangements Read</pd:from>
+        <pd:to>ParallelEnd</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call Read Addresses</pd:from>
+        <pd:to>ParallelEnd</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call Customer Info Read</pd:from>
+        <pd:to>ParallelEnd</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>GetDummyCust</pd:from>
+        <pd:to>ParallelEnd</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallGetCustomerSegment</pd:from>
+        <pd:to>ParallelEnd</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ParallelEnd</pd:from>
+        <pd:to>Map TermCode</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

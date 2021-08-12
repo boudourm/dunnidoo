@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="http://www.tibco.com/schemas/TRAINING/SharedResources/Schemas/XSD/Schema.xsd6"
+	 targetNamespace="http://www.tibco.com/schemas/TRAINING/SharedResources/Schemas/XSD/Schema.xsd6"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:element name="setContractStatus">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Header" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="TransactionID" type="xs:string" minOccurs="0"/>
+							<xs:element name="TimeStamp" type="xs:string" minOccurs="0"/>
+							<xs:element name="UserAdress" type="xs:string" minOccurs="0"/>
+							<xs:element name="UserName" type="xs:string" minOccurs="0"/>
+							<xs:element name="NotificationParam" minOccurs="0" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="NotificationTemplate" type="xs:string"/>
+										<xs:element name="Msisdn" type="xs:string"/>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="Msisdn" type="xs:string" minOccurs="0"/>
+							<xs:element name="Property1" type="xs:string" minOccurs="0"/>
+							<xs:element name="Property2" type="xs:string" minOccurs="0"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="msisdn" type="xs:string" minOccurs="0"/>
+				<xs:element name="coId" type="xs:long" minOccurs="0"/>
+				<xs:element name="status" type="xs:string"/>
+				<xs:element name="reason" type="xs:long" minOccurs="0"/>
+				<xs:element name="validFrom" type="xs:string" minOccurs="0"/>
+				<xs:element name="templateName" type="xs:string" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="setContractStatusResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="transactionId" type="xs:string" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

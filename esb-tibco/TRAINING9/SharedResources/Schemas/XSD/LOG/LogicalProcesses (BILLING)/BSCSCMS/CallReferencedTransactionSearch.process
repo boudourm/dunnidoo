@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:ns2="http://www.tibco.com/pe/DeployedVarsType" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:ns3="http://www.ooredoo.dz/common/header/v1" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx4="http://www.ooredoo.dz/ws/bscs/referencedTransactionSearch" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://www.ooredoo.dz/ws/bscs/contractsSearch" xmlns:pfx2="http://www.ooredoo.dz/common/exception/v1" xmlns:ns12="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pfx="http://www.ooredoo.dz/ws/bscs/bookingRequestWrite">
+    <xsd:import namespace="http://www.ooredoo.dz/ws/bscs/bookingRequestWrite" schemaLocation="/SharedResources/Schemas/XSD/BSCS/BookingRequestWrite.xsd"/>
+    <xsd:import namespace="http://www.ooredoo.dz/ws/bscs/contractsSearch" schemaLocation="/SharedResources/Schemas/XSD/BSCS/ContractsSearch.xsd"/>
+    <xsd:import namespace="http://www.ooredoo.dz/common/exception/v1" schemaLocation="/SharedResources/Schemas/XSD/COMMON/Exception.xsd"/>
+    <xsd:import namespace="http://www.ooredoo.dz/ws/bscs/referencedTransactionSearch" schemaLocation="/SharedResources/Schemas/XSD/BSCS/ReferencedTransactionSearch.xsd"/>
+    <pd:name>BusinessProcess/LogicalProcesses/BSCSCMS/CallReferencedTransactionSearch.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx4:referencedTransactionSearchRequest"/>
+    <pd:startX>114</pd:startX>
+    <pd:startY>63</pd:startY>
+    <pd:returnBindings>
+        <xsl:copy-of select="$CallReferencedTransactionSearch-Requestor/ns:ActivityOutput/Body/root/pfx4:referencedTransactionSearchResponse"/>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx4:referencedTransactionSearchResponse"/>
+    <pd:endX>511</pd:endX>
+    <pd:endY>63</pd:endY>
+    <pd:errorSchemas>
+        <Exception ref="pfx2:Exception"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1412067414408</pd:targetNamespace>
+    <pd:activity name="CallReferencedTransactionSearch Requestor">
+        <pd:type>com.tibco.plugin.jms.JMSQueueRequestReplyActivity</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueRequestReplyActivity</pd:resourceType>
+        <pd:x>298</pd:x>
+        <pd:y>71</pd:y>
+        <config>
+            <PermittedMessageType>XML Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>%%ExternalApplications/BSCSCMS/JMS/CMSCommande/ReferencedTransactionSearch%%</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/SharedResources/Connections/JMS/JMS_Tech_Connection.sharedjmscon</ConnectionReference>
+            <InDataxsdString ref="pfx4:referencedTransactionSearchRequest"/>
+            <OutDataxsdString>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element ref="pfx4:referencedTransactionSearchResponse" minOccurs="0"/>
+                            <xsd:element ref="pfx2:Exception" minOccurs="0"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </OutDataxsdString>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <requestTimeout>
+                    <xsl:value-of select="$_globalVariables/ns2:GlobalVariables/Application/JMS/TimeOutRequestorCMS"/>
+                </requestTimeout>
+                <Body>
+                    <xsl:copy-of select="$Start/pfx4:referencedTransactionSearchRequest"/>
+                </Body>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Generate Error">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>498</pd:x>
+        <pd:y>249</pd:y>
+        <config>
+            <faultName>Exception</faultName>
+        </config>
+        <pd:inputBindings>
+            <ns12:ActivityInput>
+                <xsl:if test="$CallReferencedTransactionSearch-Requestor/ns:ActivityOutput/Body/root/pfx2:Exception/pfx2:Msg">
+                    <message>
+                        <xsl:value-of select="$CallReferencedTransactionSearch-Requestor/ns:ActivityOutput/Body/root/pfx2:Exception/pfx2:Msg"/>
+                    </message>
+                </xsl:if>
+                <xsl:if test="$CallReferencedTransactionSearch-Requestor/ns:ActivityOutput/Body/root/pfx2:Exception/pfx2:MsgCode">
+                    <messageCode>
+                        <xsl:value-of select="$CallReferencedTransactionSearch-Requestor/ns:ActivityOutput/Body/root/pfx2:Exception/pfx2:MsgCode"/>
+                    </messageCode>
+                </xsl:if>
+                <data>
+                    <xsl:copy-of select="$CallReferencedTransactionSearch-Requestor/ns:ActivityOutput/Body/root/pfx2:Exception"/>
+                </data>
+            </ns12:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="LogException">
+        <pd:type>com.tibco.pe.core.WriteToLogActivity</pd:type>
+        <pd:resourceType>ae.activities.log</pd:resourceType>
+        <pd:x>300</pd:x>
+        <pd:y>248</pd:y>
+        <config>
+            <role>Error</role>
+        </config>
+        <pd:inputBindings>
+            <ns1:ActivityInput>
+                <message>
+                    <xsl:value-of select="tib:render-xml($CallReferencedTransactionSearch-Requestor/ns:ActivityOutput/Body/root/pfx2:Exception)"/>
+                </message>
+                <msgCode>
+                    <xsl:value-of select="'BW - CallReferencedTransactionSearch Exception'"/>
+                </msgCode>
+            </ns1:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>CallReferencedTransactionSearch Requestor</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallReferencedTransactionSearch Requestor</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallReferencedTransactionSearch Requestor</pd:from>
+        <pd:to>LogException</pd:to>
+        <pd:xpathDescription>ERR</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$CallReferencedTransactionSearch-Requestor/ns:ActivityOutput/Body/root/pfx2:Exception/pfx2:StackTrace !='' or $CallReferencedTransactionSearch-Requestor/ns:ActivityOutput/Body/root/pfx2:Exception/pfx2:Data !=''</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogException</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

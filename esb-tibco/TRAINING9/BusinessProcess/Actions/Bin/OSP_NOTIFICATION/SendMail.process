@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/mail" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:ns="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:ns4="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns3="http://xmlns.tibco.com/body" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://www.ooredoo.dz/common/nJAMSTemplate" xmlns:pfx2="http://xmlns.tibco.com/encodings/mime" xmlns:pfx="http://www.ooredoo.dz/common/exception/v1">
+    <xsd:import namespace="http://www.ooredoo.dz/common/exception/v1" schemaLocation="/SharedResources/Schemas/XSD/COMMON/Exception.xsd"/>
+    <pd:name>SystemProcess/Actions/OSP_NOTIFICATION/SendMail.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="Mail">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="to" type="xsd:string"/>
+                    <xsd:element name="from" type="xsd:string"/>
+                    <xsd:element name="cc" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="bcc" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="subject" type="xsd:string"/>
+                    <xsd:element name="replyTo" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="body" type="xsd:string"/>
+                    <xsd:element name="mimeEnveloppe" minOccurs="0">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="mimePart" minOccurs="0" maxOccurs="unbounded">
+                                    <xsd:complexType>
+                                        <xsd:sequence>
+                                            <xsd:element name="mimeHeaders">
+                                                <xsd:complexType>
+                                                    <xsd:sequence>
+                                                        <xsd:element name="content-disposition" type="xsd:string" minOccurs="0"/>
+                                                        <xsd:element name="content-type" type="xsd:string"/>
+                                                        <xsd:element name="contecnt-transfer-encoding" type="xsd:string" minOccurs="0"/>
+                                                        <xsd:element name="content-id" type="xsd:string" minOccurs="0"/>
+                                                    </xsd:sequence>
+                                                </xsd:complexType>
+                                            </xsd:element>
+                                        </xsd:sequence>
+                                    </xsd:complexType>
+                                </xsd:element>
+                                <xsd:element name="textContent" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="binaryContent" type="xsd:base64Binary" minOccurs="0"/>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>78</pd:startX>
+    <pd:startY>136</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>680</pd:endX>
+    <pd:endY>133</pd:endY>
+    <pd:errorSchemas>
+        <Exception ref="pfx:Exception"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1414491602486</pd:targetNamespace>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>121</pd:x>
+        <pd:y>259</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Log Send Mail Error">
+        <pd:type>com.tibco.pe.core.WriteToLogActivity</pd:type>
+        <pd:resourceType>ae.activities.log</pd:resourceType>
+        <pd:x>258</pd:x>
+        <pd:y>265</pd:y>
+        <config>
+            <role>ERROR</role>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <message>
+                    <xsl:value-of select="concat(&quot;Error when Sending Mail to : &quot; ,$Start/Mail/to,&quot; about : &quot;,$Start/Mail/subject)"/>
+                </message>
+                <msgCode>
+                    <xsl:value-of select="&quot;SendingMailException &quot;"/>
+                </msgCode>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Log Starting">
+        <pd:type>com.tibco.pe.core.WriteToLogActivity</pd:type>
+        <pd:resourceType>ae.activities.log</pd:resourceType>
+        <pd:x>222</pd:x>
+        <pd:y>136</pd:y>
+        <config>
+            <role>INFO</role>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <message>
+                    <xsl:value-of select="concat(&quot;Error when Sending Mail to : &quot; ,$Start/Mail/to,&quot; about : &quot;,$Start/Mail/subject)"/>
+                </message>
+                <msgCode>
+                    <xsl:value-of select="&quot;StartingSendMail&quot;"/>
+                </msgCode>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Send Mail">
+        <pd:type>com.tibco.plugin.mail.MailPubActivity</pd:type>
+        <pd:resourceType>ae.activities.MailActivityResource</pd:resourceType>
+        <pd:x>363</pd:x>
+        <pd:y>137</pd:y>
+        <config>
+            <newMimeSupport>true</newMimeSupport>
+            <inputOutputVersion>5.2.0</inputOutputVersion>
+            <host>%%Environment/Mail/SMTPHost%%</host>
+            <useSsl>false</useSsl>
+            <authenticate>false</authenticate>
+            <nonRFC822>false</nonRFC822>
+            <username/>
+            <password/>
+            <ns0:ssl xmlns:ns0="http://www.tibco.com/xmlns/aemeta/services/2002">
+                <ns0:strongCipherSuitesOnly>true</ns0:strongCipherSuitesOnly>
+            </ns0:ssl>
+            <InputHeaders>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="Content-Type" type="xsd:string" minOccurs="0"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </InputHeaders>
+        </config>
+        <pd:inputBindings>
+            <ns2:mailActivityInput>
+                <from>
+                    <xsl:value-of select="$Start/Mail/from"/>
+                </from>
+                <to>
+                    <xsl:value-of select="$Start/Mail/to"/>
+                </to>
+                <xsl:if test="$Start/Mail/cc">
+                    <cc>
+                        <xsl:value-of select="$Start/Mail/cc"/>
+                    </cc>
+                </xsl:if>
+                <xsl:if test="$Start/Mail/bcc">
+                    <bcc>
+                        <xsl:value-of select="$Start/Mail/bcc"/>
+                    </bcc>
+                </xsl:if>
+                <xsl:if test="$Start/Mail/replyTo">
+                    <replyTo>
+                        <xsl:value-of select="$Start/Mail/replyTo"/>
+                    </replyTo>
+                </xsl:if>
+                <subject>
+                    <xsl:value-of select="$Start/Mail/subject"/>
+                </subject>
+                <ns3:bodyElement>
+                    <bodyText>
+                        <xsl:value-of select="$Start/Mail/body"/>
+                    </bodyText>
+                </ns3:bodyElement>
+                <Headers>
+                    <Content-Type>
+                        <xsl:value-of select="'text/html;charset=UTF-8'"/>
+                    </Content-Type>
+                </Headers>
+                <xsl:if test="exists($Start/Mail/mimeEnveloppe)">
+                    <pfx2:mimeEnvelopeElement>
+                        <mimePart>
+                            <mimeHeaders>
+                                <content-type>
+                                    <xsl:value-of select="'text/html; charset=utf-8'"/>
+                                </content-type>
+                            </mimeHeaders>
+                            <binaryContent>
+                                <xsl:value-of select="$Start/Mail/mimeEnveloppe/binaryContent"/>
+                            </binaryContent>
+                        </mimePart>
+                    </pfx2:mimeEnvelopeElement>
+                </xsl:if>
+            </ns2:mailActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Rethrow">
+        <pd:type>com.tibco.pe.core.RethrowActivity</pd:type>
+        <pd:resourceType>ae.activities.rethrow</pd:resourceType>
+        <pd:x>676</pd:x>
+        <pd:y>257</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="LogInfo">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>499</pd:x>
+        <pd:y>135</pd:y>
+        <config>
+            <processName>/Utility/Monitoring/LogInfo.process</processName>
+        </config>
+        <pd:inputBindings>
+            <pfx3:Template>
+                <pfx3:EventMsgCode>
+                    <xsl:value-of select="concat(&quot;Mail sent to &quot;, $Start/Mail/to,&quot; about : &quot;,$Start/Mail/subject)"/>
+                </pfx3:EventMsgCode>
+                <pfx3:EventMsg>
+                    <xsl:value-of select="&quot;MailSent&quot;"/>
+                </pfx3:EventMsg>
+                <pfx3:Payload>
+                    <xsl:value-of select="tib:render-xml($Start/Mail)"/>
+                </pfx3:Payload>
+            </pfx3:Template>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="LogError">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>460</pd:x>
+        <pd:y>258</pd:y>
+        <config>
+            <processName>/Utility/Monitoring/LogError.process</processName>
+        </config>
+        <pd:inputBindings>
+            <pfx3:Template>
+                <pfx3:EventMsgCode>
+                    <xsl:value-of select="&quot;SendingMailException &quot;"/>
+                </pfx3:EventMsgCode>
+                <pfx3:EventMsg>
+                    <xsl:value-of select="concat(&quot;Error when Sending Mail to : &quot; ,$Start/Mail/to,&quot; about : &quot;,$Start/Mail/subject)"/>
+                </pfx3:EventMsg>
+                <xsl:if test="$_error/ns1:ErrorReport/StackTrace">
+                    <pfx3:StackTrace>
+                        <xsl:value-of select="$_error/ns1:ErrorReport/StackTrace"/>
+                    </pfx3:StackTrace>
+                </xsl:if>
+            </pfx3:Template>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Log Starting</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log Starting</pd:from>
+        <pd:to>Send Mail</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>Log Send Mail Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log Send Mail Error</pd:from>
+        <pd:to>LogError</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Send Mail</pd:from>
+        <pd:to>LogInfo</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogInfo</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogError</pd:from>
+        <pd:to>Rethrow</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

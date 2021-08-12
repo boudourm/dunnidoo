@@ -1,0 +1,37 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<repository xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance" xmlns = "http://www.tibco.com/xmlns/repo/types/2002">
+	<globalVariables>
+		<globalVariable>
+			<name>BSCS</name>
+			<value>BSCS</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1414504818270</modTime>
+		</globalVariable>
+		<globalVariable>
+			<name>MaximumRows</name>
+			<value>100</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1414507986263</modTime>
+		</globalVariable>
+		<globalVariable>
+			<name>TimeOut</name>
+			<value>10</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1414507986173</modTime>
+		</globalVariable>
+		<globalVariable>
+			<name>WEBWAP</name>
+			<value>WEBWAP</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1414507343982</modTime>
+		</globalVariable>
+	</globalVariables>
+</repository>

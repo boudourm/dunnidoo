@@ -1,0 +1,21 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<repository xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance" xmlns = "http://www.tibco.com/xmlns/repo/types/2002">
+	<globalVariables>
+		<globalVariable>
+			<name>MaxSessions</name>
+			<value>1</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1421942803039</modTime>
+		</globalVariable>
+		<globalVariable>
+			<name>NotificationReplyStarter</name>
+			<value>Q.NOTIFICATION.NotificationReplyStarter</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1421942802899</modTime>
+		</globalVariable>
+	</globalVariables>
+</repository>

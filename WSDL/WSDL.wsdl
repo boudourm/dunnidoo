@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:ns="http://www.tibco.com/schemas/TRAINING9/SharedResources/Schemas/XSD/Schema.xsd" xmlns:tns="http://xmlns.example.com/1527793653233" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://xmlns.example.com/1527793653233">
+    <import namespace="http://www.tibco.com/schemas/TRAINING9/SharedResources/Schemas/XSD/Schema.xsd" location="../XSD/GetDunningEligibleCustomers.xsd"/>
+    <message name="INPUT">
+        <part name="input" element="ns:DunningEligibleCustomersInput"/>
+    </message>
+    <message name="OUTPUT">
+        <part name="output" element="ns:DunningEligibleCustomersList"/>
+    </message>
+    <portType name="PortType">
+        <operation name="DUNNIDOO">
+            <input message="tns:INPUT"/>
+            <output message="tns:OUTPUT"/>
+        </operation>
+    </portType>
+</definitions>

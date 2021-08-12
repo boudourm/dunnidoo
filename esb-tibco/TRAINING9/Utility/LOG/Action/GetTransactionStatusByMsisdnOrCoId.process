@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:ns="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:ns4="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns3="http://www.ooredoo.dz/common/header/v1" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx2="http://www.ooredoo.dz/common/exception/v1" xmlns:pfx="http://www.ooredoo.dz/log/logSchema">
+    <xsd:import namespace="http://www.ooredoo.dz/log/logSchema" schemaLocation="/SharedResources/Schemas/XSD/LOG/logschema.xsd"/>
+    <xsd:import namespace="http://www.ooredoo.dz/common/exception/v1" schemaLocation="/SharedResources/Schemas/XSD/COMMON/Exception.xsd"/>
+    <pd:name>Utility/LOG/Action/GetTransactionStatusByMsisdnOrCoId.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx:getTransactionStatusByMsisdnOrCoIdRequest"/>
+    <pd:startX>149</pd:startX>
+    <pd:startY>60</pd:startY>
+    <pd:returnBindings>
+        <xsl:copy-of select="$GetTransactionStatusByMsisdnOrCoId-Requestor/ns2:ActivityOutput/Body/root/pfx:getTransactionStatusByMsisdnOrCoIdResponse"/>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx:getTransactionStatusByMsisdnOrCoIdResponse"/>
+    <pd:endX>451</pd:endX>
+    <pd:endY>58</pd:endY>
+    <pd:errorSchemas>
+        <Exception ref="pfx2:Exception"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1425201102747</pd:targetNamespace>
+    <pd:activity name="GetTransactionStatusByMsisdnOrCoId Requestor">
+        <pd:type>com.tibco.plugin.jms.JMSQueueRequestReplyActivity</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueRequestReplyActivity</pd:resourceType>
+        <pd:x>289</pd:x>
+        <pd:y>67</pd:y>
+        <config>
+            <PermittedMessageType>XML Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>%%LocalLog/JMSQueue/GetTransactionStatusByMsisdnOrCoId%%</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/SharedResources/Connections/JMS/JMS_LOG_Connection.sharedjmscon</ConnectionReference>
+            <InDataxsdString ref="pfx:getTransactionStatusByMsisdnOrCoIdRequest"/>
+            <OutDataxsdString>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element ref="pfx:getTransactionStatusByMsisdnOrCoIdResponse" minOccurs="0"/>
+                            <xsd:element ref="pfx2:Exception" minOccurs="0"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </OutDataxsdString>
+        </config>
+        <pd:inputBindings>
+            <ns2:ActivityInput>
+                <requestTimeout>
+                    <xsl:value-of select="$_globalVariables/ns4:GlobalVariables/Application/JMS/TimeOutRequestor"/>
+                </requestTimeout>
+                <Body>
+                    <xsl:copy-of select="$Start/pfx:getTransactionStatusByMsisdnOrCoIdRequest"/>
+                </Body>
+            </ns2:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Generate Error">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>289</pd:x>
+        <pd:y>238</pd:y>
+        <config>
+            <faultName/>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <message>
+                    <xsl:value-of select="$GetTransactionStatusByMsisdnOrCoId-Requestor/ns2:ActivityOutput/Body/root/pfx2:Exception/pfx2:Msg"/>
+                </message>
+                <messageCode>
+                    <xsl:value-of select="$GetTransactionStatusByMsisdnOrCoId-Requestor/ns2:ActivityOutput/Body/root/pfx2:Exception/pfx2:MsgCode"/>
+                </messageCode>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>GetTransactionStatusByMsisdnOrCoId Requestor</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>GetTransactionStatusByMsisdnOrCoId Requestor</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>GetTransactionStatusByMsisdnOrCoId Requestor</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:xpathDescription>error</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$GetTransactionStatusByMsisdnOrCoId-Requestor/ns2:ActivityOutput/Body/root/pfx2:Exception/pfx2:StackTrace!='' or  $GetTransactionStatusByMsisdnOrCoId-Requestor/ns2:ActivityOutput/Body/root/pfx2:Exception/pfx2:Data!=''</pd:xpath>
+    </pd:transition>
+</pd:ProcessDefinition>

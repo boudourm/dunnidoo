@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.ooredoo.dz/common/header/v1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.ooredoo.dz/ws/bscs/mrstCmsCommand" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://www.ooredoo.dz/ws/bscs/contractServicesWrite">
+    <pd:name>BusinessProcess/Actions/DunningServiceDesactivation.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="Input">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="CO_ID" type="xsd:string"/>
+                    <xsd:element name="SNCODE" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>104</pd:startX>
+    <pd:startY>61</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>689</pd:endX>
+    <pd:endY>60</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1523974274767</pd:targetNamespace>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>170</pd:x>
+        <pd:y>192</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="COMMIT">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>560</pd:x>
+        <pd:y>61</pd:y>
+        <config>
+            <processName>/BusinessProcess/LogicalProcesses/CallInvokeCommit.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns:mrstCmsCommandRequest>
+                <ns2:Header>
+                    <ns2:UserName>
+                        <xsl:value-of select="&quot;test&quot;"/>
+                    </ns2:UserName>
+                </ns2:Header>
+                <xsl:if test="$GenerateCMSTransactionID/ns:mrstCmsCommandResponse/TRANSACTION_ID">
+                    <TRANSACTION_ID>
+                        <xsl:value-of select="$GenerateCMSTransactionID/ns:mrstCmsCommandResponse/TRANSACTION_ID"/>
+                    </TRANSACTION_ID>
+                </xsl:if>
+            </ns:mrstCmsCommandRequest>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Generate Error">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>510</pd:x>
+        <pd:y>192</pd:y>
+        <config>
+            <faultName/>
+        </config>
+        <pd:inputBindings>
+            <ns1:ActivityInput xmlns:ns1="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema"/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="GenerateCMSTransactionID">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>264</pd:x>
+        <pd:y>61</pd:y>
+        <config>
+            <processName>/BusinessProcess/LogicalProcesses/CallInvokeGetTransactionId.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns:mrstCmsCommandRequest>
+                <ns2:Header>
+                    <ns2:UserName>
+                        <xsl:value-of select="&quot;test&quot;"/>
+                    </ns2:UserName>
+                </ns2:Header>
+            </ns:mrstCmsCommandRequest>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="ROLLBACK">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>355</pd:x>
+        <pd:y>192</pd:y>
+        <config>
+            <processName>/BusinessProcess/LogicalProcesses/CallInvokeRollBack.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns:mrstCmsCommandRequest>
+                <ns2:Header>
+                    <ns2:UserName>
+                        <xsl:value-of select="&quot;test&quot;"/>
+                    </ns2:UserName>
+                </ns2:Header>
+                <xsl:if test="$GenerateCMSTransactionID/ns:mrstCmsCommandResponse/TRANSACTION_ID">
+                    <TRANSACTION_ID>
+                        <xsl:value-of select="$GenerateCMSTransactionID/ns:mrstCmsCommandResponse/TRANSACTION_ID"/>
+                    </TRANSACTION_ID>
+                </xsl:if>
+            </ns:mrstCmsCommandRequest>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="ServiceDesactivation">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>414</pd:x>
+        <pd:y>61</pd:y>
+        <config>
+            <processName>/BusinessProcess/LogicalProcesses (BILLING)/BSCSCMS/CallContractServicesWrite.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <xsl:if test="$GenerateCMSTransactionID/ns:mrstCmsCommandResponse/TRANSACTION_ID">
+                    <TransactionId>
+                        <xsl:value-of select="$GenerateCMSTransactionID/ns:mrstCmsCommandResponse/TRANSACTION_ID"/>
+                    </TransactionId>
+                </xsl:if>
+                <pfx:contractServicesWriteRequest>
+                    <ns2:Header>
+                        <ns2:UserName>
+                            <xsl:value-of select="&quot;test&quot;"/>
+                        </ns2:UserName>
+                    </ns2:Header>
+                    <CONTRACT_SERVICES.WRITE>
+                        <CO_ID>
+                            <xsl:value-of select="$Start/Input/CO_ID"/>
+                        </CO_ID>
+                        <services>
+                            <COS_PENDING_STATUS>
+                                <xsl:value-of select="&quot;4&quot;"/>
+                            </COS_PENDING_STATUS>
+                            <SNCODE>
+                                <xsl:value-of select="$Start/Input/SNCODE"/>
+                            </SNCODE>
+                            <PROFILE_ID>
+                                <xsl:value-of select="&quot;0&quot;"/>
+                            </PROFILE_ID>
+                        </services>
+                    </CONTRACT_SERVICES.WRITE>
+                </pfx:contractServicesWriteRequest>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>GenerateCMSTransactionID</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ServiceDesactivation</pd:from>
+        <pd:to>COMMIT</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>GenerateCMSTransactionID</pd:from>
+        <pd:to>ServiceDesactivation</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>COMMIT</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>ROLLBACK</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ROLLBACK</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

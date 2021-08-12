@@ -1,0 +1,1445 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pfx61="http://www.ooredoo.dz/osp/updateJobStatus" xmlns:BW="java://com.tibco.pe.core.JavaCustomXPATHFunctions" xmlns:ns="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pfx1="http://www.ooredoo.dz/ws/billing/getInvoicesSummary" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns91="http://xmlns.tibco.com/bw/activity/xml/render/bytesEnvelope/2003/05" xmlns:pfx41="http://www.ooredoo.dz/service/billing" xmlns:ns21="http://www.ooredoo.dz/ws/bscs/businessTransactionSearch" xmlns:ns71="http://www.ooredoo.dz/bscsdb/newSimSwapInfos" xmlns:ns22="http://www.ooredoo.dz/ws/billing" xmlns:ns23="http://www.ooredoo.dz/ws/account" xmlns:ns24="http://www.ooredoo.dz/ws/bscs/contractsSearch" xmlns:ns41="http://www.ooredoo.dz/bscsdb/gmdSimSwap" xmlns:ns62="http://www.ooredoo.dz/ws/bscs/contractResourcesReplace" xmlns:ns61="http://www.ooredoo.dz/ws/resource/doMsisdnSwap" xmlns:pfx31="http://www.ooredoo.dz/ws/billing/getDepositAmount" xmlns:pfx5="http://www.ooredoo.dz/common/exception/v1" xmlns:pfx32="http://www.ooredoo.dz/ws/bscs/contractDevicesRead" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx4="http://www.faizsiegeln.com/njams" xmlns:pfx3="http://www.tibco.com/ns/no_namespace_schema_location/SharedResources/Schemas/XSD/Notification.xsd" xmlns:pfx2="http://www.ooredoo.dz/osp/notification" xmlns:pfx8="http://www.ooredoo.dz/ws/resource/changeContractSim" xmlns:pfx7="http://www.ooredoo.dz/ws/contract/changeContractCustomer" xmlns:pfx6="http://www.ooredoo.dz/ws/retry/manuallyRetry" xmlns:pfx51="http://www.ooredoo.dz/ws/resource" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns14="http://www.ooredoo.dz/osp/notification/http" xmlns:ns9="http://www.ooredoo.dz/log/logSchema" xmlns:ns5="http://www.ooredoo.dz/notification" xmlns:ns12="http://www.ooredoo.dz/common/nJAMSTemplate" xmlns:ns31="http://www.ooredoo.dz/common/wsexception/v1" xmlns:ns6="http://www.ooredoo.dz/bscsdb/checkBscsProvPendingRequest" xmlns:ns13="http://www.ooredoo.dz/log/logStarterSchema" xmlns:ns10="http://www.ooredoo.dz/osp/retry/properties" xmlns:pfx="http://www.tibco.com/schemas/OSP_NOTIFICATION/SharedResources/Schemas/XSD/Schema.xsd" xmlns:ns7="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:ns8="http://www.ooredoo.dz/common/header/v1" xmlns:ns11="www.tibco.com/plugin/Sleep" xmlns:ns51="http://www.ooredoo.dz/ws/billing/setDepositAmount" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:ns1="java://OSPtechnicalUtilities" xmlns:ns4="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns3="http://www.tibco.com/pe/EngineTypes" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx21="http://www.ooredoo.dz/ws/bscs/storageMediumSearch" xmlns:pfx42="http://www.ooredoo.dz/bscsdb/readContractStatusReason">
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/SharedResources/Schemas/XSD/Notification.xsd" schemaLocation="/SharedResources/Schemas/XSD/Notification.xsd"/>
+    <xsd:import namespace="http://www.ooredoo.dz/common/exception/v1" schemaLocation="/SharedResources/Schemas/XSD/COMMON/Exception.xsd"/>
+    <xsd:import namespace="http://www.ooredoo.dz/osp/retry/properties" schemaLocation="/SharedResources/Schemas/XSD/RetryProperties.xsd"/>
+    <pd:name>BusinessProcess/Actions/Bin/NotificationProcess.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="NotificationProcess">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="TEMPLATE_NAME" type="xsd:string"/>
+                    <xsd:element name="MSISDN" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="CHECK_PENDING_REQUEST" type="xsd:boolean" minOccurs="0"/>
+                    <xsd:element ref="pfx3:TX_ACTIVE"/>
+                    <xsd:element ref="pfx3:COMMAND" minOccurs="0"/>
+                    <xsd:element ref="ns10:RETRY_PROPERTIES" minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>49</pd:startX>
+    <pd:startY>129</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>1799</pd:endX>
+    <pd:endY>128</pd:endY>
+    <pd:errorSchemas>
+        <Exception ref="pfx5:Exception"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1412676087109</pd:targetNamespace>
+    <pd:activity name="Call WS Notification">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>1120</pd:x>
+        <pd:y>48</pd:y>
+        <config>
+            <processName>/SystemProcess/Actions/WsNotification.process</processName>
+        </config>
+        <pd:inputBindings>
+            <WsNotification>
+                <TEMPLATE_NAME>
+                    <xsl:value-of select="$Start/NotificationProcess/TEMPLATE_NAME"/>
+                </TEMPLATE_NAME>
+                <MSISDN>
+                    <xsl:value-of select="$Start/NotificationProcess/MSISDN"/>
+                </MSISDN>
+                <xsl:copy-of select="$Start/NotificationProcess/TX_ACTIVE"/>
+                <xsl:copy-of select="$Start/NotificationProcess/COMMAND"/>
+            </WsNotification>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>36</pd:x>
+        <pd:y>504</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Check IsPending">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>769</pd:x>
+        <pd:y>133</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Check Pending Request On Network">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>774</pd:x>
+        <pd:y>255</pd:y>
+        <config>
+            <processName>/SystemProcess/TechnicalProcesses/CallCheckBscsProvPendingRequest.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns6:checkBscsProvPendingRequestRequest>
+                <xsl:choose>
+                    <xsl:when test="$Start/NotificationProcess/TX_ACTIVE/MSISDN!='' and &#xA;starts-with($Start/NotificationProcess/TX_ACTIVE/MSISDN, '213')">
+                        <DN_NUM>
+                            <xsl:value-of select="substring($Start/NotificationProcess/TX_ACTIVE/MSISDN,4,9)"/>
+                        </DN_NUM>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:if test="$Start/NotificationProcess/TX_ACTIVE/MSISDN">
+                            <DN_NUM>
+                                <xsl:value-of select="$Start/NotificationProcess/TX_ACTIVE/MSISDN"/>
+                            </DN_NUM>
+                        </xsl:if>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </ns6:checkBscsProvPendingRequestRequest>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="GetTransaction Status">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>508</pd:x>
+        <pd:y>513</pd:y>
+        <config>
+            <processName>/Utility/LOG/Action/GetTransactionStatus.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns9:getTransactionStatusRequest>
+                <ns8:Header>
+                    <ns8:TransactionID>
+                        <xsl:value-of select="concat($Start/NotificationProcess/TX_ACTIVE/TRANSACTION_ID,'NOTIF')"/>
+                    </ns8:TransactionID>
+                </ns8:Header>
+                <transactionId>
+                    <xsl:value-of select="concat($Start/NotificationProcess/TX_ACTIVE/TRANSACTION_ID,'NOTIF')"/>
+                </transactionId>
+            </ns9:getTransactionStatusRequest>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="GetVariable">
+        <pd:type>com.tibco.pe.core.GetSharedVariableActivity</pd:type>
+        <pd:resourceType>ae.activities.getSharedVariable</pd:resourceType>
+        <pd:x>658</pd:x>
+        <pd:y>130</pd:y>
+        <config>
+            <variableConfig>/SharedResources/Resources/SharedVariable/NotifConfigVariable.sharedvariable</variableConfig>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Invalid Msisdn">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>51</pd:x>
+        <pd:y>260</pd:y>
+        <config>
+            <faultName/>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <message>
+                    <xsl:value-of select="&quot;the value of msisdn does not match to the regular expression 213[5]\d\d\d\d\d\d\d\d&quot;"/>
+                </message>
+                <messageCode>
+                    <xsl:value-of select="&quot;InvalidMsisdnException&quot;"/>
+                </messageCode>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Invalid TemplateName">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>660</pd:x>
+        <pd:y>258</pd:y>
+        <config>
+            <faultName/>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <message>
+                    <xsl:value-of select="concat('Invalid TemplateName: ',$Start/NotificationProcess/TEMPLATE_NAME)"/>
+                </message>
+                <messageCode>
+                    <xsl:value-of select="'InvalidTemplateName'"/>
+                </messageCode>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Invlaid NotificationType">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>919</pd:x>
+        <pd:y>252</pd:y>
+        <config>
+            <faultName/>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <xsl:variable name="var" select="$Start/NotificationProcess/TEMPLATE_NAME"/>
+                <message>
+                    <xsl:value-of select="concat('Invalid Notification Type: ',$GetVariable/pfx2:LOAD_NOTIFICATION_CONFIG_LIST/pfx2:LOAD_NOTIFICATION_CONFIG[pfx2:TEMPLATE_NAME=$var]/pfx2:TYPE)"/>
+                </message>
+                <messageCode>
+                    <xsl:value-of select="'InvalidNotificationType'"/>
+                </messageCode>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Is retryable">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>380</pd:x>
+        <pd:y>632</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Jdbc Notification">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>1115</pd:x>
+        <pd:y>317</pd:y>
+        <config>
+            <processName>/SystemProcess/Actions/JdbcNotification.process</processName>
+        </config>
+        <pd:inputBindings>
+            <JdbcNotifcation>
+                <xsl:variable name="var" select="$_globalVariables/ns4:GlobalVariables/ProcessConfig/NotificationProcess/JdbcType"/>
+                <xsl:variable name="TemplateName" select="$GetVariable/pfx2:LOAD_NOTIFICATION_CONFIG_LIST/pfx2:LOAD_NOTIFICATION_CONFIG[pfx2:TEMPLATE_NAME=$Prepare-Template-Name/root/templateName]"/>
+                <DATA_SOURCE>
+                    <xsl:value-of select="substring-before($TemplateName/pfx2:TEMPLATE_SOURCE, '|')"/>
+                </DATA_SOURCE>
+                <QUERY>
+                    <xsl:value-of select="tib:evaluate(substring-after($TemplateName/pfx2:TEMPLATE_SOURCE,'|'))"/>
+                </QUERY>
+            </JdbcNotifcation>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Log CallWSNotification Process End">
+        <pd:type>com.tibco.pe.core.WriteToLogActivity</pd:type>
+        <pd:resourceType>ae.activities.log</pd:resourceType>
+        <pd:x>1249</pd:x>
+        <pd:y>46</pd:y>
+        <config>
+            <role>INFO</role>
+        </config>
+        <pd:inputBindings>
+            <ns2:ActivityInput>
+                <message>
+                    <xsl:value-of select="'End Call Ws Notification Process'"/>
+                </message>
+                <msgCode>
+                    <xsl:value-of select="'INFO : Call Ws Notification Process End'"/>
+                </msgCode>
+            </ns2:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Log Error">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>289</pd:x>
+        <pd:y>765</pd:y>
+        <config>
+            <processName>/Utility/Monitoring/LogError.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns12:Template>
+                <xsl:if test="$_error/ns3:ErrorReport/MsgCode">
+                    <ns12:EventMsgCode>
+                        <xsl:value-of select="$_error/ns3:ErrorReport/MsgCode"/>
+                    </ns12:EventMsgCode>
+                </xsl:if>
+                <xsl:if test="$_error/ns3:ErrorReport/Msg">
+                    <ns12:EventMsg>
+                        <xsl:value-of select="$_error/ns3:ErrorReport/Msg"/>
+                    </ns12:EventMsg>
+                </xsl:if>
+                <ns12:StackTrace>
+                    <xsl:value-of select="$_error/ns3:ErrorReport/StackTrace"/>
+                </ns12:StackTrace>
+                <ns12:Attributes>
+                    <xsl:if test="exists($Start/NotificationProcess/MSISDN)">
+                        <ns12:Attribute>
+                            <ns12:Name>
+                                <xsl:value-of select="'MSISDN'"/>
+                            </ns12:Name>
+                            <ns12:Value>
+                                <xsl:value-of select="$Start/NotificationProcess/MSISDN"/>
+                            </ns12:Value>
+                        </ns12:Attribute>
+                    </xsl:if>
+                    <ns12:Attribute>
+                        <ns12:Name>
+                            <xsl:value-of select="'Template Name'"/>
+                        </ns12:Name>
+                        <ns12:Value>
+                            <xsl:value-of select="$Start/NotificationProcess/TEMPLATE_NAME"/>
+                        </ns12:Value>
+                    </ns12:Attribute>
+                </ns12:Attributes>
+            </ns12:Template>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Log Exception">
+        <pd:type>com.tibco.pe.core.WriteToLogActivity</pd:type>
+        <pd:resourceType>ae.activities.log</pd:resourceType>
+        <pd:x>235</pd:x>
+        <pd:y>505</pd:y>
+        <config>
+            <role>ERROR</role>
+        </config>
+        <pd:inputBindings>
+            <ns2:ActivityInput>
+                <message>
+                    <xsl:value-of select="concat('Error in Notification process, details :  ',tib:render-xml($_error/ns3:ErrorReport))"/>
+                </message>
+                <xsl:if test="$_error/ns3:ErrorReport/MsgCode">
+                    <msgCode>
+                        <xsl:value-of select="$_error/ns3:ErrorReport/MsgCode"/>
+                    </msgCode>
+                </xsl:if>
+            </ns2:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Log JdbcNotifcation Process End">
+        <pd:type>com.tibco.pe.core.WriteToLogActivity</pd:type>
+        <pd:resourceType>ae.activities.log</pd:resourceType>
+        <pd:x>1234</pd:x>
+        <pd:y>326</pd:y>
+        <config>
+            <role>INFO</role>
+        </config>
+        <pd:inputBindings>
+            <ns2:ActivityInput>
+                <message>
+                    <xsl:value-of select="'End Jdbc Notification Process'"/>
+                </message>
+                <msgCode>
+                    <xsl:value-of select="'INFO : Jdbc Notification Process End'"/>
+                </msgCode>
+            </ns2:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Log Notification Process Start">
+        <pd:type>com.tibco.pe.core.WriteToLogActivity</pd:type>
+        <pd:resourceType>ae.activities.log</pd:resourceType>
+        <pd:x>237</pd:x>
+        <pd:y>138</pd:y>
+        <config>
+            <role>INFO</role>
+        </config>
+        <pd:inputBindings>
+            <ns2:ActivityInput>
+                <message>
+                    <xsl:value-of select="'Start Notification Process'"/>
+                </message>
+                <msgCode>
+                    <xsl:value-of select="'INFO : Notification Process Start'"/>
+                </msgCode>
+            </ns2:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Log SendMail Process End">
+        <pd:type>com.tibco.pe.core.WriteToLogActivity</pd:type>
+        <pd:resourceType>ae.activities.log</pd:resourceType>
+        <pd:x>1247</pd:x>
+        <pd:y>434</pd:y>
+        <config>
+            <role>INFO</role>
+        </config>
+        <pd:inputBindings>
+            <ns2:ActivityInput>
+                <message>
+                    <xsl:value-of select="'End SendMail Notification Process'"/>
+                </message>
+                <msgCode>
+                    <xsl:value-of select="'INFO : SendMail Notification Process End'"/>
+                </msgCode>
+            </ns2:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Log SendSms Process  End">
+        <pd:type>com.tibco.pe.core.WriteToLogActivity</pd:type>
+        <pd:resourceType>ae.activities.log</pd:resourceType>
+        <pd:x>1309</pd:x>
+        <pd:y>138</pd:y>
+        <config>
+            <role>INFO</role>
+        </config>
+        <pd:inputBindings>
+            <ns2:ActivityInput>
+                <message>
+                    <xsl:value-of select="'End Send Sms Process'"/>
+                </message>
+                <msgCode>
+                    <xsl:value-of select="'INFO : Send Sms Process End'"/>
+                </msgCode>
+            </ns2:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Log Send HTTP Process">
+        <pd:type>com.tibco.pe.core.WriteToLogActivity</pd:type>
+        <pd:resourceType>ae.activities.log</pd:resourceType>
+        <pd:x>1273</pd:x>
+        <pd:y>566</pd:y>
+        <config>
+            <role>INFO</role>
+        </config>
+        <pd:inputBindings>
+            <ns2:ActivityInput>
+                <message>
+                    <xsl:value-of select="'End SendHTTP Notification Process'"/>
+                </message>
+                <msgCode>
+                    <xsl:value-of select="'INFO : SendHTTP Notification Process End'"/>
+                </msgCode>
+            </ns2:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="LogError after retry">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>383</pd:x>
+        <pd:y>514</pd:y>
+        <config>
+            <processName>/Utility/Monitoring/LogError.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns12:Template>
+                <ns12:EventMsgCode>
+                    <xsl:value-of select="$_error/ns3:ErrorReport/MsgCode"/>
+                </ns12:EventMsgCode>
+                <xsl:if test="$_error/ns3:ErrorReport/Msg">
+                    <ns12:EventMsg>
+                        <xsl:value-of select="$_error/ns3:ErrorReport/Msg"/>
+                    </ns12:EventMsg>
+                </xsl:if>
+                <ns12:StackTrace>
+                    <xsl:value-of select="$_error/ns3:ErrorReport/StackTrace"/>
+                </ns12:StackTrace>
+            </ns12:Template>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="LogInfo End CallWS Notification">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>1441</pd:x>
+        <pd:y>47</pd:y>
+        <config>
+            <processName>/Utility/Monitoring/LogInfo.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns12:Template>
+                <ns12:EventMsgCode>
+                    <xsl:value-of select="&quot;End Notification process&quot;"/>
+                </ns12:EventMsgCode>
+                <ns12:EventMsg>
+                    <xsl:value-of select="concat(&quot;End Notification process  &quot;,&quot;MSISDN :&quot;,$Start/NotificationProcess/MSISDN,'  ,Template name : ',$Start/NotificationProcess/TEMPLATE_NAME)"/>
+                </ns12:EventMsg>
+                <ns12:Payload>
+                    <xsl:value-of select="tib:render-xml($Call-WS-Notification/WsNotification)"/>
+                </ns12:Payload>
+                <ns12:Attributes>
+                    <ns12:Attribute>
+                        <ns12:Name>
+                            <xsl:value-of select="'MSISDN'"/>
+                        </ns12:Name>
+                        <ns12:Value>
+                            <xsl:value-of select="$Start/NotificationProcess/MSISDN"/>
+                        </ns12:Value>
+                    </ns12:Attribute>
+                    <ns12:Attribute>
+                        <ns12:Name>
+                            <xsl:value-of select="'TransactionId'"/>
+                        </ns12:Name>
+                        <ns12:Value>
+                            <xsl:value-of select="$Start/NotificationProcess/TX_ACTIVE/TRANSACTION_ID"/>
+                        </ns12:Value>
+                    </ns12:Attribute>
+                    <ns12:Attribute>
+                        <ns12:Name>
+                            <xsl:value-of select="'Template name'"/>
+                        </ns12:Name>
+                        <ns12:Value>
+                            <xsl:value-of select="$Start/NotificationProcess/TEMPLATE_NAME"/>
+                        </ns12:Value>
+                    </ns12:Attribute>
+                </ns12:Attributes>
+                <ns12:LogContext/>
+            </ns12:Template>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="LogInfo End JdbcNotification">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>1452</pd:x>
+        <pd:y>315</pd:y>
+        <config>
+            <processName>/Utility/Monitoring/LogInfo.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns12:Template>
+                <ns12:EventMsgCode>
+                    <xsl:value-of select="&quot;End Notification process&quot;"/>
+                </ns12:EventMsgCode>
+                <ns12:EventMsg>
+                    <xsl:value-of select="concat(&quot;End Notification process  &quot;,&quot;MSISDN :&quot;,$Start/NotificationProcess/MSISDN,'  ,Template name : ',$Start/NotificationProcess/TEMPLATE_NAME)"/>
+                </ns12:EventMsg>
+                <ns12:Attributes>
+                    <ns12:Attribute>
+                        <ns12:Name>
+                            <xsl:value-of select="'MSISDN'"/>
+                        </ns12:Name>
+                        <ns12:Value>
+                            <xsl:value-of select="$Start/NotificationProcess/MSISDN"/>
+                        </ns12:Value>
+                    </ns12:Attribute>
+                    <ns12:Attribute>
+                        <ns12:Name>
+                            <xsl:value-of select="'Trsansactionid'"/>
+                        </ns12:Name>
+                        <ns12:Value>
+                            <xsl:value-of select="$Start/NotificationProcess/TX_ACTIVE/TRANSACTION_ID"/>
+                        </ns12:Value>
+                    </ns12:Attribute>
+                    <ns12:Attribute>
+                        <ns12:Name>
+                            <xsl:value-of select="'Template_Name'"/>
+                        </ns12:Name>
+                        <ns12:Value>
+                            <xsl:value-of select="$Start/NotificationProcess/TEMPLATE_NAME"/>
+                        </ns12:Value>
+                    </ns12:Attribute>
+                </ns12:Attributes>
+                <ns12:LogContext/>
+            </ns12:Template>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="LogInfo End MailNotification">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>1455</pd:x>
+        <pd:y>435</pd:y>
+        <config>
+            <processName>/Utility/Monitoring/LogInfo.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns12:Template>
+                <ns12:EventMsgCode>
+                    <xsl:value-of select="'End SendMail Notification Process'"/>
+                </ns12:EventMsgCode>
+                <ns12:EventMsg>
+                    <xsl:value-of select="concat(&quot;End Notification process  &quot;,&quot;MSISDN :&quot;,$Start/NotificationProcess/MSISDN,'  ,Template name : ',$Start/NotificationProcess/TEMPLATE_NAME)"/>
+                </ns12:EventMsg>
+                <ns12:Payload>
+                    <xsl:value-of select="tib:render-xml($Start/NotificationProcess)"/>
+                </ns12:Payload>
+                <ns12:Attributes>
+                    <ns12:Attribute>
+                        <ns12:Name>
+                            <xsl:value-of select="'Trsansactionid'"/>
+                        </ns12:Name>
+                        <ns12:Value>
+                            <xsl:value-of select="$Start/NotificationProcess/TX_ACTIVE/TRANSACTION_ID"/>
+                        </ns12:Value>
+                    </ns12:Attribute>
+                    <ns12:Attribute>
+                        <ns12:Name>
+                            <xsl:value-of select="'MSISDN'"/>
+                        </ns12:Name>
+                        <ns12:Value>
+                            <xsl:value-of select="$Start/NotificationProcess/MSISDN"/>
+                        </ns12:Value>
+                    </ns12:Attribute>
+                    <ns12:Attribute>
+                        <ns12:Name>
+                            <xsl:value-of select="'Template_Name'"/>
+                        </ns12:Name>
+                        <ns12:Value>
+                            <xsl:value-of select="$Start/NotificationProcess/TEMPLATE_NAME"/>
+                        </ns12:Value>
+                    </ns12:Attribute>
+                </ns12:Attributes>
+                <ns12:LogContext/>
+            </ns12:Template>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="LogInfo End SendSms">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>1458</pd:x>
+        <pd:y>136</pd:y>
+        <config>
+            <processName>/Utility/Monitoring/LogInfo.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns12:Template>
+                <ns12:EventMsgCode>
+                    <xsl:value-of select="&quot;End Notification process&quot;"/>
+                </ns12:EventMsgCode>
+                <ns12:EventMsg>
+                    <xsl:value-of select="concat(&quot;End Notification process with Success  &quot;,&quot;MSISDN :&quot;,$Start/NotificationProcess/MSISDN,'  ,Template name : ',$Start/NotificationProcess/TEMPLATE_NAME)"/>
+                </ns12:EventMsg>
+                <ns12:Payload>
+                    <xsl:value-of select="tib:render-xml($Send-SMS/StatusListe)"/>
+                </ns12:Payload>
+                <ns12:Attributes>
+                    <ns12:Attribute>
+                        <ns12:Name>
+                            <xsl:value-of select="'MSISDN'"/>
+                        </ns12:Name>
+                        <ns12:Value>
+                            <xsl:value-of select="$Start/NotificationProcess/MSISDN"/>
+                        </ns12:Value>
+                    </ns12:Attribute>
+                    <ns12:Attribute>
+                        <ns12:Name>
+                            <xsl:value-of select="'TransactionId'"/>
+                        </ns12:Name>
+                        <ns12:Value>
+                            <xsl:value-of select="$Start/NotificationProcess/TX_ACTIVE/TRANSACTION_ID"/>
+                        </ns12:Value>
+                    </ns12:Attribute>
+                    <ns12:Attribute>
+                        <ns12:Name>
+                            <xsl:value-of select="'Template_Name'"/>
+                        </ns12:Name>
+                        <ns12:Value>
+                            <xsl:value-of select="$Start/NotificationProcess/TEMPLATE_NAME"/>
+                        </ns12:Value>
+                    </ns12:Attribute>
+                </ns12:Attributes>
+                <ns12:LogContext/>
+            </ns12:Template>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="LogInfo Start">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>425</pd:x>
+        <pd:y>128</pd:y>
+        <config>
+            <processName>/Utility/Monitoring/LogInfo.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns12:Template>
+                <ns12:EventMsgCode>
+                    <xsl:value-of select="&quot;Start Notification process&quot;"/>
+                </ns12:EventMsgCode>
+                <ns12:EventMsg>
+                    <xsl:value-of select="concat(&quot;Start Notification process  &quot;,&quot;MSISDN :&quot;,$Start/NotificationProcess/MSISDN,'  ,Template name : ',$Start/NotificationProcess/TEMPLATE_NAME)"/>
+                </ns12:EventMsg>
+                <ns12:Payload>
+                    <xsl:value-of select="tib:render-xml($Start/NotificationProcess)"/>
+                </ns12:Payload>
+                <ns12:Attributes>
+                    <xsl:if test="exists($Start/NotificationProcess/MSISDN)">
+                        <ns12:Attribute>
+                            <ns12:Name>
+                                <xsl:value-of select="'MSISDN'"/>
+                            </ns12:Name>
+                            <ns12:Value>
+                                <xsl:value-of select="$Start/NotificationProcess/MSISDN"/>
+                            </ns12:Value>
+                        </ns12:Attribute>
+                    </xsl:if>
+                    <ns12:Attribute>
+                        <ns12:Name>
+                            <xsl:value-of select="'TransactionId'"/>
+                        </ns12:Name>
+                        <ns12:Value>
+                            <xsl:value-of select="$Start/NotificationProcess/TX_ACTIVE/TRANSACTION_ID"/>
+                        </ns12:Value>
+                    </ns12:Attribute>
+                    <ns12:Attribute>
+                        <ns12:Name>
+                            <xsl:value-of select="'Template Name'"/>
+                        </ns12:Name>
+                        <ns12:Value>
+                            <xsl:value-of select="$Start/NotificationProcess/TEMPLATE_NAME"/>
+                        </ns12:Value>
+                    </ns12:Attribute>
+                </ns12:Attributes>
+            </ns12:Template>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="LogInfo End HTTPNotification">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>1452</pd:x>
+        <pd:y>564</pd:y>
+        <config>
+            <processName>/Utility/Monitoring/LogInfo.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns12:Template>
+                <ns12:EventMsgCode>
+                    <xsl:value-of select="'End SendHTTP Notification Process'"/>
+                </ns12:EventMsgCode>
+                <ns12:EventMsg>
+                    <xsl:value-of select="concat(&quot;End Notification process  &quot;,&quot;MSISDN :&quot;,$Start/NotificationProcess/MSISDN,'  ,Template name : ',$Start/NotificationProcess/TEMPLATE_NAME)"/>
+                </ns12:EventMsg>
+                <ns12:Payload>
+                    <xsl:value-of select="tib:render-xml($Start/NotificationProcess)"/>
+                </ns12:Payload>
+                <ns12:Attributes>
+                    <ns12:Attribute>
+                        <ns12:Name>
+                            <xsl:value-of select="'Trsansactionid'"/>
+                        </ns12:Name>
+                        <ns12:Value>
+                            <xsl:value-of select="$Start/NotificationProcess/TX_ACTIVE/TRANSACTION_ID"/>
+                        </ns12:Value>
+                    </ns12:Attribute>
+                    <ns12:Attribute>
+                        <ns12:Name>
+                            <xsl:value-of select="'MSISDN'"/>
+                        </ns12:Name>
+                        <ns12:Value>
+                            <xsl:value-of select="$Start/NotificationProcess/MSISDN"/>
+                        </ns12:Value>
+                    </ns12:Attribute>
+                    <ns12:Attribute>
+                        <ns12:Name>
+                            <xsl:value-of select="'Template_Name'"/>
+                        </ns12:Name>
+                        <ns12:Value>
+                            <xsl:value-of select="$Start/NotificationProcess/TEMPLATE_NAME"/>
+                        </ns12:Value>
+                    </ns12:Attribute>
+                </ns12:Attributes>
+                <ns12:LogContext/>
+            </ns12:Template>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="LogRetry">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>739</pd:x>
+        <pd:y>632</pd:y>
+        <config>
+            <processName>/Utility/Monitoring/LogWarn.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns12:Template>
+                <ns12:EventMsgCode>
+                    <xsl:value-of select="'RETRY'"/>
+                </ns12:EventMsgCode>
+                <xsl:if test="$Notification-Retry/TXStatus/statut">
+                    <ns12:EventMsg>
+                        <xsl:value-of select="$Notification-Retry/TXStatus/statut"/>
+                    </ns12:EventMsg>
+                </xsl:if>
+                <ns12:StackTrace>
+                    <xsl:value-of select="$_error/ns3:ErrorReport/StackTrace"/>
+                </ns12:StackTrace>
+            </ns12:Template>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Map ErrorMsg">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>129</pd:x>
+        <pd:y>504</pd:y>
+        <config>
+            <element>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="Msg" type="xsd:string" minOccurs="0"/>
+                            <xsd:element name="MsgCode" type="xsd:string" minOccurs="0"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <xsl:if test="$_error/ns3:ErrorReport/Msg">
+                    <Msg>
+                        <xsl:value-of select="$_error/ns3:ErrorReport/Msg"/>
+                    </Msg>
+                </xsl:if>
+                <xsl:if test="$_error/ns3:ErrorReport/MsgCode">
+                    <MsgCode>
+                        <xsl:value-of select="$_error/ns3:ErrorReport/MsgCode"/>
+                    </MsgCode>
+                </xsl:if>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Notification Retry">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>238</pd:x>
+        <pd:y>632</pd:y>
+        <config>
+            <processName>/SystemProcess/Actions/NotificationRetry.process</processName>
+        </config>
+        <pd:inputBindings>
+            <Input>
+                <root>
+                    <NOTIFICATION>
+                        <NOTIFICATION_PARAM_LIST>
+                            <TEMPLATE_NAME>
+                                <xsl:value-of select="$Start/NotificationProcess/TEMPLATE_NAME"/>
+                            </TEMPLATE_NAME>
+                        </NOTIFICATION_PARAM_LIST>
+                        <xsl:copy-of select="$Start/NotificationProcess/TX_ACTIVE"/>
+                        <xsl:copy-of select="$Start/NotificationProcess/COMMAND"/>
+                        <xsl:if test="$Start/NotificationProcess/CHECK_PENDING_REQUEST">
+                            <CHECK_PENDING_REQUEST>
+                                <xsl:value-of select="$Start/NotificationProcess/CHECK_PENDING_REQUEST"/>
+                            </CHECK_PENDING_REQUEST>
+                        </xsl:if>
+                    </NOTIFICATION>
+                </root>
+                <ns31:Error>
+                    <xsl:if test="$_error/ns3:ErrorReport/MsgCode">
+                        <ns31:ErrorMessageCode>
+                            <xsl:value-of select="$_error/ns3:ErrorReport/MsgCode"/>
+                        </ns31:ErrorMessageCode>
+                    </xsl:if>
+                    <xsl:if test="$_error/ns3:ErrorReport/Msg">
+                        <ns31:ErrorMessage>
+                            <xsl:value-of select="$_error/ns3:ErrorReport/Msg"/>
+                        </ns31:ErrorMessage>
+                    </xsl:if>
+                </ns31:Error>
+                <ns10:RETRY_PROPERTIES>
+                    <ns10:TRANSCATION_RETRY_ITERATION>
+                        <xsl:value-of select="if(empty($Start/NotificationProcess/ns10:RETRY_PROPERTIES/ns10:TRANSCATION_RETRY_ITERATION) )then 0 else ( $Start/NotificationProcess/ns10:RETRY_PROPERTIES/ns10:TRANSCATION_RETRY_ITERATION)"/>
+                    </ns10:TRANSCATION_RETRY_ITERATION>
+                    <xsl:if test="exists($Start/NotificationProcess/ns10:RETRY_PROPERTIES/ns10:TRANSACTION_RETRY_NEXT_EXECUTION)">
+                        <xsl:if test="$Start/NotificationProcess/ns10:RETRY_PROPERTIES/ns10:TRANSACTION_RETRY_NEXT_EXECUTION">
+                            <ns10:TRANSACTION_RETRY_NEXT_EXECUTION>
+                                <xsl:value-of select="$Start/NotificationProcess/ns10:RETRY_PROPERTIES/ns10:TRANSACTION_RETRY_NEXT_EXECUTION"/>
+                            </ns10:TRANSACTION_RETRY_NEXT_EXECUTION>
+                        </xsl:if>
+                    </xsl:if>
+                    <xsl:if test="exists($Start/NotificationProcess/ns10:RETRY_PROPERTIES/ns10:TRANSACTION_BATCH_RETRY_NEXT_EXECUTION)">
+                        <xsl:if test="$Start/NotificationProcess/ns10:RETRY_PROPERTIES/ns10:TRANSACTION_BATCH_RETRY_NEXT_EXECUTION">
+                            <ns10:TRANSACTION_BATCH_RETRY_NEXT_EXECUTION>
+                                <xsl:value-of select="$Start/NotificationProcess/ns10:RETRY_PROPERTIES/ns10:TRANSACTION_BATCH_RETRY_NEXT_EXECUTION"/>
+                            </ns10:TRANSACTION_BATCH_RETRY_NEXT_EXECUTION>
+                        </xsl:if>
+                    </xsl:if>
+                    <ns10:SYSDATE>
+                        <xsl:value-of select="current-dateTime()"/>
+                    </ns10:SYSDATE>
+                    <ns10:DESTINATION_QUEUE>
+                        <xsl:value-of select="$_globalVariables/ns4:GlobalVariables/ProcessConfig/NotificationProcess/ManuallyRetry/NotificationProcessRetry"/>
+                    </ns10:DESTINATION_QUEUE>
+                    <ns10:BODY_MSG>
+                        <xsl:value-of select="tib:render-xml($Start/NotificationProcess)"/>
+                    </ns10:BODY_MSG>
+                    <ns10:TRANSACTION_ID>
+                        <xsl:value-of select="concat($Start/NotificationProcess/TX_ACTIVE/TRANSACTION_ID, 'NOTIF')"/>
+                    </ns10:TRANSACTION_ID>
+                    <ns10:FLOW_ID>
+                        <xsl:value-of select="&quot;NotificationProcess&quot;"/>
+                    </ns10:FLOW_ID>
+                    <xsl:if test="$_error/ns3:ErrorReport/MsgCode">
+                        <ns10:EXCEPTION_CODE>
+                            <xsl:value-of select="$_error/ns3:ErrorReport/MsgCode"/>
+                        </ns10:EXCEPTION_CODE>
+                    </xsl:if>
+                </ns10:RETRY_PROPERTIES>
+            </Input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Null">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>916</pd:x>
+        <pd:y>130</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Prepare Template Name">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>543</pd:x>
+        <pd:y>136</pd:y>
+        <config>
+            <element>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="templateName" type="xsd:string"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <templateName>
+                    <xsl:value-of select="concat($Start/NotificationProcess/TEMPLATE_NAME,'.',$Start/NotificationProcess/TX_ACTIVE/TRANSACTION_STATUS)"/>
+                </templateName>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="PutRequest">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>608</pd:x>
+        <pd:y>415</pd:y>
+        <config>
+            <processName>/Utility/LOG/Action/Put.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns13:putStarterRequest>
+                <ns8:Header>
+                    <ns8:TransactionID>
+                        <xsl:value-of select="concat($Start/NotificationProcess/TX_ACTIVE/TRANSACTION_ID,'NOTIF')"/>
+                    </ns8:TransactionID>
+                </ns8:Header>
+                <TRANSACTION_ID>
+                    <xsl:value-of select="concat($Start/NotificationProcess/TX_ACTIVE/TRANSACTION_ID,'NOTIF')"/>
+                </TRANSACTION_ID>
+                <STATUS>
+                    <xsl:value-of select="'ERROR'"/>
+                </STATUS>
+                <ADDITIONAL_INPUT>
+                    <xsl:value-of select="$Start/NotificationProcess/TX_ACTIVE/TRANSACTION_ID"/>
+                </ADDITIONAL_INPUT>
+                <MAIN_INPUT>
+                    <xsl:value-of select="concat('213', $Start/NotificationProcess/TX_ACTIVE/MSISDN)"/>
+                </MAIN_INPUT>
+                <REQUESTXML>
+                    <xsl:value-of select="tib:render-xml($Start/NotificationProcess)"/>
+                </REQUESTXML>
+                <PROCESS_SERVICES>
+                    <xsl:value-of select="&quot;NotificationProcess&quot;"/>
+                </PROCESS_SERVICES>
+            </ns13:putStarterRequest>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Rethrow">
+        <pd:type>com.tibco.pe.core.RethrowActivity</pd:type>
+        <pd:resourceType>ae.activities.rethrow</pd:resourceType>
+        <pd:x>857</pd:x>
+        <pd:y>507</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Send Mail">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>1116</pd:x>
+        <pd:y>424</pd:y>
+        <config>
+            <processName>/SystemProcess/Actions/SendMail.process</processName>
+        </config>
+        <pd:inputBindings>
+            <Mail>
+                <xsl:variable name="var" select="$_globalVariables/ns4:GlobalVariables/ProcessConfig/NotificationProcess/MailType"/>
+                <xsl:variable name="templateName" select="$GetVariable/pfx2:LOAD_NOTIFICATION_CONFIG_LIST/pfx2:LOAD_NOTIFICATION_CONFIG[pfx2:TEMPLATE_NAME=$Prepare-Template-Name/root/templateName]"/>
+                <to>
+                    <xsl:value-of select="tib:tokenize-allow-empty($templateName/pfx2:TEMPLATE_SOURCE, '|')[2]"/>
+                </to>
+                <from>
+                    <xsl:value-of select="tib:tokenize-allow-empty($templateName/pfx2:TEMPLATE_SOURCE, '|')[1]"/>
+                </from>
+                <xsl:if test="tib:tokenize-allow-empty($templateName/pfx2:TEMPLATE_SOURCE, '|')[3]">
+                    <cc>
+                        <xsl:value-of select="tib:tokenize-allow-empty($templateName/pfx2:TEMPLATE_SOURCE, '|')[3]"/>
+                    </cc>
+                </xsl:if>
+                <bcc>
+                    <xsl:value-of select="$_globalVariables/ns4:GlobalVariables/ProcessConfig/NotificationProcess/SOATEAM"/>
+                </bcc>
+                <subject>
+                    <xsl:value-of select="tib:evaluate(tib:tokenize-allow-empty($templateName/pfx2:TEMPLATE_SOURCE, '|')[4])"/>
+                </subject>
+                <body>
+                    <xsl:value-of select="tib:evaluate(tib:tokenize-allow-empty($templateName/pfx2:TEMPLATE_SOURCE, '|')[5])"/>
+                </body>
+            </Mail>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Send SMS">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>1121</pd:x>
+        <pd:y>130</pd:y>
+        <config>
+            <processName>/SystemProcess/Actions/SendSms.process</processName>
+        </config>
+        <pd:inputBindings>
+            <pfx2:HttpSMSMTReq>
+                <xsl:variable name="TemplateName" select="$GetVariable/pfx2:LOAD_NOTIFICATION_CONFIG_LIST/pfx2:LOAD_NOTIFICATION_CONFIG[pfx2:TEMPLATE_NAME=$Prepare-Template-Name/root/templateName]"/>
+                <xsl:variable name="var" select="$_globalVariables/ns4:GlobalVariables/ProcessConfig/NotificationProcess/SmsType"/>
+                <pfx2:FormatVersion>
+                    <xsl:value-of select="$_globalVariables/ns4:GlobalVariables/ProcessConfig/NotificationProcess/FormatVersion"/>
+                </pfx2:FormatVersion>
+                <pfx2:User>
+                    <xsl:value-of select="$_globalVariables/ns4:GlobalVariables/ProcessConfig/NotificationProcess/User"/>
+                </pfx2:User>
+                <pfx2:Passwd>
+                    <xsl:value-of select="$_globalVariables/ns4:GlobalVariables/ProcessConfig/NotificationProcess/Passwd"/>
+                </pfx2:Passwd>
+                <pfx2:From>
+                    <xsl:value-of select="substring-before($TemplateName/pfx2:TEMPLATE_SOURCE, '|')"/>
+                </pfx2:From>
+                <pfx2:ToList>
+                    <pfx2:To>
+                        <xsl:value-of select="substring($Start/NotificationProcess/MSISDN, 4, 9)"/>
+                    </pfx2:To>
+                </pfx2:ToList>
+                <pfx2:MessageType>
+                    <xsl:value-of select="$_globalVariables/ns4:GlobalVariables/ProcessConfig/NotificationProcess/MessageType"/>
+                </pfx2:MessageType>
+                <pfx2:SMS_Encoding>
+                    <xsl:value-of select="$_globalVariables/ns4:GlobalVariables/ProcessConfig/NotificationProcess/SMS_Encoding"/>
+                </pfx2:SMS_Encoding>
+                <pfx2:Message>
+                    <xsl:value-of select="tib:evaluate(substring-after($TemplateName/pfx2:TEMPLATE_SOURCE,'|'))"/>
+                </pfx2:Message>
+                <pfx2:DeliveryTime>
+                    <xsl:value-of select="$_globalVariables/ns4:GlobalVariables/ProcessConfig/NotificationProcess/DeliveryTime"/>
+                </pfx2:DeliveryTime>
+                <pfx2:ValidityTime>
+                    <xsl:value-of select="$_globalVariables/ns4:GlobalVariables/ProcessConfig/NotificationProcess/ValidityTime"/>
+                </pfx2:ValidityTime>
+            </pfx2:HttpSMSMTReq>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Send HTTP">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>1116</pd:x>
+        <pd:y>558</pd:y>
+        <config>
+            <processName>/SystemProcess/Actions/HttpNotification.process</processName>
+        </config>
+        <pd:inputBindings>
+            <xsl:variable xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="var" select="$_globalVariables/ns4:GlobalVariables/ProcessConfig/NotificationProcess/HttpType"/>
+            <xsl:variable xmlns:xsl="http://www.w3.org/1999/XSL/Transform" name="templateName" select="$GetVariable/pfx2:LOAD_NOTIFICATION_CONFIG_LIST/pfx2:LOAD_NOTIFICATION_CONFIG[pfx2:TEMPLATE_NAME=$Prepare-Template-Name/root/templateName]"/>
+            <ns14:HttpRequest>
+                <ns14:URL>
+                    <xsl:value-of select="tib:evaluate(tib:tokenize-allow-empty($templateName/pfx2:TEMPLATE_SOURCE, '|')[2])"/>
+                </ns14:URL>
+                <ns14:MSISDN>
+                    <xsl:value-of select="substring($Start/NotificationProcess/MSISDN, 4, 9)"/>
+                </ns14:MSISDN>
+                <ns14:EXT_APP>
+                    <xsl:value-of select="tib:tokenize-allow-empty($templateName/pfx2:TEMPLATE_SOURCE, '|')[1]"/>
+                </ns14:EXT_APP>
+            </ns14:HttpRequest>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Sleep">
+        <pd:type>com.tibco.plugin.timer.SleepActivity</pd:type>
+        <pd:resourceType>ae.activities.sleep</pd:resourceType>
+        <pd:x>697</pd:x>
+        <pd:y>415</pd:y>
+        <config/>
+        <pd:inputBindings>
+            <ns11:SleepInputSchema>
+                <IntervalInMillisec>
+                    <xsl:value-of select="$_globalVariables/ns4:GlobalVariables/ProcessConfig/NotificationProcess/SleepPutUpdate"/>
+                </IntervalInMillisec>
+            </ns11:SleepInputSchema>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="SMS not sendiing">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>1246</pd:x>
+        <pd:y>227</pd:y>
+        <config>
+            <faultName/>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <message>
+                    <xsl:value-of select="concat(&quot;Erro in Sending SMS  &quot;,&quot;MSISDN :&quot;,$Start/NotificationProcess/MSISDN,'  ,Template name : ',$Start/NotificationProcess/TEMPLATE_NAME)"/>
+                </message>
+                <messageCode>
+                    <xsl:value-of select="&quot;SendingSMSException&quot;"/>
+                </messageCode>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Update">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>784</pd:x>
+        <pd:y>414</pd:y>
+        <config>
+            <processName>/Utility/LOG/Action/Update.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns13:updateStarterRequest>
+                <MSISDN>
+                    <xsl:value-of select="&quot;MAIN_INPUT like '%' &quot;"/>
+                </MSISDN>
+                <PROCESS_NAME>
+                    <xsl:value-of select="&quot;NotificationProcess&quot;"/>
+                </PROCESS_NAME>
+                <STATUS>
+                    <xsl:value-of select="'ERROR'"/>
+                </STATUS>
+                <Additionnal_Cond>
+                    <xsl:value-of select="concat(&quot; transaction_id  = '&quot;,concat($Start/NotificationProcess/TX_ACTIVE/TRANSACTION_ID,'NOTIF'),&quot;' &quot;)"/>
+                </Additionnal_Cond>
+                <Update_Info>
+                    <xsl:value-of select="concat(&quot;MSG ='&quot;,translate($Map-ErrorMsg/root/Msg, &quot;'&quot;, '&quot;'),&quot;' ,MSGCODE ='&quot;,$Map-ErrorMsg/root/MsgCode,&quot;' &quot;,&quot;,STEP='End'&quot;)"/>
+                </Update_Info>
+            </ns13:updateStarterRequest>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>GetVariable</pd:from>
+        <pd:to>Check IsPending</pd:to>
+        <pd:xpathDescription>Get Notif Template</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$GetVariable/pfx2:LOAD_NOTIFICATION_CONFIG_LIST/pfx2:LOAD_NOTIFICATION_CONFIG[pfx2:TEMPLATE_NAME=$Prepare-Template-Name/root/templateName]</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>GetVariable</pd:from>
+        <pd:to>Invalid TemplateName</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call WS Notification</pd:from>
+        <pd:to>Log CallWSNotification Process End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null</pd:from>
+        <pd:to>Call WS Notification</pd:to>
+        <pd:xpathDescription>Call Ws</pd:xpathDescription>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$GetVariable/pfx2:LOAD_NOTIFICATION_CONFIG_LIST/pfx2:LOAD_NOTIFICATION_CONFIG[pfx2:TEMPLATE_NAME=$Prepare-Template-Name/root/templateName]/pfx2:TYPE=$_globalVariables/ns4:GlobalVariables/ProcessConfig/NotificationProcess/WsType</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null</pd:from>
+        <pd:to>Send SMS</pd:to>
+        <pd:xpathDescription>Send Sms</pd:xpathDescription>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$GetVariable/pfx2:LOAD_NOTIFICATION_CONFIG_LIST/pfx2:LOAD_NOTIFICATION_CONFIG[pfx2:TEMPLATE_NAME=$Prepare-Template-Name/root/templateName]/pfx2:TYPE=$_globalVariables/ns4:GlobalVariables/ProcessConfig/NotificationProcess/SmsType</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log Notification Process Start</pd:from>
+        <pd:to>LogInfo Start</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log CallWSNotification Process End</pd:from>
+        <pd:to>LogInfo End CallWS Notification</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>Map ErrorMsg</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Send SMS</pd:from>
+        <pd:to>Log SendSms Process  End</pd:to>
+        <pd:xpathDescription>Success</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>count($Send-SMS/StatusListe/Status[Status=$_globalVariables/ns4:GlobalVariables/ProcessConfig/SendSms/SendingStatus]/Status) &gt; 0</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log SendSms Process  End</pd:from>
+        <pd:to>LogInfo End SendSms</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null</pd:from>
+        <pd:to>Invlaid NotificationType</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log Exception</pd:from>
+        <pd:to>Notification Retry</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null</pd:from>
+        <pd:to>Jdbc Notification</pd:to>
+        <pd:xpathDescription>Execute Jdbc Query</pd:xpathDescription>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$GetVariable/pfx2:LOAD_NOTIFICATION_CONFIG_LIST/pfx2:LOAD_NOTIFICATION_CONFIG[pfx2:TEMPLATE_NAME=$Prepare-Template-Name/root/templateName]/pfx2:TYPE=$_globalVariables/ns4:GlobalVariables/ProcessConfig/NotificationProcess/JdbcType</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Jdbc Notification</pd:from>
+        <pd:to>Log JdbcNotifcation Process End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log JdbcNotifcation Process End</pd:from>
+        <pd:to>LogInfo End JdbcNotification</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Log Notification Process Start</pd:to>
+        <pd:xpathDescription>Valid Msisdn</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogInfo Start</pd:from>
+        <pd:to>Prepare Template Name</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogInfo End CallWS Notification</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogInfo End SendSms</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogInfo End JdbcNotification</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Check Pending Request On Network</pd:from>
+        <pd:to>Null</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Check IsPending</pd:from>
+        <pd:to>Check Pending Request On Network</pd:to>
+        <pd:xpathDescription>Is Pending On Network</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Start/NotificationProcess/CHECK_PENDING_REQUEST='true'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Check IsPending</pd:from>
+        <pd:to>Null</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null</pd:from>
+        <pd:to>Send Mail</pd:to>
+        <pd:xpathDescription>Send Mail</pd:xpathDescription>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$GetVariable/pfx2:LOAD_NOTIFICATION_CONFIG_LIST/pfx2:LOAD_NOTIFICATION_CONFIG[pfx2:TEMPLATE_NAME=$Prepare-Template-Name/root/templateName]/pfx2:TYPE=$_globalVariables/ns4:GlobalVariables/ProcessConfig/NotificationProcess/MailType</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Send Mail</pd:from>
+        <pd:to>Log SendMail Process End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log SendMail Process End</pd:from>
+        <pd:to>LogInfo End MailNotification</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogInfo End MailNotification</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Prepare Template Name</pd:from>
+        <pd:to>GetVariable</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Invalid Msisdn</pd:to>
+        <pd:xpathDescription> </pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>ns1:matches($Start/NotificationProcess/MSISDN, "213[5]\d\d\d\d\d\d\d\d") = false() and exists($Start/NotificationProcess/MSISDN) and string-length($Start/NotificationProcess/MSISDN)&gt;0</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Send SMS</pd:from>
+        <pd:to>SMS not sendiing</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>PutRequest</pd:from>
+        <pd:to>Sleep</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>GetTransaction Status</pd:from>
+        <pd:to>PutRequest</pd:to>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>GetTransaction Status</pd:from>
+        <pd:to>Rethrow</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogError after retry</pd:from>
+        <pd:to>GetTransaction Status</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Notification Retry</pd:from>
+        <pd:to>Log Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Notification Retry</pd:from>
+        <pd:to>Is retryable</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log Error</pd:from>
+        <pd:to>Is retryable</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Is retryable</pd:from>
+        <pd:to>LogRetry</pd:to>
+        <pd:xpathDescription>retry Iteration</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>contains($Notification-Retry/TXStatus/statut,'retry iteration')</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Is retryable</pd:from>
+        <pd:to>LogError after retry</pd:to>
+        <pd:xpathDescription>No</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogRetry</pd:from>
+        <pd:to>Rethrow</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Update</pd:from>
+        <pd:to>Rethrow</pd:to>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map ErrorMsg</pd:from>
+        <pd:to>Log Exception</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Sleep</pd:from>
+        <pd:to>Update</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null</pd:from>
+        <pd:to>Send HTTP</pd:to>
+        <pd:xpathDescription>SendHttp</pd:xpathDescription>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$GetVariable/pfx2:LOAD_NOTIFICATION_CONFIG_LIST/pfx2:LOAD_NOTIFICATION_CONFIG[pfx2:TEMPLATE_NAME=$Prepare-Template-Name/root/templateName]/pfx2:TYPE=$_globalVariables/ns4:GlobalVariables/ProcessConfig/NotificationProcess/HttpType</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Send HTTP</pd:from>
+        <pd:to>Log Send HTTP Process</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log Send HTTP Process</pd:from>
+        <pd:to>LogInfo End HTTPNotification</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogInfo End HTTPNotification</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

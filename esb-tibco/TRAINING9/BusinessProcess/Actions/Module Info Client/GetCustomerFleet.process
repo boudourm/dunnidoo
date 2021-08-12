@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.ooredoo.dz/ws/party/getCustomerContracts" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://www.tibco.com/schemas/TRAINING9/SharedResources/Schemas/XSD/Schema.xsd">
+    <xsd:import namespace="http://www.tibco.com/schemas/TRAINING9/SharedResources/Schemas/XSD/Schema.xsd" schemaLocation="/BusinessProcess/Actions/Module Info Client/XSD/GetDunningEligibleCustomers.xsd"/>
+    <pd:name>BusinessProcess/Actions/Module Info Client/GetCustomerFleet.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="Customer">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="CUSTOMER_ID" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>130</pd:startX>
+    <pd:startY>100</pd:startY>
+    <pd:returnBindings>
+        <pfx:DunningEligibleCustomersList>
+            <xsl:for-each select="$GetCustomerContractsRequest/ns:getCustomerContractsResponse/contract">
+                <xsl:if test="current()/paymentResponsible = 0">
+                    <pfx:Customers>
+                        <xsl:if test="customerId">
+                            <pfx:customerId>
+                                <xsl:value-of select="customerId"/>
+                            </pfx:customerId>
+                        </xsl:if>
+                        <xsl:if test="customerCode">
+                            <pfx:custCode>
+                                <xsl:value-of select="customerCode"/>
+                            </pfx:custCode>
+                        </xsl:if>
+                        <xsl:if test="msisdn">
+                            <pfx:msisdn>
+                                <xsl:value-of select="msisdn"/>
+                            </pfx:msisdn>
+                        </xsl:if>
+                        <xsl:if test="coId">
+                            <pfx:coId>
+                                <xsl:value-of select="coId"/>
+                            </pfx:coId>
+                        </xsl:if>
+                    </pfx:Customers>
+                </xsl:if>
+            </xsl:for-each>
+        </pfx:DunningEligibleCustomersList>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx:DunningEligibleCustomersList"/>
+    <pd:endX>552</pd:endX>
+    <pd:endY>96</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1525210758457</pd:targetNamespace>
+    <pd:activity name="GetCustomerContractsRequest">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>335</pd:x>
+        <pd:y>99</pd:y>
+        <config>
+            <processName>/BusinessProcess/Actions/Module Info Client/GetCustomerContractsRequest.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns:getCustomerContractsRequest>
+                <customerId>
+                    <xsl:value-of select="$Start/Customer/CUSTOMER_ID"/>
+                </customerId>
+            </ns:getCustomerContractsRequest>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>GetCustomerContractsRequest</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>GetCustomerContractsRequest</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

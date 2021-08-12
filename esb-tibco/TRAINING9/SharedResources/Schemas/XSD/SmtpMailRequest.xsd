@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="http://www.tibco.com/schemas/TRAINING/SharedResources/Schemas/XSD/Schema.xsd3"
+	 targetNamespace="http://www.tibco.com/schemas/TRAINING/SharedResources/Schemas/XSD/Schema.xsd3"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:element name="SmtpMailRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="to" type="xs:string"/>
+				<xs:element name="from" type="xs:string"/>
+				<xs:element name="cc" type="xs:string" minOccurs="0"/>
+				<xs:element name="bcc" type="xs:string" minOccurs="0"/>
+				<xs:element name="subject" type="xs:string"/>
+				<xs:element name="replyT" type="xs:string" minOccurs="0"/>
+				<xs:element name="body" type="xs:string"/>
+				<xs:element name="mimeEnveloppe" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="mimePart" minOccurs="0" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="mimeHeaders">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="content-disposition" type="xs:string" minOccurs="0"/>
+													<xs:element name="content-type" type="xs:string"/>
+													<xs:element name="contecnt-transfer-encoding" type="xs:string" minOccurs="0"/>
+													<xs:element name="content-id" type="xs:string" minOccurs="0"/>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="textContent" type="xs:string" minOccurs="0"/>
+							<xs:element name="binaryContent" type="xs:base64Binary" minOccurs="0"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

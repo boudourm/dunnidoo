@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BWSharedResource>
+    <name>JMS_Tech_Connection_UAT</name>
+    <resourceType>ae.shared.JMSConnectionKey</resourceType>
+    <config>
+        <NamingEnvironment>
+            <UseJNDI>true</UseJNDI>
+            <ProviderURL>tcp://localhost:7222</ProviderURL>
+            <NamingURL>%%Environment/Connections/JNDI_Desactivation/ContextURL%%</NamingURL>
+            <NamingInitialContextFactory>com.tibco.tibjms.naming.TibjmsInitialContextFactory</NamingInitialContextFactory>
+            <TopicFactoryName>TopicConnectionFactory</TopicFactoryName>
+            <QueueFactoryName>QueueConnectionFactory</QueueFactoryName>
+            <NamingPrincipal>%%Environment/Connections/JNDI_Desactivation/UsedID%%</NamingPrincipal>
+            <NamingCredential>%%Environment/Connections/JNDI_Desactivation/Password%%</NamingCredential>
+        </NamingEnvironment>
+        <ConnectionAttributes>
+            <username>%%Environment/Connections/JNDI_Desactivation/UsedID%%</username>
+            <password>%%Environment/Connections/JNDI_Desactivation/Password%%</password>
+            <clientID>%%Environment/Connections/JNDI_Desactivation/ClientID%%</clientID>
+            <autoGenClientID>false</autoGenClientID>
+        </ConnectionAttributes>
+        <UseXACF>false</UseXACF>
+    </config>
+</BWSharedResource>

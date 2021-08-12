@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns:tns="http://www.ooredoo.dz/ws/party/setCustomerAndContact"
+	 xmlns:ns0="http://www.ooredoo.dz/common/header/v1"
+	 xmlns:ns1="http://www.ooredoo.dz/common/types"
+	 xmlns:ns2="http://www.ooredoo.dz/ws/party/customerInfos"
+	 xmlns:ns3="http://www.ooredoo.dz/ws/party/getCustomerContracts"
+	 targetNamespace="http://www.ooredoo.dz/ws/party/setCustomerAndContact"
+	 elementFormDefault="unqualified"
+	 attributeFormDefault="unqualified">
+	<xs:import namespace="http://www.ooredoo.dz/common/header/v1" schemaLocation="../COMMON/Header.xsd"/>
+	<xs:import namespace="http://www.ooredoo.dz/common/types" schemaLocation="../COMMON/Types.xsd"/>
+	<xs:import namespace="http://www.ooredoo.dz/ws/party/getCustomerContracts" schemaLocation="GetCustomerContracts.xsd"/>
+	<xs:element name="setCustomerAndContactRequest" type="tns:SetCustomerAndContactRequest"/>
+	<xs:complexType name="SetCustomerAndContactRequest">
+		<xs:sequence>
+			<xs:element name="action" type="xs:string" minOccurs="0"/>
+			<xs:element name="templateName" type="xs:string" minOccurs="0"/>
+			<xs:element name="customerId" type="xs:long" minOccurs="0"/>
+			<xs:element name="custCode" type="xs:string" minOccurs="0"/>
+			<xs:element name="msisdn" type="ns1:MsisdnType" minOccurs="0"/>
+			<xs:element name="contactType" type="xs:string" minOccurs="0"/>
+			<xs:element name="contactSeqno" type="xs:int" minOccurs="0"/>
+			<xs:element name="customer" type="ns2:CustomerType" minOccurs="0"/>
+			<xs:element name="contact" type="ns2:ContactType" minOccurs="0"/>
+			<xs:element name="memoShortDesc" type="xs:string" minOccurs="0"/>
+			<xs:element name="memoLongDesc" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="setCustomerAndContact" type="tns:SetCustomerAndContact"/>
+	<xs:complexType name="SetCustomerAndContact">
+		<xs:sequence>
+			<xs:element ref="ns0:Header" minOccurs="0"/>
+			<xs:element name="action" type="xs:string" minOccurs="0"/>
+			<xs:element name="templateName" type="xs:string" minOccurs="0"/>
+			<xs:element name="customerId" type="xs:long" minOccurs="0"/>
+			<xs:element name="custCode" type="xs:string" minOccurs="0"/>
+			<xs:element name="msisdn" type="ns1:MsisdnType" minOccurs="0"/>
+			<xs:element name="contactType" type="xs:string" minOccurs="0"/>
+			<xs:element name="contactSeqno" type="xs:int" minOccurs="0"/>
+			<xs:element name="customer" type="ns2:CustomerType" minOccurs="0"/>
+			<xs:element name="contact" type="ns2:ContactType" minOccurs="0"/>
+			<xs:element name="memoShortDesc" type="xs:string" minOccurs="0"/>
+			<xs:element name="memoLongDesc" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="setCustomerAndContactResponse" type="tns:SetCustomerAndContactResponse"/>
+	<xs:complexType name="SetCustomerAndContactResponse">
+		<xs:sequence>
+			<xs:element name="transactionId" type="xs:string" minOccurs="0"/>
+			<xs:element name="customerId" type="xs:long" minOccurs="0"/>
+			<xs:element name="custCode" type="xs:string" minOccurs="0"/>
+			<xs:element name="contactSeqno" type="xs:long" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

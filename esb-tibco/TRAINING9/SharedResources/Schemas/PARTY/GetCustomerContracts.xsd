@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns:tns="http://www.ooredoo.dz/ws/party/getCustomerContracts"
+	 xmlns:ns0="http://www.ooredoo.dz/common/header/v1"
+	 xmlns:ns1="http://www.ooredoo.dz/common/types"
+	 targetNamespace="http://www.ooredoo.dz/ws/party/getCustomerContracts"
+	 elementFormDefault="unqualified"
+	 attributeFormDefault="unqualified">
+	<xs:import namespace="http://www.ooredoo.dz/common/header/v1" schemaLocation="../COMMON/Header.xsd"/>
+	<xs:import namespace="http://www.ooredoo.dz/common/types" schemaLocation="../COMMON/Types.xsd"/>
+	<xs:element name="getCustomerContractsRequest" type="tns:GetCustomerContractsRequest"/>
+	<xs:complexType name="GetCustomerContractsRequest">
+		<xs:sequence>
+			<xs:element name="customerId" type="xs:long" minOccurs="0"/>
+			<xs:element name="custCode" type="xs:string" minOccurs="0"/>
+			<xs:element name="templateName" type="xs:string" minOccurs="0"/>
+			<xs:element name="contractStatus" type="xs:string" minOccurs="0"/>
+			<xs:element name="searchLimit" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="getCustomerContracts" type="tns:GetCustomerContracts"/>
+	<xs:complexType name="GetCustomerContracts">
+		<xs:sequence>
+			<xs:element ref="ns0:Header" minOccurs="0"/>
+			<xs:element name="customerId" type="xs:long" minOccurs="0"/>
+			<xs:element name="custCode" type="xs:string" minOccurs="0"/>
+			<xs:element name="templateName" type="xs:string" minOccurs="0"/>
+			<xs:element name="contractStatus" type="xs:string" minOccurs="0"/>
+			<xs:element name="searchLimit" type="xs:long" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="getCustomerContractsResponse" type="tns:GetCustomerContractsResponse"/>
+	<xs:complexType name="GetCustomerContractsResponse">
+		<xs:sequence>
+			<xs:element name="limitReached" type="xs:boolean" minOccurs="0"/>
+			<xs:element name="contract" type="tns:ContractType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ContractType">
+		<xs:sequence>
+			<xs:element name="msisdn" type="ns1:MsisdnType" minOccurs="0"/>
+			<xs:element name="coId" type="xs:long" minOccurs="0"/>
+			<xs:element name="status" type="xs:string" minOccurs="0"/>
+			<xs:element name="statusReason" type="xs:string" minOccurs="0"/>
+			<xs:element name="statusReasonId" type="xs:long" minOccurs="0"/>
+			<xs:element name="activationDate" type="xs:dateTime" minOccurs="0"/>
+			<xs:element name="statusValidFrom" type="xs:dateTime" minOccurs="0"/>
+			<xs:element name="firstCallDate" type="xs:dateTime" minOccurs="0"/>
+			<xs:element name="contractValidDate" type="xs:dateTime" minOccurs="0"/>
+			<xs:element name="customerCode" type="xs:string" minOccurs="0"/>
+			<xs:element name="customerId" type="xs:long" minOccurs="0"/>
+			<xs:element name="billCycle" type="xs:string" minOccurs="0"/>
+			<xs:element name="billCycleValidFrom" type="xs:dateTime" minOccurs="0"/>
+			<xs:element name="offerCode" type="xs:long" minOccurs="0"/>
+			<xs:element name="providerId" type="xs:long" minOccurs="0"/>
+			<xs:element name="offerDescription" type="xs:string" minOccurs="0"/>
+			<xs:element name="offerCategory" type="xs:string" minOccurs="0"/>
+			<xs:element name="ressourceId" type="xs:string" minOccurs="0"/>
+			<xs:element name="ressourceType" type="xs:long" minOccurs="0"/>
+			<xs:element name="ressourcePortNum" type="xs:string" minOccurs="0"/>
+			<xs:element name="ressourceHlr" type="xs:long" minOccurs="0"/>
+			<xs:element name="puk1" type="xs:string" minOccurs="0"/>
+			<xs:element name="puk2" type="xs:string" minOccurs="0"/>
+			<xs:element name="ressourceImsi" type="xs:string" minOccurs="0"/>
+			<xs:element name="paymentResponsible" type="xs:boolean" minOccurs="0"/>
+			<xs:element name="bundleAmount" type="xs:long" minOccurs="0"/>
+			<xs:element name="partnerCode" type="xs:string" minOccurs="0"/>
+			<xs:element name="receptionDate" type="xs:string" minOccurs="0"/>
+			<xs:element name="billDetail" type="xs:boolean" minOccurs="0"/>
+			<xs:element name="currency" type="xs:long" minOccurs="0"/>
+			<xs:element name="onDunning" type="xs:boolean" minOccurs="0"/>
+			<xs:element name="subscriptionDate" type="xs:string" minOccurs="0"/>
+			<xs:element name="signDate" type="xs:string" minOccurs="0"/>
+			<xs:element name="developerCode" type="xs:string" minOccurs="0"/>
+			<xs:element name="engagementDate" type="xs:string" minOccurs="0"/>
+			<xs:element name="engagementDuration" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

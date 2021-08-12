@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:pfx13="http://www.ooredoo.dz/bscsdb/getAdditionnalLineBundle" xmlns:pfx12="http://www.tibco.com/schemas/OSP_SP_BSCS_DB/SharedResources/Schemas/XSD/BSCSDB/Schema.xsd6" xmlns:pfx11="http://www.tibco.com/schemas/OSP_SP_BSCS_DB/SharedResources/Schemas/XSD/BSCSDB/Schema.xsd5" xmlns:pfx10="http://www.tibco.com/schemas/OSP_SP_BSCS_DB/SharedResources/Schemas/XSD/BSCSDB/Schema.xsd4" xmlns:ns12="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pfx="http://www.ooredoo.dz/ws/vad/getDefaultOccServiceParameter" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.ooredoo.dz/common/header/v1" xmlns:ns1="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:ns3="http://www.tibco.com/pe/DeployedVarsType" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx5="http://www.ooredoo.dz/bscsdb/unbilledAmount" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx4="http://www.ooredoo.dz/bscsdb/getDefaultOccServiceParameter" xmlns:pfx3="http://www.ooredoo.dz/ws/bscs/contractsSearch" xmlns:pfx2="http://www.ooredoo.dz/common/exception/v1" xmlns:pfx9="http://www.tibco.com/schemas/OSP_SP_BSCS_DB/SharedResources/Schemas/XSD/BSCSDB/Schema.xsd3" xmlns:pfx8="http://www.tibco.com/schemas/OSP_SP_BSCS_DB/SharedResources/Schemas/XSD/BSCSDB/Schema.xsd2" xmlns:pfx7="http://www.tibco.com/schemas/OSP_SP_BSCS_DB/SharedResources/Schemas/XSD/BSCSDB/Schema.xsd" xmlns:pfx6="http://www.ooredoo.dz/bscsdb/advanceConsumption">
+    <xsd:import namespace="http://www.ooredoo.dz/ws/bscs/contractsSearch" schemaLocation="/SharedResources/Schemas/XSD/BSCS/ContractsSearch.xsd"/>
+    <xsd:import namespace="http://www.ooredoo.dz/common/exception/v1" schemaLocation="/SharedResources/Schemas/XSD/COMMON/Exception.xsd"/>
+    <xsd:import namespace="http://www.ooredoo.dz/bscsdb/getDefaultOccServiceParameter" schemaLocation="/SharedResources/Schemas/XSD/BSCSDB/GetDefaultOccServiceParameter.xsd"/>
+    <xsd:import namespace="http://www.ooredoo.dz/bscsdb/unbilledAmount" schemaLocation="/SharedResources/Schemas/XSD/BSCSDB/UnbilledAmount.xsd"/>
+    <xsd:import namespace="http://www.ooredoo.dz/bscsdb/advanceConsumption" schemaLocation="/SharedResources/Schemas/XSD/BSCSDB/AdvanceConsumption.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/schemas/OSP_SP_BSCS_DB/SharedResources/Schemas/XSD/BSCSDB/Schema.xsd" schemaLocation="/SharedResources/Schemas/XSD/BSCSDB/GetMasterLineBundle.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/schemas/OSP_SP_BSCS_DB/SharedResources/Schemas/XSD/BSCSDB/Schema.xsd2" schemaLocation="/SharedResources/Schemas/XSD/BSCSDB/GetMasterLineBundlePV.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/schemas/OSP_SP_BSCS_DB/SharedResources/Schemas/XSD/BSCSDB/Schema.xsd3" schemaLocation="/SharedResources/Schemas/XSD/BSCSDB/GetLastDateDispatchBundle.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/schemas/OSP_SP_BSCS_DB/SharedResources/Schemas/XSD/BSCSDB/Schema.xsd4" schemaLocation="/SharedResources/Schemas/XSD/BSCSDB/GetGlobalAndTotalBundlePV.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/schemas/OSP_SP_BSCS_DB/SharedResources/Schemas/XSD/BSCSDB/Schema.xsd5" schemaLocation="/SharedResources/Schemas/XSD/BSCSDB/GetContractAnd3gStatus.xsd"/>
+    <xsd:import namespace="http://www.ooredoo.dz/bscsdb/getAdditionnalLineBundle" schemaLocation="/SharedResources/Schemas/XSD/BSCSDB/GetAdditionnalLineBundle.xsd"/>
+    <pd:name>BusinessProcess/LogicalProcesses/BSCSDB/CallGetAdditionnalLineBundle.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx13:getAdditionnalLineBundleRequest"/>
+    <pd:startX>112</pd:startX>
+    <pd:startY>69</pd:startY>
+    <pd:returnBindings>
+        <xsl:copy-of select="$GetAdditionnalLineBundle-Requestor/ns:ActivityOutput/Body/root/pfx13:getAdditionnalLineBundleResponse"/>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx13:getAdditionnalLineBundleResponse"/>
+    <pd:endX>587</pd:endX>
+    <pd:endY>69</pd:endY>
+    <pd:errorSchemas>
+        <Exception ref="pfx2:Exception"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1412080701321</pd:targetNamespace>
+    <pd:activity name="GetAdditionnalLineBundle Requestor">
+        <pd:type>com.tibco.plugin.jms.JMSQueueRequestReplyActivity</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueRequestReplyActivity</pd:resourceType>
+        <pd:x>325</pd:x>
+        <pd:y>77</pd:y>
+        <config>
+            <PermittedMessageType>XML Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>%%ExternalApplications/BSCSDB/JMS/GetAdditionnalLineBundle%%</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/SharedResources/Connections/JMS/JMS_Tech_Connection.sharedjmscon</ConnectionReference>
+            <InDataxsdString ref="pfx13:getAdditionnalLineBundleRequest"/>
+            <OutDataxsdString>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element ref="pfx13:getAdditionnalLineBundleResponse" minOccurs="0"/>
+                            <xsd:element ref="pfx2:Exception" minOccurs="0"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </OutDataxsdString>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <requestTimeout>
+                    <xsl:value-of select="$_globalVariables/ns3:GlobalVariables/Application/JMS/TimeOutRequestorJDBC"/>
+                </requestTimeout>
+                <Body>
+                    <xsl:copy-of select="$Start/pfx13:getAdditionnalLineBundleRequest"/>
+                </Body>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Generate Error">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>593</pd:x>
+        <pd:y>274</pd:y>
+        <config>
+            <faultName>Exception</faultName>
+        </config>
+        <pd:inputBindings>
+            <ns12:ActivityInput>
+                <xsl:if test="$GetAdditionnalLineBundle-Requestor/ns:ActivityOutput/Body/root/pfx2:Exception/pfx2:Msg">
+                    <message>
+                        <xsl:value-of select="$GetAdditionnalLineBundle-Requestor/ns:ActivityOutput/Body/root/pfx2:Exception/pfx2:Msg"/>
+                    </message>
+                </xsl:if>
+                <xsl:if test="$GetAdditionnalLineBundle-Requestor/ns:ActivityOutput/Body/root/pfx2:Exception/pfx2:MsgCode">
+                    <messageCode>
+                        <xsl:value-of select="$GetAdditionnalLineBundle-Requestor/ns:ActivityOutput/Body/root/pfx2:Exception/pfx2:MsgCode"/>
+                    </messageCode>
+                </xsl:if>
+                <data>
+                    <xsl:copy-of select="$GetAdditionnalLineBundle-Requestor/ns:ActivityOutput/Body/root/pfx2:Exception"/>
+                </data>
+            </ns12:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="LogException">
+        <pd:type>com.tibco.pe.core.WriteToLogActivity</pd:type>
+        <pd:resourceType>ae.activities.log</pd:resourceType>
+        <pd:x>327</pd:x>
+        <pd:y>271</pd:y>
+        <config>
+            <role>Error</role>
+        </config>
+        <pd:inputBindings>
+            <ns1:ActivityInput>
+                <message>
+                    <xsl:value-of select="tib:render-xml($GetAdditionnalLineBundle-Requestor/ns:ActivityOutput/Body/root/pfx2:Exception)"/>
+                </message>
+                <msgCode>
+                    <xsl:value-of select="'BW - GetAdditionnalLineBundle Exception'"/>
+                </msgCode>
+            </ns1:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>GetAdditionnalLineBundle Requestor</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>GetAdditionnalLineBundle Requestor</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>GetAdditionnalLineBundle Requestor</pd:from>
+        <pd:to>LogException</pd:to>
+        <pd:xpathDescription>ERR</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$GetAdditionnalLineBundle-Requestor/ns:ActivityOutput/Body/root/pfx2:Exception/pfx2:StackTrace !='' or $GetAdditionnalLineBundle-Requestor/ns:ActivityOutput/Body/root/pfx2:Exception/pfx2:Data !=''</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogException</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

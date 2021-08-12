@@ -1,0 +1,24 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<DunningAction xmlns = "http://www.tibco.com/schemas/TRAINING/SharedResources/Schemas/XSD/Schema.xsd2">
+	<ACTION_NAME>SMS1</ACTION_NAME>
+	<DunningEligibleCustomersInfo>
+		<CUSTOMER_ID>007</CUSTOMER_ID>
+		<CUSTCODE>007</CUSTCODE>
+		<INVOICE_AMOUNT>8000</INVOICE_AMOUNT>
+		<OPEN_AMOUNT>6000.0</OPEN_AMOUNT>
+		<DUE_DATE>20/05/2018</DUE_DATE>
+		<LBC_DATE>04/04/2018</LBC_DATE>
+		<CCLNAME>MUSTAFA</CCLNAME>
+		<MSISDN>554542255</MSISDN>
+		<CCEMAIL>geronimotoutcourt@gmail.com</CCEMAIL>
+	</DunningEligibleCustomersInfo>
+</DunningAction>
+
+
+<?xml version = "1.0" encoding = "UTF-8"?>
+<SmtpMailRequest xmlns = "http://www.tibco.com/schemas/TRAINING/SharedResources/Schemas/XSD/Schema.xsd3">
+	<to>geronimotoutcourt@gmail.com</to>
+	<from>aladjadj@ooredoo.dz</from>
+	<subject>CC</subject>
+	<body>Nchallah</body>
+</SmtpMailRequest>

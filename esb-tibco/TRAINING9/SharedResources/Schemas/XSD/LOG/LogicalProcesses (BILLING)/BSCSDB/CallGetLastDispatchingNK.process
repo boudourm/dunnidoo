@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:pfx13="http://www.ooredoo.dz/bscsdb/getLastDispatchingNK" xmlns:pfx12="http://www.ooredoo.dz/bscsdb/getMasterLineData" xmlns:pfx11="http://www.ooredoo.dz/bscsdb/getNewAdditionnalLinesBundle" xmlns:pfx10="http://www.ooredoo.dz/bscsdb/getLastDateDispatchBundle" xmlns:ns12="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pfx="http://www.ooredoo.dz/ws/vad/getDefaultOccServiceParameter" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.ooredoo.dz/common/header/v1" xmlns:ns1="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:ns3="http://www.tibco.com/pe/DeployedVarsType" xmlns:pfx5="http://www.ooredoo.dz/bscsdb/unbilledAmount" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx4="http://www.ooredoo.dz/bscsdb/getDefaultOccServiceParameter" xmlns:pfx3="http://www.ooredoo.dz/ws/bscs/contractsSearch" xmlns:pfx2="http://www.ooredoo.dz/common/exception/v1" xmlns:pfx9="http://www.tibco.com/schemas/OSP_SP_BSCS_DB/SharedResources/Schemas/XSD/BSCSDB/Schema.xsd3" xmlns:pfx8="http://www.tibco.com/schemas/OSP_SP_BSCS_DB/SharedResources/Schemas/XSD/BSCSDB/Schema.xsd2" xmlns:pfx7="http://www.tibco.com/schemas/OSP_SP_BSCS_DB/SharedResources/Schemas/XSD/BSCSDB/Schema.xsd" xmlns:pfx6="http://www.ooredoo.dz/bscsdb/advanceConsumption">
+    <xsd:import namespace="http://www.ooredoo.dz/ws/bscs/contractsSearch" schemaLocation="/SharedResources/Schemas/XSD/BSCS/ContractsSearch.xsd"/>
+    <xsd:import namespace="http://www.ooredoo.dz/common/exception/v1" schemaLocation="/SharedResources/Schemas/XSD/COMMON/Exception.xsd"/>
+    <xsd:import namespace="http://www.ooredoo.dz/bscsdb/getDefaultOccServiceParameter" schemaLocation="/SharedResources/Schemas/XSD/BSCSDB/GetDefaultOccServiceParameter.xsd"/>
+    <xsd:import namespace="http://www.ooredoo.dz/bscsdb/unbilledAmount" schemaLocation="/SharedResources/Schemas/XSD/BSCSDB/UnbilledAmount.xsd"/>
+    <xsd:import namespace="http://www.ooredoo.dz/bscsdb/advanceConsumption" schemaLocation="/SharedResources/Schemas/XSD/BSCSDB/AdvanceConsumption.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/schemas/OSP_SP_BSCS_DB/SharedResources/Schemas/XSD/BSCSDB/Schema.xsd" schemaLocation="/SharedResources/Schemas/XSD/BSCSDB/GetMasterLineBundle.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/schemas/OSP_SP_BSCS_DB/SharedResources/Schemas/XSD/BSCSDB/Schema.xsd2" schemaLocation="/SharedResources/Schemas/XSD/BSCSDB/GetMasterLineBundlePV.xsd"/>
+    <xsd:import namespace="http://www.ooredoo.dz/bscsdb/getLastDateDispatchBundle" schemaLocation="/SharedResources/Schemas/XSD/BSCSDB/GetLastDateDispatchBundle.xsd"/>
+    <xsd:import namespace="http://www.ooredoo.dz/bscsdb/getNewAdditionnalLinesBundle" schemaLocation="/SharedResources/Schemas/XSD/BSCSDB/GetNewAdditionnalLinesBundle.xsd"/>
+    <xsd:import namespace="http://www.ooredoo.dz/bscsdb/getMasterLineData" schemaLocation="/SharedResources/Schemas/XSD/BSCSDB/GetMasterLineData.xsd"/>
+    <xsd:import namespace="http://www.ooredoo.dz/bscsdb/getLastDispatchingNK" schemaLocation="/SharedResources/Schemas/XSD/BSCSDB/GetLastDispatchingNK.xsd"/>
+    <pd:name>BusinessProcess/LogicalProcesses/BSCSDB/CallGetLastDispatchingNK.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx13:getLastDispatchingNKRequest"/>
+    <pd:startX>112</pd:startX>
+    <pd:startY>69</pd:startY>
+    <pd:returnBindings>
+        <xsl:copy-of select="$GetGetLastDispatchingNK-Requestor/ns:ActivityOutput/Body/root/pfx13:getLastDispatchingNKResponse"/>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx13:getLastDispatchingNKResponse"/>
+    <pd:endX>587</pd:endX>
+    <pd:endY>69</pd:endY>
+    <pd:errorSchemas>
+        <Exception ref="pfx2:Exception"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1412080701321</pd:targetNamespace>
+    <pd:activity name="GetGetLastDispatchingNK Requestor">
+        <pd:type>com.tibco.plugin.jms.JMSQueueRequestReplyActivity</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueRequestReplyActivity</pd:resourceType>
+        <pd:x>325</pd:x>
+        <pd:y>77</pd:y>
+        <config>
+            <PermittedMessageType>XML Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>%%ExternalApplications/BSCSDB/JMS/GetLastDispatchingNK%%</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/SharedResources/Connections/JMS/JMS_Tech_Connection.sharedjmscon</ConnectionReference>
+            <InDataxsdString ref="pfx13:getLastDispatchingNKRequest"/>
+            <OutDataxsdString>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element ref="pfx13:getLastDispatchingNKResponse" minOccurs="0"/>
+                            <xsd:element ref="pfx2:Exception" minOccurs="0"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </OutDataxsdString>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <requestTimeout>
+                    <xsl:value-of select="$_globalVariables/ns3:GlobalVariables/Application/JMS/TimeOutRequestorJDBC"/>
+                </requestTimeout>
+                <Body>
+                    <xsl:copy-of select="$Start/pfx13:getLastDispatchingNKRequest"/>
+                </Body>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Generate Error">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>593</pd:x>
+        <pd:y>274</pd:y>
+        <config>
+            <faultName>Exception</faultName>
+        </config>
+        <pd:inputBindings>
+            <ns12:ActivityInput>
+                <xsl:if test="$GetGetLastDispatchingNK-Requestor/ns:ActivityOutput/Body/root/pfx2:Exception/pfx2:Msg">
+                    <message>
+                        <xsl:value-of select="$GetGetLastDispatchingNK-Requestor/ns:ActivityOutput/Body/root/pfx2:Exception/pfx2:Msg"/>
+                    </message>
+                </xsl:if>
+                <xsl:if test="$GetGetLastDispatchingNK-Requestor/ns:ActivityOutput/Body/root/pfx2:Exception/pfx2:MsgCode">
+                    <messageCode>
+                        <xsl:value-of select="$GetGetLastDispatchingNK-Requestor/ns:ActivityOutput/Body/root/pfx2:Exception/pfx2:MsgCode"/>
+                    </messageCode>
+                </xsl:if>
+                <data>
+                    <xsl:copy-of select="$GetGetLastDispatchingNK-Requestor/ns:ActivityOutput/Body/root/pfx2:Exception"/>
+                </data>
+            </ns12:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="LogException">
+        <pd:type>com.tibco.pe.core.WriteToLogActivity</pd:type>
+        <pd:resourceType>ae.activities.log</pd:resourceType>
+        <pd:x>327</pd:x>
+        <pd:y>271</pd:y>
+        <config>
+            <role>Error</role>
+        </config>
+        <pd:inputBindings>
+            <ns1:ActivityInput>
+                <message>
+                    <xsl:value-of select="tib:render-xml($GetGetLastDispatchingNK-Requestor/ns:ActivityOutput/Body/root/pfx2:Exception)"/>
+                </message>
+                <msgCode>
+                    <xsl:value-of select="'BW - GetNewAditionnalLinesBundle Exception'"/>
+                </msgCode>
+            </ns1:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>GetGetLastDispatchingNK Requestor</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>GetGetLastDispatchingNK Requestor</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>GetGetLastDispatchingNK Requestor</pd:from>
+        <pd:to>LogException</pd:to>
+        <pd:xpathDescription>ERR</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$GetGetLastDispatchingNK-Requestor/ns:ActivityOutput/Body/root/pfx2:Exception/pfx2:StackTrace !='' or $GetGetLastDispatchingNK-Requestor/ns:ActivityOutput/Body/root/pfx2:Exception/pfx2:Data !=''</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogException</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

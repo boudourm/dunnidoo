@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.tibco.com/pe/EngineTypes" xmlns:BW="java://com.tibco.pe.core.JavaCustomXPATHFunctions" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.ooredoo.dz/ws/bscs/mrstCmsCommand" xmlns:ns="http://www.ooredoo.dz/common/header/v1" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pfx2="http://www.ooredoo.dz/common/exception/v1" xmlns:pfx="http://www.ooredoo.dz/ws/bscs/bookingRequestWrite">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://www.ooredoo.dz/ws/bscs/bookingRequestWrite" schemaLocation="/SharedResources/Schemas/XSD/BSCS/BookingRequestWrite.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://www.ooredoo.dz/common/exception/v1" schemaLocation="/SharedResources/Schemas/XSD/COMMON/Exception.xsd"/>
+    <pd:name>BusinessProcess/LogicalProcesses/BSCSCMS/CallCommitBookingRequestWrite.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx:writeBookingRequestRequest"/>
+    <pd:startX>78</pd:startX>
+    <pd:startY>95</pd:startY>
+    <pd:returnBindings>
+        <pfx:writeBookingRequestResponse>
+            <xsl:if test="$Start/pfx:writeBookingRequestRequest/ns:Header/ns:TransactionID">
+                <transactionId>
+                    <xsl:value-of select="$Start/pfx:writeBookingRequestRequest/ns:Header/ns:TransactionID"/>
+                </transactionId>
+            </xsl:if>
+        </pfx:writeBookingRequestResponse>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx:writeBookingRequestResponse"/>
+    <pd:endX>780</pd:endX>
+    <pd:endY>95</pd:endY>
+    <pd:errorSchemas>
+        <Exception ref="pfx2:Exception"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1412083457829</pd:targetNamespace>
+    <pd:activity name="CallBookingRequestWrite">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>405</pd:x>
+        <pd:y>94</pd:y>
+        <config>
+            <processName>/BusinessProcess/LogicalProcesses/BSCSCMS/CallBookingRequestWrite.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <xsl:if test="$CallInvokeGetTransactionId/ns1:mrstCmsCommandResponse/TRANSACTION_ID">
+                    <transactionId>
+                        <xsl:value-of select="$CallInvokeGetTransactionId/ns1:mrstCmsCommandResponse/TRANSACTION_ID"/>
+                    </transactionId>
+                </xsl:if>
+                <xsl:copy-of select="$Start/pfx:writeBookingRequestRequest"/>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="CallInvokeCommit">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>600</pd:x>
+        <pd:y>95</pd:y>
+        <config>
+            <processName>/BusinessProcess/LogicalProcesses/CallInvokeCommit.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns1:mrstCmsCommandRequest>
+                <xsl:copy-of select="$Start/pfx:writeBookingRequestRequest/ns:Header"/>
+                <xsl:if test="$CallInvokeGetTransactionId/ns1:mrstCmsCommandResponse/TRANSACTION_ID">
+                    <TRANSACTION_ID>
+                        <xsl:value-of select="$CallInvokeGetTransactionId/ns1:mrstCmsCommandResponse/TRANSACTION_ID"/>
+                    </TRANSACTION_ID>
+                </xsl:if>
+            </ns1:mrstCmsCommandRequest>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="CallInvokeGetTransactionId">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>218</pd:x>
+        <pd:y>95</pd:y>
+        <config>
+            <processName>/BusinessProcess/LogicalProcesses/CallInvokeGetTransactionId.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns1:mrstCmsCommandRequest>
+                <xsl:copy-of select="$Start/pfx:writeBookingRequestRequest/ns:Header"/>
+            </ns1:mrstCmsCommandRequest>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="CallInvokeRollBack">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>479</pd:x>
+        <pd:y>252</pd:y>
+        <config>
+            <processName>/BusinessProcess/LogicalProcesses/CallInvokeRollBack.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns1:mrstCmsCommandRequest>
+                <xsl:copy-of select="$Start/pfx:writeBookingRequestRequest/ns:Header"/>
+                <xsl:if test="$CallInvokeGetTransactionId/ns1:mrstCmsCommandResponse/TRANSACTION_ID">
+                    <TRANSACTION_ID>
+                        <xsl:value-of select="$CallInvokeGetTransactionId/ns1:mrstCmsCommandResponse/TRANSACTION_ID"/>
+                    </TRANSACTION_ID>
+                </xsl:if>
+            </ns1:mrstCmsCommandRequest>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Generate Error">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>478</pd:x>
+        <pd:y>397</pd:y>
+        <config>
+            <faultName>Exception</faultName>
+        </config>
+        <pd:inputBindings>
+            <pfx3:ActivityInput>
+                <message>
+                    <xsl:value-of select="if(contains($_error/ns2:ErrorReport/MsgCode,'FeeTypeNotCompatibleWithNoOfPeriods'))&#xA;then&#xA;concat('The fee type for the OCC is not compatible with number of periods  #feeType#',$Start/pfx:writeBookingRequestRequest/BOOKING_REQUEST.WRITE/FEE_TYPE,'#Period#',$Start/pfx:writeBookingRequestRequest/BOOKING_REQUEST.WRITE/NUM_PERIODS)&#xA;else&#xA;$_error/ns2:ErrorReport/MsgCode"/>
+                </message>
+                <messageCode>
+                    <xsl:value-of select="if(contains($_error/ns2:ErrorReport/MsgCode,'FeeTypeNotCompatibleWithNoOfPeriods'))&#xA;then&#xA;'InvalidParameterException'&#xA;else&#xA;$_error/ns2:ErrorReport/Msg"/>
+                </messageCode>
+                <data>
+                    <pfx2:Exception>
+                        <xsl:copy-of select="$Start/pfx:writeBookingRequestRequest/ns:Header"/>
+                        <pfx2:ProcessID>
+                            <xsl:value-of select="$_processContext/ns2:ProcessContext/ProcessId"/>
+                        </pfx2:ProcessID>
+                        <pfx2:ProcessName>
+                            <xsl:value-of select="BW:getCurrentProcessName($_processContext/ns2:ProcessContext/ProcessId)"/>
+                        </pfx2:ProcessName>
+                        <pfx2:ActivityName>
+                            <xsl:value-of select="BW:getCurrentActivityName($_processContext/ns2:ProcessContext/ProcessId)"/>
+                        </pfx2:ActivityName>
+                        <pfx2:ProcessData>
+                            <xsl:value-of select="tib:render-xml($Start/pfx:writeBookingRequestRequest)"/>
+                        </pfx2:ProcessData>
+                        <pfx2:LogLevel>
+                            <xsl:value-of select="3"/>
+                        </pfx2:LogLevel>
+                        <pfx2:Severity>
+                            <xsl:value-of select="'ERROR'"/>
+                        </pfx2:Severity>
+                        <pfx2:TimeStamp>
+                            <xsl:value-of select="current-dateTime()"/>
+                        </pfx2:TimeStamp>
+                        <xsl:if test="$_error/ns2:ErrorReport/StackTrace">
+                            <pfx2:StackTrace>
+                                <xsl:value-of select="$_error/ns2:ErrorReport/StackTrace"/>
+                            </pfx2:StackTrace>
+                        </xsl:if>
+                        <pfx2:Msg>
+                            <xsl:value-of select="if(contains($_error/ns2:ErrorReport/MsgCode,'FeeTypeNotCompatibleWithNoOfPeriods'))&#xA;then&#xA;concat('The fee type for the OCC is not compatible with number of periods  #feeType#',$Start/pfx:writeBookingRequestRequest/BOOKING_REQUEST.WRITE/FEE_TYPE,'#Period#',$Start/pfx:writeBookingRequestRequest/BOOKING_REQUEST.WRITE/NUM_PERIODS)&#xA;else&#xA;$_error/ns2:ErrorReport/MsgCode"/>
+                        </pfx2:Msg>
+                        <xsl:if test="$_error/ns2:ErrorReport/FullClass">
+                            <pfx2:FullClass>
+                                <xsl:value-of select="$_error/ns2:ErrorReport/FullClass"/>
+                            </pfx2:FullClass>
+                        </xsl:if>
+                        <xsl:if test="$_error/ns2:ErrorReport/Class">
+                            <pfx2:Class>
+                                <xsl:value-of select="$_error/ns2:ErrorReport/Class"/>
+                            </pfx2:Class>
+                        </xsl:if>
+                        <xsl:if test="$_error/ns2:ErrorReport/ProcessStack">
+                            <pfx2:ProcessStack>
+                                <xsl:value-of select="$_error/ns2:ErrorReport/ProcessStack"/>
+                            </pfx2:ProcessStack>
+                        </xsl:if>
+                        <pfx2:MsgCode>
+                            <xsl:value-of select="if(contains($_error/ns2:ErrorReport/MsgCode,'FeeTypeNotCompatibleWithNoOfPeriods'))&#xA;then&#xA;'InvalidParameterException'&#xA;else&#xA;$_error/ns2:ErrorReport/MsgCode"/>
+                        </pfx2:MsgCode>
+                        <pfx2:Data>
+                            <xsl:value-of select="tib:render-xml($_error/ns2:ErrorReport/Data)"/>
+                        </pfx2:Data>
+                    </pfx2:Exception>
+                </data>
+            </pfx3:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>CallInvokeGetTransactionId</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallInvokeGetTransactionId</pd:from>
+        <pd:to>CallBookingRequestWrite</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallBookingRequestWrite</pd:from>
+        <pd:to>CallInvokeCommit</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallInvokeCommit</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallBookingRequestWrite</pd:from>
+        <pd:to>CallInvokeRollBack</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallInvokeCommit</pd:from>
+        <pd:to>CallInvokeRollBack</pd:to>
+        <pd:xpathDescription>ERR</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallInvokeRollBack</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallInvokeGetTransactionId</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:xpathDescription>ERR</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

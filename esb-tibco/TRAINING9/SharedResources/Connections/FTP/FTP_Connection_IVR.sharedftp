@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BWSharedResource>
+    <name>FTP_Connection_IVR</name>
+    <resourceType>ae.shared.FTPuserChannel</resourceType>
+    <config>
+        <Timeout>60000</Timeout>
+        <Port>21</Port>
+        <Encoding>Cp1252</Encoding>
+        <FireWall>false</FireWall>
+        <Mode>Passive</Mode>
+        <Host>10.1.16.100</Host>
+        <UserName>soa_user</UserName>
+        <Password>#!noKxubvKR7ENShWW+wJe9FL+2nhwYCZAmZTPQ+4TaUw=</Password>
+    </config>
+</BWSharedResource>

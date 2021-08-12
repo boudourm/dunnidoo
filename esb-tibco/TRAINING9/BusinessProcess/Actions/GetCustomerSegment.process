@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.ooredoo.dz/common/header/v1" xmlns:pfx="http://www.ooredoo.dz/crm/getCustomerSegment" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://www.ooredoo.dz/crm/getCustomerSegment" schemaLocation="/SharedResources/Schemas/XSD/GetCustomerSegment.xsd"/>
+    <pd:name>BusinessProcess/Actions/GetCustomerSegment.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx:getCustomerSegmentRequest"/>
+    <pd:startX>150</pd:startX>
+    <pd:startY>64</pd:startY>
+    <pd:returnBindings>
+        <pfx:getCustomerSegmentResponse>
+            <segment>
+                <xsl:value-of select="$JDBC-Query/resultSet/Record[1]/SEGMENT"/>
+            </segment>
+        </pfx:getCustomerSegmentResponse>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx:getCustomerSegmentResponse"/>
+    <pd:endX>450</pd:endX>
+    <pd:endY>64</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1513087996874</pd:targetNamespace>
+    <pd:activity name="JDBC Query">
+        <pd:type>com.tibco.plugin.jdbc.JDBCQueryActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCQueryActivity</pd:resourceType>
+        <pd:x>300</pd:x>
+        <pd:y>66</pd:y>
+        <config>
+            <timeout>%%ProcessConfig/GetCustomerSegment/timeout%%</timeout>
+            <commit>false</commit>
+            <maxRows>%%ProcessConfig/GetCustomerSegment/MxRows%%</maxRows>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <statement>SELECT SEGMENT
+FROM crmextract.SEGMENTATION_ERP
+WHERE CUSTOMER_ID = ?</statement>
+            <jdbcSharedConfig>/SharedResources/Connections/JDBC/CRM_JDBC_Connection_Segment.sharedjdbc</jdbcSharedConfig>
+            <Prepared_Param_DataType>
+                <parameter>
+                    <parameterName>customer_id</parameterName>
+                    <dataType>VARCHAR</dataType>
+                </parameter>
+            </Prepared_Param_DataType>
+            <oraObjects/>
+            <oraTables/>
+            <QueryOutputCachedSchemaColumns>SEGMENT</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+        </config>
+        <pd:inputBindings>
+            <jdbcQueryActivityInput>
+                <customer_id>
+                    <xsl:choose>
+                        <xsl:when test="exists($Start/pfx:getCustomerSegmentRequest/customer_id)">
+                            <xsl:value-of select="$Start/pfx:getCustomerSegmentRequest/customer_id"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="xsi:nil">true</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </customer_id>
+            </jdbcQueryActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>JDBC Query</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>JDBC Query</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

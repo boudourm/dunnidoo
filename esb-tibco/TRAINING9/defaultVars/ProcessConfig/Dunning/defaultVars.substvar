@@ -1,0 +1,29 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<repository xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance" xmlns = "http://www.tibco.com/xmlns/repo/types/2002">
+	<globalVariables>
+		<globalVariable>
+			<name>MaxSessionsRetry</name>
+			<value>20</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1525343750461</modTime>
+		</globalVariable>
+		<globalVariable>
+			<name>UserDunning</name>
+			<value>DUNNING</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1524735945533</modTime>
+		</globalVariable>
+		<globalVariable>
+			<name>UserHeader</name>
+			<value>BatchDunning</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1525273218602</modTime>
+		</globalVariable>
+	</globalVariables>
+</repository>

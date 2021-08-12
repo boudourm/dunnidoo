@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:ns="http://www.tibco.com/schemas/TRAINING/SharedResources/Schemas/XSD/Schema.xsd3" xmlns:tns="http://xmlns.example.com/1527511653658" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://xmlns.example.com/1527511653658">
+    <import namespace="http://www.tibco.com/schemas/TRAINING/SharedResources/Schemas/XSD/Schema.xsd3" location="../XSD/SmtpMailRequest.xsd"/>
+    <message name="SendMailRequest">
+        <part name="MailRequest" element="ns:SmtpMailRequest"/>
+    </message>
+    <portType name="PortType">
+        <operation name="SendMailRequest">
+            <input message="tns:SendMailRequest"/>
+        </operation>
+    </portType>
+</definitions>

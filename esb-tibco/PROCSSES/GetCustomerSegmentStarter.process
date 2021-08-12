@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:ns12="http://www.ooredoo.dz/log/logStarterSchema" xmlns:ns5="http://www.tibco.com/pe/EngineTypes" xmlns:ns6="http://www.ooredoo.dz/log/logSchema" xmlns:ns13="http://www.ooredoo.dz/common/nJAMSTemplate" xmlns:pfx="http://www.ooredoo.dz/ws/offer/changeContractOffer" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.ooredoo.dz/common/header/v1" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns4="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:ns3="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx4="http://www.ooredoo.dz/ws/party/customerInfos" xmlns:pfx3="http://www.ooredoo.dz/ws/party/setCustomerAndContact" xmlns:pfx2="http://www.ooredoo.dz/common/exception/v1">
+    <xsd:import namespace="http://www.ooredoo.dz/ws/offer/changeContractOffer" schemaLocation="/SharedResources/Schemas/XSD/OFFER/ChangeContractOffer.xsd"/>
+    <xsd:import namespace="http://www.ooredoo.dz/ws/party/setCustomerAndContact" schemaLocation="/SharedResources/Schemas/XSD/PARTY/SetCustomerAndContact.xsd"/>
+    <xsd:import namespace="http://www.ooredoo.dz/common/exception/v1" schemaLocation="/SharedResources/Schemas/XSD/COMMON/Exception.xsd"/>
+    <xsd:import namespace="http://www.ooredoo.dz/ws/party/customerInfos" schemaLocation="/SharedResources/Schemas/XSD/CustomerInfos.xsd"/>
+    <pd:name>BusinessProcess/Actions/GetCustomerSegmentStarter.process</pd:name>
+    <pd:startName>GetCustomerSegment Receiver</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings>
+        <pfx:changeContractOfferResponse>
+            <transactionId>
+                <xsl:value-of select="$ChangeContractOffer-Requestor/ns:ActivityOutput/Body/root/pfx:changeContractOfferResponse/transactionId"/>
+            </transactionId>
+        </pfx:changeContractOfferResponse>
+    </pd:returnBindings>
+    <pd:starter name="GetCustomerSegment Receiver">
+        <pd:type>com.tibco.plugin.jms.JMSQueueEventSource</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueEventSource</pd:resourceType>
+        <pd:x>77</pd:x>
+        <pd:y>71</pd:y>
+        <config>
+            <PermittedMessageType>XML Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>2</acknowledgeMode>
+                <maxSessions/>
+                <destination/>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/SharedResources/Connections/JMS/JMS_Tech_Connection.sharedjmscon</ConnectionReference>
+            <ApplicationProperties/>
+            <OutDataxsdString>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="customer_id" type="xsd:string"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </OutDataxsdString>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>1044</pd:endX>
+    <pd:endY>66</pd:endY>
+    <pd:errorSchemas>
+        <Exception ref="pfx2:Exception"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1423144514497</pd:targetNamespace>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>175</pd:x>
+        <pd:y>241</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="GetCustomerSegment">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>516</pd:x>
+        <pd:y>64</pd:y>
+        <config>
+            <processName/>
+        </config>
+        <pd:inputBindings>
+            <xsl:copy-of select="$GetCustomerSegment-Receiver/ns:ActivityOutput/Body/pfx3:setCustomerAndContact"/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Confirm Error">
+        <pd:type>com.tibco.pe.core.ConfirmActivity</pd:type>
+        <pd:resourceType>activity.confirm</pd:resourceType>
+        <pd:x>910</pd:x>
+        <pd:y>242</pd:y>
+        <config>
+            <ConfirmEvent>GetCustomerSegment Receiver</ConfirmEvent>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Confirm Success">
+        <pd:type>com.tibco.pe.core.ConfirmActivity</pd:type>
+        <pd:resourceType>activity.confirm</pd:resourceType>
+        <pd:x>877</pd:x>
+        <pd:y>65</pd:y>
+        <config>
+            <ConfirmEvent>GetCustomerSegment Receiver</ConfirmEvent>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="LogError">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>551</pd:x>
+        <pd:y>242</pd:y>
+        <config>
+            <processName>/Utility/Monitoring/LogError.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns13:Template>
+                <xsl:if test="$_error/ns5:ErrorReport/MsgCode">
+                    <ns13:EventMsgCode>
+                        <xsl:value-of select="$_error/ns5:ErrorReport/MsgCode"/>
+                    </ns13:EventMsgCode>
+                </xsl:if>
+                <xsl:if test="$_error/ns5:ErrorReport/Msg">
+                    <ns13:EventMsg>
+                        <xsl:value-of select="$_error/ns5:ErrorReport/Msg"/>
+                    </ns13:EventMsg>
+                </xsl:if>
+                <ns13:StackTrace>
+                    <xsl:value-of select="tib:render-xml($_error/ns5:ErrorReport/StackTrace)"/>
+                </ns13:StackTrace>
+                <ns13:LogContext/>
+            </ns13:Template>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Log">
+        <pd:type>com.tibco.pe.core.WriteToLogActivity</pd:type>
+        <pd:resourceType>ae.activities.log</pd:resourceType>
+        <pd:x>388</pd:x>
+        <pd:y>240</pd:y>
+        <config>
+            <role>Error</role>
+        </config>
+        <pd:inputBindings>
+            <ns4:ActivityInput>
+                <message>
+                    <xsl:value-of select="$_error/ns5:ErrorReport/Msg"/>
+                </message>
+                <msgCode>
+                    <xsl:value-of select="$_error/ns5:ErrorReport/MsgCode"/>
+                </msgCode>
+            </ns4:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Reply to JMS Message">
+        <pd:type>com.tibco.plugin.jms.JMSReplyActivity</pd:type>
+        <pd:resourceType>ae.activities.JMSReplyActivity</pd:resourceType>
+        <pd:x>723</pd:x>
+        <pd:y>249</pd:y>
+        <config>
+            <PermittedMessageType>XML Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>NON_PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+                <EventSource>GetCustomerSegment Receiver</EventSource>
+            </ConfigurableHeaders>
+            <InDataxsdString>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element ref="pfx2:Exception" minOccurs="0"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </InDataxsdString>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <Body>
+                    <root>
+                        <pfx2:Exception>
+                            <pfx2:LogLevel>
+                                <xsl:value-of select="3"/>
+                            </pfx2:LogLevel>
+                            <pfx2:Severity>
+                                <xsl:value-of select="'Error'"/>
+                            </pfx2:Severity>
+                            <xsl:if test="$_error/ns5:ErrorReport/StackTrace">
+                                <pfx2:StackTrace>
+                                    <xsl:value-of select="$_error/ns5:ErrorReport/StackTrace"/>
+                                </pfx2:StackTrace>
+                            </xsl:if>
+                            <xsl:if test="$_error/ns5:ErrorReport/Msg">
+                                <pfx2:Msg>
+                                    <xsl:value-of select="$_error/ns5:ErrorReport/Msg"/>
+                                </pfx2:Msg>
+                            </xsl:if>
+                            <xsl:if test="$_error/ns5:ErrorReport/FullClass">
+                                <pfx2:FullClass>
+                                    <xsl:value-of select="$_error/ns5:ErrorReport/FullClass"/>
+                                </pfx2:FullClass>
+                            </xsl:if>
+                            <xsl:if test="$_error/ns5:ErrorReport/Class">
+                                <pfx2:Class>
+                                    <xsl:value-of select="$_error/ns5:ErrorReport/Class"/>
+                                </pfx2:Class>
+                            </xsl:if>
+                            <xsl:if test="$_error/ns5:ErrorReport/ProcessStack">
+                                <pfx2:ProcessStack>
+                                    <xsl:value-of select="$_error/ns5:ErrorReport/ProcessStack"/>
+                                </pfx2:ProcessStack>
+                            </xsl:if>
+                            <xsl:if test="$_error/ns5:ErrorReport/MsgCode">
+                                <pfx2:MsgCode>
+                                    <xsl:value-of select="$_error/ns5:ErrorReport/MsgCode"/>
+                                </pfx2:MsgCode>
+                            </xsl:if>
+                            <pfx2:Data>
+                                <xsl:value-of select="tib:render-xml($_error/ns5:ErrorReport/Data)"/>
+                            </pfx2:Data>
+                        </pfx2:Exception>
+                    </root>
+                </Body>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Log-Error-To-Reply">
+        <pd:type>com.tibco.pe.core.WriteToLogActivity</pd:type>
+        <pd:resourceType>ae.activities.log</pd:resourceType>
+        <pd:x>823</pd:x>
+        <pd:y>367</pd:y>
+        <config>
+            <role>Error</role>
+        </config>
+        <pd:inputBindings>
+            <ns4:ActivityInput>
+                <message>
+                    <xsl:value-of select="$_error/ns5:ErrorReport/Msg"/>
+                </message>
+                <xsl:if test="$_error/ns5:ErrorReport/MsgCode">
+                    <msgCode>
+                        <xsl:value-of select="$_error/ns5:ErrorReport/MsgCode"/>
+                    </msgCode>
+                </xsl:if>
+            </ns4:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Reply-by-Success">
+        <pd:type>com.tibco.plugin.jms.JMSReplyActivity</pd:type>
+        <pd:resourceType>ae.activities.JMSReplyActivity</pd:resourceType>
+        <pd:x>705</pd:x>
+        <pd:y>65</pd:y>
+        <config>
+            <PermittedMessageType>XML Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+                <EventSource>GetCustomerSegment Receiver</EventSource>
+            </ConfigurableHeaders>
+            <InDataxsdString>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="SEGMENT" type="xsd:string"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </InDataxsdString>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <Body/>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>GetCustomerSegment</pd:from>
+        <pd:to>Reply-by-Success</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Confirm Success</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>Log</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Confirm Error</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogError</pd:from>
+        <pd:to>Reply to JMS Message</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log</pd:from>
+        <pd:to>LogError</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Reply to JMS Message</pd:from>
+        <pd:to>Confirm Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Reply to JMS Message</pd:from>
+        <pd:to>Log-Error-To-Reply</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log-Error-To-Reply</pd:from>
+        <pd:to>Confirm Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Reply-by-Success</pd:from>
+        <pd:to>Confirm Success</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>GetCustomerSegment Receiver</pd:from>
+        <pd:to>GetCustomerSegment</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

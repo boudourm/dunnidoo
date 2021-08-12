@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx4="http://www.ooredoo.dz/common/exception/v1" xmlns:pfx3="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pfx2="http://www.ooredoo.dz/common/wsexception/v1" xmlns:pfx="http://www.ooredoo.dz/log/logStarterSchema">
+    <xsd:import namespace="http://www.ooredoo.dz/log/logStarterSchema" schemaLocation="/SharedResources/Schemas/XSD/LOG/logStarterSchema.xsd"/>
+    <xsd:import namespace="http://www.ooredoo.dz/common/wsexception/v1" schemaLocation="/SharedResources/Schemas/XSD/COMMON/WSException.xsd"/>
+    <xsd:import namespace="http://www.ooredoo.dz/common/exception/v1" schemaLocation="/SharedResources/Schemas/XSD/COMMON/Exception.xsd"/>
+    <pd:name>Utility/LOG/Action/Check.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx:checkStarterRequest"/>
+    <pd:startX>159</pd:startX>
+    <pd:startY>91</pd:startY>
+    <pd:returnBindings>
+        <xsl:copy-of select="$Check-Requestor/ns:ActivityOutput/Body/root/pfx:checkStarterResponse"/>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx:checkStarterResponse"/>
+    <pd:endX>459</pd:endX>
+    <pd:endY>93</pd:endY>
+    <pd:errorSchemas>
+        <Exception ref="pfx4:Exception"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1417676185454</pd:targetNamespace>
+    <pd:activity name="Check Requestor">
+        <pd:type>com.tibco.plugin.jms.JMSQueueRequestReplyActivity</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueRequestReplyActivity</pd:resourceType>
+        <pd:x>317</pd:x>
+        <pd:y>92</pd:y>
+        <config>
+            <PermittedMessageType>XML Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>%%LocalLog/JMSQueue/CheckContains%%</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>NON_PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration/>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/SharedResources/Connections/JMS/JMS_LOG_Connection.sharedjmscon</ConnectionReference>
+            <InDataxsdString ref="pfx:checkStarterRequest"/>
+            <OutDataxsdString>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element ref="pfx:checkStarterResponse" minOccurs="0"/>
+                            <xsd:element ref="pfx2:Error" minOccurs="0"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </OutDataxsdString>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <requestTimeout>
+                    <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/LocalLog/JMSQueue/CheckRequestorTimeOut"/>
+                </requestTimeout>
+                <Body>
+                    <xsl:copy-of select="$Start/pfx:checkStarterRequest"/>
+                </Body>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Generate Error">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>363</pd:x>
+        <pd:y>218</pd:y>
+        <config>
+            <faultName/>
+        </config>
+        <pd:inputBindings>
+            <pfx3:ActivityInput>
+                <xsl:if test="$Check-Requestor/ns:ActivityOutput/Body/root/pfx2:Error/pfx2:ErrorMessage">
+                    <message>
+                        <xsl:value-of select="$Check-Requestor/ns:ActivityOutput/Body/root/pfx2:Error/pfx2:ErrorMessage"/>
+                    </message>
+                </xsl:if>
+                <xsl:if test="$Check-Requestor/ns:ActivityOutput/Body/root/pfx2:Error/pfx2:ErrorMessageCode">
+                    <messageCode>
+                        <xsl:value-of select="$Check-Requestor/ns:ActivityOutput/Body/root/pfx2:Error/pfx2:ErrorMessageCode"/>
+                    </messageCode>
+                </xsl:if>
+            </pfx3:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Check Requestor</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Check Requestor</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Check Requestor</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:xpathDescription>ERR</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>exists($Check-Requestor/ns:ActivityOutput/Body/root/pfx2:Error)</pd:xpath>
+    </pd:transition>
+</pd:ProcessDefinition>

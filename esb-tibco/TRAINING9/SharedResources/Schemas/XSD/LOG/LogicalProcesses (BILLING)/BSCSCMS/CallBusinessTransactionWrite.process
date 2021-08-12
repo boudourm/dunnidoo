@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:pfx="http://www.ooredoo.dz/ws/bscs/contractDevicesRead" xmlns:ns2="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:ns4="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns3="http://www.ooredoo.dz/common/header/v1" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx5="http://www.ooredoo.dz/ws/bscs/businessTransactionWrite" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx4="http://www.ooredoo.dz/ws/bscs/businessTransactionRead" xmlns:pfx3="http://www.ooredoo.dz/ws/bscs/contractInfosRead" xmlns:pfx2="http://www.ooredoo.dz/common/exception/v1">
+    <xsd:import namespace="http://www.ooredoo.dz/ws/bscs/contractDevicesRead" schemaLocation="/SharedResources/Schemas/XSD/BSCS/ContractDevicesRead.xsd"/>
+    <xsd:import namespace="http://www.ooredoo.dz/ws/bscs/contractInfosRead" schemaLocation="/SharedResources/Schemas/XSD/BSCS/ContractInfosRead.xsd"/>
+    <xsd:import namespace="http://www.ooredoo.dz/ws/bscs/businessTransactionRead" schemaLocation="/SharedResources/Schemas/XSD/BSCS/BusinessTransactionRead.xsd"/>
+    <xsd:import namespace="http://www.ooredoo.dz/common/exception/v1" schemaLocation="/SharedResources/Schemas/XSD/COMMON/Exception.xsd"/>
+    <xsd:import namespace="http://www.ooredoo.dz/ws/bscs/businessTransactionWrite" schemaLocation="/SharedResources/Schemas/XSD/BSCS/BusinessTransactionWrite.xsd"/>
+    <pd:name>BusinessProcess/LogicalProcesses/BSCSCMS/CallBusinessTransactionWrite.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx5:businessTransactionWriteRequest"/>
+                    <xsd:element name="transactionId" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>145</pd:startX>
+    <pd:startY>80</pd:startY>
+    <pd:returnBindings>
+        <xsl:copy-of select="$BusinessTransactionWrite-Requestor/ns:ActivityOutput/Body/root/pfx5:businessTransactionWriteResponse"/>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx5:businessTransactionWriteResponse"/>
+    <pd:endX>636</pd:endX>
+    <pd:endY>79</pd:endY>
+    <pd:errorSchemas>
+        <Exception ref="pfx2:Exception"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1416492734069</pd:targetNamespace>
+    <pd:activity name="BusinessTransactionWrite Requestor">
+        <pd:type>com.tibco.plugin.jms.JMSQueueRequestReplyActivity</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueRequestReplyActivity</pd:resourceType>
+        <pd:x>362</pd:x>
+        <pd:y>88</pd:y>
+        <config>
+            <PermittedMessageType>XML Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>%%ExternalApplications/BSCSCMS/JMS/InvokeMRSTQueue/BusinessTransactionWrite%%</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>NON_PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/SharedResources/Connections/JMS/JMS_Tech_Connection.sharedjmscon</ConnectionReference>
+            <InDataxsdString>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element ref="pfx5:businessTransactionWriteRequest"/>
+                            <xsd:element name="transactionId" type="xsd:string" minOccurs="0"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </InDataxsdString>
+            <OutDataxsdString>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element ref="pfx5:businessTransactionWriteResponse" minOccurs="0"/>
+                            <xsd:element ref="pfx2:Exception" minOccurs="0"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </OutDataxsdString>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <requestTimeout>
+                    <xsl:value-of select="$_globalVariables/ns4:GlobalVariables/Application/JMS/TimeOutRequestorCMS"/>
+                </requestTimeout>
+                <Body>
+                    <root>
+                        <xsl:copy-of select="$Start/root/pfx5:businessTransactionWriteRequest"/>
+                        <transactionId>
+                            <xsl:value-of select="$Start/root/transactionId"/>
+                        </transactionId>
+                    </root>
+                </Body>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="LogException">
+        <pd:type>com.tibco.pe.core.WriteToLogActivity</pd:type>
+        <pd:resourceType>ae.activities.log</pd:resourceType>
+        <pd:x>365</pd:x>
+        <pd:y>230</pd:y>
+        <config>
+            <role>Error</role>
+        </config>
+        <pd:inputBindings>
+            <ns1:ActivityInput>
+                <message>
+                    <xsl:value-of select="tib:render-xml($BusinessTransactionWrite-Requestor/ns:ActivityOutput/Body/root/pfx2:Exception)"/>
+                </message>
+                <msgCode>
+                    <xsl:value-of select="'BW - BusinessTransactionWrite Exception'"/>
+                </msgCode>
+            </ns1:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Generate Error">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>598</pd:x>
+        <pd:y>224</pd:y>
+        <config>
+            <faultName>Exception</faultName>
+        </config>
+        <pd:inputBindings>
+            <ns2:ActivityInput>
+                <xsl:if test="$BusinessTransactionWrite-Requestor/ns:ActivityOutput/Body/root/pfx2:Exception/pfx2:Msg">
+                    <message>
+                        <xsl:value-of select="$BusinessTransactionWrite-Requestor/ns:ActivityOutput/Body/root/pfx2:Exception/pfx2:Msg"/>
+                    </message>
+                </xsl:if>
+                <xsl:if test="$BusinessTransactionWrite-Requestor/ns:ActivityOutput/Body/root/pfx2:Exception/pfx2:MsgCode">
+                    <messageCode>
+                        <xsl:value-of select="$BusinessTransactionWrite-Requestor/ns:ActivityOutput/Body/root/pfx2:Exception/pfx2:MsgCode"/>
+                    </messageCode>
+                </xsl:if>
+                <data>
+                    <xsl:copy-of select="$BusinessTransactionWrite-Requestor/ns:ActivityOutput/Body/root/pfx2:Exception"/>
+                </data>
+            </ns2:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>BusinessTransactionWrite Requestor</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>BusinessTransactionWrite Requestor</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>BusinessTransactionWrite Requestor</pd:from>
+        <pd:to>LogException</pd:to>
+        <pd:xpathDescription>error</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$BusinessTransactionWrite-Requestor/ns:ActivityOutput/Body/root/pfx2:Exception/pfx2:StackTrace !='' or $BusinessTransactionWrite-Requestor/ns:ActivityOutput/Body/root/pfx2:Exception/pfx2:Data !=''</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogException</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

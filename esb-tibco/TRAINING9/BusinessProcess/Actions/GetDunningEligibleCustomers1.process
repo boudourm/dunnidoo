@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+    <pd:name>BusinessProcess/Actions/GetDunningEligibleCustomers.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>74</pd:startX>
+    <pd:startY>121</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>828</pd:endX>
+    <pd:endY>130</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1525210763033</pd:targetNamespace>
+    <pd:activity name="JDBC Query">
+        <pd:type>com.tibco.plugin.jdbc.JDBCQueryActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCQueryActivity</pd:resourceType>
+        <pd:x>220</pd:x>
+        <pd:y>123</pd:y>
+        <config>
+            <timeout>10</timeout>
+            <commit>false</commit>
+            <maxRows>100</maxRows>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <statement>SELECT  v.CUSTOMER_ID , v.OHENTDATE , u.CUSTCODE, u.LBC_DATE, v.OHINVAMT_GL, v.OHOPNAMT_GL , v.OHDUEDATE
+FROM  ORDERHDR_ALL v ,
+     	      CUSTOMER_ALL u      
+WHERE  v.OHSTATUS = 'IN'
+AND     v.OHINVTYPE = 5
+AND     v.OHOPNAMT_GL &gt; 0
+AND   v.OHENTDATE = to_date('08/04/20' ,'DD/MM/YYYY')
+AND v.CUSTOMER_ID = u.CUSTOMER_ID
+AND u.TMCODE IN 
+(SELECT TMCODE
+FROM OFFER_TYPE 
+WHERE TYPE = 'C')
+</statement>
+            <jdbcSharedConfig>//ConnexionBSCS</jdbcSharedConfig>
+        </config>
+        <pd:inputBindings>
+            <jdbcQueryActivityInput/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:group name="Group">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>302</pd:x>
+        <pd:y>41</pd:y>
+        <pd:width>417</pd:width>
+        <pd:height>207</pd:height>
+        <pd:collapsedWidth>52</pd:collapsedWidth>
+        <pd:collapsedHeight>69</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <config>
+            <pd:groupType>inputLoop</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:activityOutputName/>
+            <pd:accumulateOutput>false</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>GetCustomerAndContacts</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>GetCustomerSegment</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>GetCustomerAndContacts</pd:from>
+            <pd:to>GetCustomerSegment</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="GetCustomerSegment">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>613</pd:x>
+            <pd:y>138</pd:y>
+            <config>
+                <processName>/BusinessProcess/Actions/GetCustomerSegment.process</processName>
+            </config>
+            <pd:inputBindings>
+                <ns0:getCustomerSegmentRequest xmlns:ns0="http://www.ooredoo.dz/crm/getCustomerSegment"/>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="GetCustomerAndContacts">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>396</pd:x>
+            <pd:y>132</pd:y>
+            <config>
+                <processName>/BusinessProcess/Actions/GetCustomerAndContacts.process</processName>
+            </config>
+            <pd:inputBindings>
+                <ns0:setCustomerAndContact xmlns:ns0="http://www.ooredoo.dz/ws/party/setCustomerAndContact"/>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>JDBC Query</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>JDBC Query</pd:from>
+        <pd:to>Group</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns:tns="http://www.tibco.com/schemas/TRAINING/SharedResources/Schemas/XSD/Schema.xsd4"
+	 targetNamespace="http://www.tibco.com/schemas/TRAINING/SharedResources/Schemas/XSD/Schema.xsd4"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:element name="StatusListe">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Status">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="to" type="xs:string" minOccurs="0"/>
+							<xs:element name="status" type="xs:string" minOccurs="0"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

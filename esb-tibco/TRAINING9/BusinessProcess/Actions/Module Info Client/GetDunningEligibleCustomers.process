@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.ooredoo.dz/ws/party/getCustomerContracts" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.ooredoo.dz/ws/party/customerInfos" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns0="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://www.tibco.com/schemas/TRAINING9/SharedResources/Schemas/XSD/Schema.xsd" xmlns:pfx2="http://www.tibco.com/schemas/TRAINING/SharedResources/Schemas/XSD/Schema.xsd2" xmlns:pfx="http://www.tibco.com/schemas/TRAINING/SharedResources/Schemas/XSD/Schema.xsd8">
+    <xsd:import namespace="http://www.tibco.com/schemas/TRAINING/SharedResources/Schemas/XSD/Schema.xsd8" schemaLocation="/SharedResources/Schemas/XSD/BatchUser.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/schemas/TRAINING/SharedResources/Schemas/XSD/Schema.xsd2"/>
+    <xsd:import namespace="http://www.tibco.com/schemas/TRAINING/SharedResources/Schemas/XSD/Schema.xsd2" schemaLocation="/SharedResources/Schemas/XSD/DunningActions.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/schemas/TRAINING9/SharedResources/Schemas/XSD/Schema.xsd" schemaLocation="/BusinessProcess/Actions/Module Info Client/XSD/GetDunningEligibleCustomers.xsd"/>
+    <pd:name>BusinessProcess/Actions/Module Info Client/GetDunningEligibleCustomers.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>159</pd:startX>
+    <pd:startY>226</pd:startY>
+    <pd:returnBindings>
+        <pfx3:DunningEligibleCustomersList>
+            <xsl:for-each select="$PaymentResponsibleInfos/AccumulatedOutput/pfx3:GetDunningEligibleCystomersResponse">
+                <pfx3:Customers>
+                    <xsl:if test="pfx3:customerId">
+                        <pfx3:customerId>
+                            <xsl:value-of select="pfx3:customerId"/>
+                        </pfx3:customerId>
+                    </xsl:if>
+                    <xsl:if test="pfx3:custCode">
+                        <pfx3:custCode>
+                            <xsl:value-of select="pfx3:custCode"/>
+                        </pfx3:custCode>
+                    </xsl:if>
+                    <xsl:if test="pfx3:segment">
+                        <pfx3:segment>
+                            <xsl:value-of select="pfx3:segment"/>
+                        </pfx3:segment>
+                    </xsl:if>
+                    <xsl:if test="pfx3:openAmount">
+                        <pfx3:openAmount>
+                            <xsl:value-of select="pfx3:openAmount"/>
+                        </pfx3:openAmount>
+                    </xsl:if>
+                    <xsl:if test="pfx3:invoiceAmount">
+                        <pfx3:invoiceAmount>
+                            <xsl:value-of select="pfx3:invoiceAmount"/>
+                        </pfx3:invoiceAmount>
+                    </xsl:if>
+                    <xsl:if test="pfx3:dueDate">
+                        <pfx3:dueDate>
+                            <xsl:value-of select="pfx3:dueDate"/>
+                        </pfx3:dueDate>
+                    </xsl:if>
+                    <xsl:if test="pfx3:lbcDate">
+                        <pfx3:lbcDate>
+                            <xsl:value-of select="pfx3:lbcDate"/>
+                        </pfx3:lbcDate>
+                    </xsl:if>
+                    <xsl:if test="pfx3:msisdn">
+                        <pfx3:msisdn>
+                            <xsl:value-of select="pfx3:msisdn"/>
+                        </pfx3:msisdn>
+                    </xsl:if>
+                    <xsl:if test="pfx3:ccEmail">
+                        <pfx3:ccEmail>
+                            <xsl:value-of select="pfx3:ccEmail"/>
+                        </pfx3:ccEmail>
+                    </xsl:if>
+                    <xsl:if test="pfx3:cclName">
+                        <pfx3:cclName>
+                            <xsl:value-of select="pfx3:cclName"/>
+                        </pfx3:cclName>
+                    </xsl:if>
+                    <xsl:if test="pfx3:ccfName">
+                        <pfx3:ccfName>
+                            <xsl:value-of select="pfx3:ccfName"/>
+                        </pfx3:ccfName>
+                    </xsl:if>
+                    <xsl:if test="pfx3:raisonSociale">
+                        <pfx3:raisonSociale>
+                            <xsl:value-of select="pfx3:raisonSociale"/>
+                        </pfx3:raisonSociale>
+                    </xsl:if>
+                    <xsl:if test="pfx3:coId">
+                        <pfx3:coId>
+                            <xsl:value-of select="pfx3:coId"/>
+                        </pfx3:coId>
+                    </xsl:if>
+                </pfx3:Customers>
+            </xsl:for-each>
+        </pfx3:DunningEligibleCustomersList>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx3:DunningEligibleCustomersList"/>
+    <pd:endX>910</pd:endX>
+    <pd:endY>218</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1524141282063</pd:targetNamespace>
+    <pd:activity name="BSCS TE">
+        <pd:type>com.tibco.plugin.jdbc.JDBCQueryActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCQueryActivity</pd:resourceType>
+        <pd:x>309</pd:x>
+        <pd:y>224</pd:y>
+        <config>
+            <timeout>10</timeout>
+            <commit>false</commit>
+            <maxRows>100</maxRows>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <jdbcSharedConfig>/SharedResources/Connections/JDBC/DUNNIDOO_JDBC_Connection_Native.sharedjdbc</jdbcSharedConfig>
+            <statement>SELECT * FROM BSCS_TE</statement>
+            <oraObjects/>
+            <oraTables/>
+            <QueryOutputCachedSchemaColumns>CUSTOMER_ID</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>2</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>NUMBER</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>CUSTCODE</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>INVOICE_AMOUNT</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>2</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>NUMBER</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>OPEN_AMOUNT</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>2</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>NUMBER</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>DUE_DATE</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>93</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>DATE</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            <QueryOutputCachedSchemaColumns>ENTRY_DATE</QueryOutputCachedSchemaColumns>
+            <QueryOutputCachedSchemaDataTypes>93</QueryOutputCachedSchemaDataTypes>
+            <QueryOutputCachedSchemaDataTypesName>DATE</QueryOutputCachedSchemaDataTypesName>
+            <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+        </config>
+        <pd:inputBindings>
+            <jdbcQueryActivityInput/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:group name="Group">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>423</pd:x>
+        <pd:y>85</pd:y>
+        <pd:width>368</pd:width>
+        <pd:height>254</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>inputLoop</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:over>$BSCS-TE/resultSet/Record</pd:over>
+            <pd:iterationElementSlot>currentInput</pd:iterationElementSlot>
+            <pd:indexSlot>index</pd:indexSlot>
+            <pd:outSlot>PaymentResponsibleInfos</pd:outSlot>
+            <pd:activityOutputName>Map Data</pd:activityOutputName>
+            <pd:accumulateOutput>true</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>GetCustomerContractsRequest</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>GetCustomerInfoRequest</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Map Data</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>GetCustomerInfoRequest</pd:from>
+            <pd:to>Map Data</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>GetCustomerContractsRequest</pd:from>
+            <pd:to>Map Data</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="GetCustomerContractsRequest">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>563</pd:x>
+            <pd:y>263</pd:y>
+            <config>
+                <processName>/BusinessProcess/Actions/Module Info Client/GetCustomerContractsRequest.process</processName>
+            </config>
+            <pd:inputBindings>
+                <ns2:getCustomerContractsRequest>
+                    <customerId>
+                        <xsl:value-of select="round($currentInput/Record/CUSTOMER_ID)"/>
+                    </customerId>
+                </ns2:getCustomerContractsRequest>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="GetCustomerInfoRequest">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>558</pd:x>
+            <pd:y>149</pd:y>
+            <config>
+                <processName>/BusinessProcess/Actions/Module Info Client/GetCustomerInfoRequest.process</processName>
+            </config>
+            <pd:inputBindings>
+                <ns1:customerInfos>
+                    <customerId>
+                        <xsl:value-of select="round($currentInput/Record/CUSTOMER_ID)"/>
+                    </customerId>
+                    <contactType>
+                        <xsl:value-of select="&quot;BILL&quot;"/>
+                    </contactType>
+                </ns1:customerInfos>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Map Data">
+            <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+            <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+            <pd:x>695</pd:x>
+            <pd:y>219</pd:y>
+            <config>
+                <element ref="pfx3:GetDunningEligibleCystomersResponse"/>
+            </config>
+            <pd:inputBindings>
+                <pfx3:GetDunningEligibleCystomersResponse>
+                    <pfx3:customerId>
+                        <xsl:value-of select="round($currentInput/Record/CUSTOMER_ID)"/>
+                    </pfx3:customerId>
+                    <xsl:if test="$currentInput/Record/CUSTCODE">
+                        <pfx3:custCode>
+                            <xsl:value-of select="$currentInput/Record/CUSTCODE"/>
+                        </pfx3:custCode>
+                    </xsl:if>
+                    <xsl:if test="$GetCustomerInfoRequest/ns1:customerInfosResponse/Customer/customerSegment">
+                        <pfx3:segment>
+                            <xsl:value-of select="$GetCustomerInfoRequest/ns1:customerInfosResponse/Customer/customerSegment"/>
+                        </pfx3:segment>
+                    </xsl:if>
+                    <xsl:if test="$currentInput/Record/OPEN_AMOUNT">
+                        <pfx3:openAmount>
+                            <xsl:value-of select="$currentInput/Record/OPEN_AMOUNT"/>
+                        </pfx3:openAmount>
+                    </xsl:if>
+                    <pfx3:invoiceAmount>
+                        <xsl:value-of select="round($currentInput/Record/INVOICE_AMOUNT)"/>
+                    </pfx3:invoiceAmount>
+                    <xsl:if test="$currentInput/Record/DUE_DATE">
+                        <pfx3:dueDate>
+                            <xsl:value-of select="$currentInput/Record/DUE_DATE"/>
+                        </pfx3:dueDate>
+                    </xsl:if>
+                    <xsl:if test="$currentInput/Record/ENTRY_DATE">
+                        <pfx3:lbcDate>
+                            <xsl:value-of select="$currentInput/Record/ENTRY_DATE"/>
+                        </pfx3:lbcDate>
+                    </xsl:if>
+                    <xsl:variable name="var" select="$BSCS-TE/resultSet/Record/CUSTOMER_ID "/>
+                    <pfx3:msisdn>
+                        <xsl:value-of select="$GetCustomerContractsRequest/ns2:getCustomerContractsResponse/contract[customerId =$var ]/msisdn"/>
+                    </pfx3:msisdn>
+                    <pfx3:ccEmail>
+                        <xsl:value-of select="$GetCustomerInfoRequest/ns1:customerInfosResponse/ContactList[1]/email"/>
+                    </pfx3:ccEmail>
+                    <pfx3:cclName>
+                        <xsl:value-of select="$GetCustomerInfoRequest/ns1:customerInfosResponse/ContactList[1]/lastName"/>
+                    </pfx3:cclName>
+                    <pfx3:ccfName>
+                        <xsl:value-of select="$GetCustomerInfoRequest/ns1:customerInfosResponse/ContactList[1]/firstName"/>
+                    </pfx3:ccfName>
+                    <pfx3:raisonSociale>
+                        <xsl:value-of select="$GetCustomerInfoRequest/ns1:customerInfosResponse/ContactList[1]/companyName"/>
+                    </pfx3:raisonSociale>
+                    <xsl:variable name="var2" select="$BSCS-TE/resultSet/Record/CUSTOMER_ID"/>
+                    <pfx3:coId>
+                        <xsl:value-of select="$GetCustomerContractsRequest/ns2:getCustomerContractsResponse/contract[customerId = $var2]/coId"/>
+                    </pfx3:coId>
+                </pfx3:GetDunningEligibleCystomersResponse>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>BSCS TE</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>BSCS TE</pd:from>
+        <pd:to>Group</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

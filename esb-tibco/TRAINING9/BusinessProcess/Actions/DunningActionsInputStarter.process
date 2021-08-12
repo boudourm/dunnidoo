@@ -1,0 +1,445 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns0="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx2="http://www.tibco.com/schemas/TRAINING/SharedResources/Schemas/XSD/Schema.xsd2" xmlns:pfx="http://www.tibco.com/schemas/TRAINING/SharedResources/Schemas/XSD/Schema.xsd8">
+    <xsd:import namespace="http://www.tibco.com/schemas/TRAINING/SharedResources/Schemas/XSD/Schema.xsd8" schemaLocation="/SharedResources/Schemas/XSD/BatchUser.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/schemas/TRAINING/SharedResources/Schemas/XSD/Schema.xsd2"/>
+    <xsd:import namespace="http://www.tibco.com/schemas/TRAINING/SharedResources/Schemas/XSD/Schema.xsd2" schemaLocation="/SharedResources/Schemas/XSD/DunningActions.xsd"/>
+    <pd:name>BusinessProcess/Actions/DunningActionsInputStarter.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>50</pd:startX>
+    <pd:startY>238</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>834</pd:endX>
+    <pd:endY>236</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1524141282063</pd:targetNamespace>
+    <pd:group name="Transaction JDBC">
+        <pd:type>com.tibco.pe.core.TransactionGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>116</pd:x>
+        <pd:y>110</pd:y>
+        <pd:width>665</pd:width>
+        <pd:height>239</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>transactionGroup</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:transactionType>JDBCTransaction</pd:transactionType>
+            <pd:includeCheckpoint>false</pd:includeCheckpoint>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>Get Dunning Planification Inputs</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>For each input dunning</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Get Dunning Planification Inputs</pd:from>
+            <pd:to>For each input dunning</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:group name="For each input dunning">
+            <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+            <pd:resourceType>ae.process.group</pd:resourceType>
+            <pd:x>210</pd:x>
+            <pd:y>156</pd:y>
+            <pd:width>496</pd:width>
+            <pd:height>168</pd:height>
+            <pd:collapsedWidth>57</pd:collapsedWidth>
+            <pd:collapsedHeight>70</pd:collapsedHeight>
+            <pd:groupVariables/>
+            <pd:joinToggle>inherit</pd:joinToggle>
+            <config>
+                <pd:groupType>inputLoop</pd:groupType>
+                <pd:serializable>false</pd:serializable>
+                <pd:over>$Get-Dunning-Planification-Inputs/resultSet/Record</pd:over>
+                <pd:iterationElementSlot>currentInput</pd:iterationElementSlot>
+                <pd:indexSlot>index</pd:indexSlot>
+                <pd:activityOutputName/>
+                <pd:accumulateOutput>false</pd:accumulateOutput>
+            </config>
+            <pd:inputBindings/>
+            <pd:expanded>true</pd:expanded>
+            <pd:transition>
+                <pd:from>start</pd:from>
+                <pd:to>Tarnsaction_ID_Generation</pd:to>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>always</pd:conditionType>
+            </pd:transition>
+            <pd:transition>
+                <pd:from>UpdateInputTableStatusProgress</pd:from>
+                <pd:to>end</pd:to>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>always</pd:conditionType>
+            </pd:transition>
+            <pd:transition>
+                <pd:from>Tarnsaction_ID_Generation</pd:from>
+                <pd:to>Get Batch User</pd:to>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>always</pd:conditionType>
+            </pd:transition>
+            <pd:transition>
+                <pd:from>Get Batch User</pd:from>
+                <pd:to>Send to SetBatchDunning</pd:to>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>always</pd:conditionType>
+            </pd:transition>
+            <pd:transition>
+                <pd:from>Send to SetBatchDunning</pd:from>
+                <pd:to>UpdateInputTableStatusProgress</pd:to>
+                <pd:lineType>Default</pd:lineType>
+                <pd:lineColor>-16777216</pd:lineColor>
+                <pd:conditionType>always</pd:conditionType>
+            </pd:transition>
+            <pd:activity name="Get Batch User">
+                <pd:type>com.tibco.plugin.jdbc.JDBCQueryActivity</pd:type>
+                <pd:resourceType>ae.activities.JDBCQueryActivity</pd:resourceType>
+                <pd:x>396</pd:x>
+                <pd:y>233</pd:y>
+                <config>
+                    <timeout>%%ProcessConfig/Batch/JDBC/SQLTimeOut%%</timeout>
+                    <commit>false</commit>
+                    <maxRows>%%ProcessConfig/Batch/JDBC/MaxRows%%</maxRows>
+                    <emptyStrAsNil>false</emptyStrAsNil>
+                    <jdbcSharedConfig>/SharedResources/Connections/JDBC/DUNNIDOO_JDBC_Connection_ESB_BATCH.sharedjdbc</jdbcSharedConfig>
+                    <statement>select  USER_BATCH , MAIL_ADDRESS , PHONE_NUMBER , IP_ADDRESS 
+from USER_INFORMATION  where  USER_BATCH =?</statement>
+                    <Prepared_Param_DataType>
+                        <parameter>
+                            <parameterName>USER_BATCH</parameterName>
+                            <dataType>VARCHAR</dataType>
+                        </parameter>
+                    </Prepared_Param_DataType>
+                    <oraObjects/>
+                    <oraTables/>
+                    <QueryOutputCachedSchemaColumns>USER_BATCH</QueryOutputCachedSchemaColumns>
+                    <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+                    <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+                    <QueryOutputCachedSchemaStatus>RequiredElement</QueryOutputCachedSchemaStatus>
+                    <QueryOutputCachedSchemaColumns>MAIL_ADDRESS</QueryOutputCachedSchemaColumns>
+                    <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+                    <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+                    <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+                    <QueryOutputCachedSchemaColumns>PHONE_NUMBER</QueryOutputCachedSchemaColumns>
+                    <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+                    <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+                    <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+                    <QueryOutputCachedSchemaColumns>IP_ADDRESS</QueryOutputCachedSchemaColumns>
+                    <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+                    <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+                    <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+                </config>
+                <pd:inputBindings>
+                    <jdbcQueryActivityInput>
+                        <USER_BATCH>
+                            <xsl:value-of select="$_globalVariables/ns:GlobalVariables/ProcessConfig/Dunning/UserDunning"/>
+                        </USER_BATCH>
+                    </jdbcQueryActivityInput>
+                </pd:inputBindings>
+            </pd:activity>
+            <pd:activity name="Send to SetBatchDunning">
+                <pd:type>com.tibco.plugin.jms.JMSQueueRequestReplyActivity</pd:type>
+                <pd:resourceType>ae.activities.JMSQueueRequestReplyActivity</pd:resourceType>
+                <pd:x>498</pd:x>
+                <pd:y>241</pd:y>
+                <config>
+                    <PermittedMessageType>XML Text</PermittedMessageType>
+                    <SessionAttributes>
+                        <transacted>false</transacted>
+                        <acknowledgeMode>1</acknowledgeMode>
+                        <maxSessions>1</maxSessions>
+                        <destination>Dunnidoo_Batch_Queue</destination>
+                    </SessionAttributes>
+                    <ConfigurableHeaders>
+                        <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                        <JMSExpiration>0</JMSExpiration>
+                        <JMSPriority>4</JMSPriority>
+                    </ConfigurableHeaders>
+                    <ConnectionReference>/SharedResources/Connections/JMS/JMS_ Connection_BATCH_Local.sharedjmscon</ConnectionReference>
+                    <InDataxsdString>
+                        <xsd:element name="DunningActionInputs">
+                            <xsd:complexType>
+                                <xsd:sequence>
+                                    <xsd:element ref="pfx:USER"/>
+                                    <xsd:element ref="pfx2:DunningAction"/>
+                                </xsd:sequence>
+                            </xsd:complexType>
+                        </xsd:element>
+                    </InDataxsdString>
+                    <OutDataxsdString>
+                        <xsd:element name="DunningActionInputs">
+                            <xsd:complexType>
+                                <xsd:sequence>
+                                    <xsd:element ref="pfx:USER"/>
+                                    <xsd:element ref="pfx2:DunningAction"/>
+                                </xsd:sequence>
+                            </xsd:complexType>
+                        </xsd:element>
+                    </OutDataxsdString>
+                </config>
+                <pd:inputBindings>
+                    <ns0:ActivityInput>
+                        <Body>
+                            <DunningActionInputs>
+                                <pfx:USER>
+                                    <pfx:USER_BATCH>
+                                        <xsl:value-of select="$Get-Batch-User/resultSet/Record[1]/USER_BATCH"/>
+                                    </pfx:USER_BATCH>
+                                    <xsl:if test="$Get-Batch-User/resultSet/Record[1]/MAIL_ADDRESS">
+                                        <pfx:MAIL_ADDRESS>
+                                            <xsl:value-of select="$Get-Batch-User/resultSet/Record[1]/MAIL_ADDRESS"/>
+                                        </pfx:MAIL_ADDRESS>
+                                    </xsl:if>
+                                    <pfx:IP_ADDRESS>
+                                        <xsl:value-of select="$Get-Batch-User/resultSet/Record[1]/IP_ADDRESS"/>
+                                    </pfx:IP_ADDRESS>
+                                    <pfx:PHONE_NUMBER>
+                                        <xsl:value-of select="$Get-Batch-User/resultSet/Record[1]/PHONE_NUMBER"/>
+                                    </pfx:PHONE_NUMBER>
+                                    <pfx:EXECUTION_DELAY>
+                                        <xsl:value-of select="$_globalVariables/ns:GlobalVariables/ProcessConfig/Dunning/ExecutionDelay/Dunning"/>
+                                    </pfx:EXECUTION_DELAY>
+                                </pfx:USER>
+                                <pfx2:DunningAction>
+                                    <pfx2:Header>
+                                        <pfx2:TransactionID>
+                                            <xsl:value-of select="$Tarnsaction_ID_Generation/root/TransactionId"/>
+                                        </pfx2:TransactionID>
+                                        <pfx2:UserAdress>
+                                            <xsl:value-of select="$Get-Batch-User/resultSet/Record[1]/IP_ADDRESS"/>
+                                        </pfx2:UserAdress>
+                                        <pfx2:UserName>
+                                            <xsl:value-of select="$Get-Batch-User/resultSet/Record[1]/USER_BATCH"/>
+                                        </pfx2:UserName>
+                                        <pfx2:Property1>
+                                            <xsl:value-of select="$_globalVariables/ns:GlobalVariables/ProcessConfig/Dunning/ExecutionDelay/Dunning"/>
+                                        </pfx2:Property1>
+                                        <pfx2:Property2>
+                                            <xsl:value-of select="$_globalVariables/ns:GlobalVariables/ProcessConfig/Dunning/UserHeader"/>
+                                        </pfx2:Property2>
+                                    </pfx2:Header>
+                                    <pfx2:ACTION_NAME>
+                                        <xsl:value-of select="$currentInput/Record/ACTION_NAME"/>
+                                    </pfx2:ACTION_NAME>
+                                    <pfx2:ExtraData>
+                                        <pfx2:ID>
+                                            <xsl:value-of select="'PLANIFICATION_ID'"/>
+                                        </pfx2:ID>
+                                        <pfx2:VALUE>
+                                            <xsl:value-of select="$currentInput/Record/ID"/>
+                                        </pfx2:VALUE>
+                                    </pfx2:ExtraData>
+                                    <pfx2:DunningEligibleCustomersInfo>
+                                        <pfx2:CUSTOMER_ID>
+                                            <xsl:value-of select="round($currentInput/Record/CUSTOMER_ID)"/>
+                                        </pfx2:CUSTOMER_ID>
+                                        <xsl:if test="$currentInput/Record/CUSTCODE">
+                                            <pfx2:CUSTCODE>
+                                                <xsl:value-of select="$currentInput/Record/CUSTCODE"/>
+                                            </pfx2:CUSTCODE>
+                                        </xsl:if>
+                                        <pfx2:CO_ID>
+                                            <xsl:value-of select="round($currentInput/Record/CO_ID)"/>
+                                        </pfx2:CO_ID>
+                                        <pfx2:INVOICE_AMOUNT>
+                                            <xsl:value-of select="round($currentInput/Record/INVOICE_AMOUNT)"/>
+                                        </pfx2:INVOICE_AMOUNT>
+                                        <xsl:if test="$currentInput/Record/OPEN_AMOUNT">
+                                            <pfx2:OPEN_AMOUNT>
+                                                <xsl:value-of select="$currentInput/Record/OPEN_AMOUNT"/>
+                                            </pfx2:OPEN_AMOUNT>
+                                        </xsl:if>
+                                        <pfx2:DUE_DATE>
+                                            <xsl:value-of select="tib:format-dateTime('dd/MM/yyyy',   $currentInput/Record/DUE_DATE)"/>
+                                        </pfx2:DUE_DATE>
+                                        <pfx2:LBC_DATE>
+                                            <xsl:value-of select="tib:format-dateTime('dd/MM/yyyy',   $currentInput/Record/LBC_DATE)"/>
+                                        </pfx2:LBC_DATE>
+                                        <xsl:if test="$currentInput/Record/CCLNAME">
+                                            <pfx2:CCLNAME>
+                                                <xsl:value-of select="$currentInput/Record/CCLNAME"/>
+                                            </pfx2:CCLNAME>
+                                        </xsl:if>
+                                        <xsl:if test="$currentInput/Record/MSISDN">
+                                            <pfx2:MSISDN>
+                                                <xsl:value-of select="$currentInput/Record/MSISDN"/>
+                                            </pfx2:MSISDN>
+                                        </xsl:if>
+                                        <xsl:if test="$currentInput/Record/CCEMAIL">
+                                            <pfx2:CCEMAIL>
+                                                <xsl:value-of select="$currentInput/Record/CCEMAIL"/>
+                                            </pfx2:CCEMAIL>
+                                        </xsl:if>
+                                    </pfx2:DunningEligibleCustomersInfo>
+                                </pfx2:DunningAction>
+                            </DunningActionInputs>
+                        </Body>
+                    </ns0:ActivityInput>
+                </pd:inputBindings>
+            </pd:activity>
+            <pd:activity name="Tarnsaction_ID_Generation">
+                <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+                <pd:resourceType>ae.process.subprocess</pd:resourceType>
+                <pd:x>293</pd:x>
+                <pd:y>233</pd:y>
+                <config>
+                    <processName>/Utility/TransactionId_Gen.process</processName>
+                </config>
+                <pd:inputBindings/>
+            </pd:activity>
+            <pd:activity name="UpdateInputTableStatusProgress">
+                <pd:type>com.tibco.plugin.jdbc.JDBCUpdateActivity</pd:type>
+                <pd:resourceType>ae.activities.JDBCUpdateActivity</pd:resourceType>
+                <pd:x>608</pd:x>
+                <pd:y>233</pd:y>
+                <config>
+                    <timeout>10</timeout>
+                    <commit>false</commit>
+                    <emptyStrAsNil>false</emptyStrAsNil>
+                    <jdbcSharedConfig>/SharedResources/Connections/JDBC/DUNNIDOO_JDBC_Connection_ESB_BATCH.sharedjdbc</jdbcSharedConfig>
+                    <statement>UPDATE DUNNING_PLANIFICATION 
+SET STATUS = 'INPROGRESS'
+WHERE ID = ?</statement>
+                    <Prepared_Param_DataType>
+                        <parameter>
+                            <parameterName>PLANIFICATION_ID</parameterName>
+                            <dataType>VARCHAR</dataType>
+                        </parameter>
+                    </Prepared_Param_DataType>
+                </config>
+                <pd:inputBindings>
+                    <jdbcUpdateActivityInput>
+                        <PLANIFICATION_ID>
+                            <xsl:value-of select="$currentInput/Record/ID"/>
+                        </PLANIFICATION_ID>
+                    </jdbcUpdateActivityInput>
+                </pd:inputBindings>
+            </pd:activity>
+        </pd:group>
+        <pd:activity name="Get Dunning Planification Inputs">
+            <pd:type>com.tibco.plugin.jdbc.JDBCQueryActivity</pd:type>
+            <pd:resourceType>ae.activities.JDBCQueryActivity</pd:resourceType>
+            <pd:x>173</pd:x>
+            <pd:y>261</pd:y>
+            <config>
+                <timeout>10</timeout>
+                <commit>false</commit>
+                <maxRows>100</maxRows>
+                <emptyStrAsNil>false</emptyStrAsNil>
+                <jdbcSharedConfig>/SharedResources/Connections/JDBC/DUNNIDOO_JDBC_Connection_ESB_BATCH.sharedjdbc</jdbcSharedConfig>
+                <statement>SELECT  * 
+FROM DUNNING_PLANIFICATION 
+WHERE STATUS = 'PLANNED'
+AND EXECUTION_DATE = to_date(? , 'DD/MM/YYYY')
+
+FOR UPDATE SKIP LOCKED</statement>
+                <wizardData/>
+                <Prepared_Param_DataType>
+                    <parameter>
+                        <parameterName>CURRENT_DATE</parameterName>
+                        <dataType>VARCHAR</dataType>
+                    </parameter>
+                </Prepared_Param_DataType>
+                <oraObjects/>
+                <oraTables/>
+                <QueryOutputCachedSchemaColumns>ID</QueryOutputCachedSchemaColumns>
+                <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+                <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+                <QueryOutputCachedSchemaStatus>RequiredElement</QueryOutputCachedSchemaStatus>
+                <QueryOutputCachedSchemaColumns>ACTION_NAME</QueryOutputCachedSchemaColumns>
+                <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+                <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+                <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+                <QueryOutputCachedSchemaColumns>EXECUTION_DATE</QueryOutputCachedSchemaColumns>
+                <QueryOutputCachedSchemaDataTypes>93</QueryOutputCachedSchemaDataTypes>
+                <QueryOutputCachedSchemaDataTypesName>DATE</QueryOutputCachedSchemaDataTypesName>
+                <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+                <QueryOutputCachedSchemaColumns>STATUS</QueryOutputCachedSchemaColumns>
+                <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+                <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+                <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+                <QueryOutputCachedSchemaColumns>CUSTOMER_ID</QueryOutputCachedSchemaColumns>
+                <QueryOutputCachedSchemaDataTypes>2</QueryOutputCachedSchemaDataTypes>
+                <QueryOutputCachedSchemaDataTypesName>NUMBER</QueryOutputCachedSchemaDataTypesName>
+                <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+                <QueryOutputCachedSchemaColumns>CUSTCODE</QueryOutputCachedSchemaColumns>
+                <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+                <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+                <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+                <QueryOutputCachedSchemaColumns>CO_ID</QueryOutputCachedSchemaColumns>
+                <QueryOutputCachedSchemaDataTypes>2</QueryOutputCachedSchemaDataTypes>
+                <QueryOutputCachedSchemaDataTypesName>NUMBER</QueryOutputCachedSchemaDataTypesName>
+                <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+                <QueryOutputCachedSchemaColumns>INVOICE_AMOUNT</QueryOutputCachedSchemaColumns>
+                <QueryOutputCachedSchemaDataTypes>2</QueryOutputCachedSchemaDataTypes>
+                <QueryOutputCachedSchemaDataTypesName>NUMBER</QueryOutputCachedSchemaDataTypesName>
+                <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+                <QueryOutputCachedSchemaColumns>OPEN_AMOUNT</QueryOutputCachedSchemaColumns>
+                <QueryOutputCachedSchemaDataTypes>2</QueryOutputCachedSchemaDataTypes>
+                <QueryOutputCachedSchemaDataTypesName>NUMBER</QueryOutputCachedSchemaDataTypesName>
+                <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+                <QueryOutputCachedSchemaColumns>DUE_DATE</QueryOutputCachedSchemaColumns>
+                <QueryOutputCachedSchemaDataTypes>93</QueryOutputCachedSchemaDataTypes>
+                <QueryOutputCachedSchemaDataTypesName>DATE</QueryOutputCachedSchemaDataTypesName>
+                <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+                <QueryOutputCachedSchemaColumns>LBC_DATE</QueryOutputCachedSchemaColumns>
+                <QueryOutputCachedSchemaDataTypes>93</QueryOutputCachedSchemaDataTypes>
+                <QueryOutputCachedSchemaDataTypesName>DATE</QueryOutputCachedSchemaDataTypesName>
+                <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+                <QueryOutputCachedSchemaColumns>CCLNAME</QueryOutputCachedSchemaColumns>
+                <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+                <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+                <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+                <QueryOutputCachedSchemaColumns>MSISDN</QueryOutputCachedSchemaColumns>
+                <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+                <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+                <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+                <QueryOutputCachedSchemaColumns>CCEMAIL</QueryOutputCachedSchemaColumns>
+                <QueryOutputCachedSchemaDataTypes>12</QueryOutputCachedSchemaDataTypes>
+                <QueryOutputCachedSchemaDataTypesName>VARCHAR2</QueryOutputCachedSchemaDataTypesName>
+                <QueryOutputCachedSchemaStatus>OptionalElement</QueryOutputCachedSchemaStatus>
+            </config>
+            <pd:inputBindings>
+                <jdbcQueryActivityInput>
+                    <CURRENT_DATE>
+                        <xsl:value-of select="tib:format-date(&quot;dd/MM/yyyy&quot;,current-date() )"/>
+                    </CURRENT_DATE>
+                </jdbcQueryActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:transition>
+        <pd:from>Transaction JDBC</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Transaction JDBC</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

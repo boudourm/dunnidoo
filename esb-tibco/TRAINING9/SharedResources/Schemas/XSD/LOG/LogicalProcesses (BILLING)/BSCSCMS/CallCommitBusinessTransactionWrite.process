@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.tibco.com/pe/EngineTypes" xmlns:BW="java://com.tibco.pe.core.JavaCustomXPATHFunctions" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.ooredoo.dz/ws/bscs/mrstCmsCommand" xmlns:ns="http://www.ooredoo.dz/common/header/v1" xmlns:pfx4="http://www.ooredoo.dz/ws/bscs/businessTransactionWrite" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pfx2="http://www.ooredoo.dz/common/exception/v1" xmlns:pfx="http://www.ooredoo.dz/ws/bscs/bookingRequestWrite">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://www.ooredoo.dz/ws/bscs/bookingRequestWrite" schemaLocation="/SharedResources/Schemas/XSD/BSCS/BookingRequestWrite.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://www.ooredoo.dz/common/exception/v1" schemaLocation="/SharedResources/Schemas/XSD/COMMON/Exception.xsd"/>
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://www.ooredoo.dz/ws/bscs/businessTransactionWrite" schemaLocation="/SharedResources/Schemas/XSD/BSCS/BusinessTransactionWrite.xsd"/>
+    <pd:name>BusinessProcess/LogicalProcesses/BSCSCMS/CallCommitBusinessTransactionWrite.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx4:businessTransactionWriteRequest"/>
+    <pd:startX>78</pd:startX>
+    <pd:startY>78</pd:startY>
+    <pd:returnBindings>
+        <xsl:copy-of select="$Call-Business-Transaction-Write/pfx4:businessTransactionWriteResponse"/>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx4:businessTransactionWriteResponse"/>
+    <pd:endX>780</pd:endX>
+    <pd:endY>78</pd:endY>
+    <pd:errorSchemas>
+        <Exception ref="pfx2:Exception"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1412083457829</pd:targetNamespace>
+    <pd:activity name="Call Business Transaction Write">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>404</pd:x>
+        <pd:y>86</pd:y>
+        <config>
+            <processName>/BusinessProcess/LogicalProcesses/BSCSCMS/CallBusinessTransactionWrite.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <xsl:copy-of select="$Start/pfx4:businessTransactionWriteRequest"/>
+                <transactionId>
+                    <xsl:value-of select="$CallInvokeGet-TransactionId/ns1:mrstCmsCommandResponse/TRANSACTION_ID"/>
+                </transactionId>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="CallInvokeCommit">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>601</pd:x>
+        <pd:y>78</pd:y>
+        <config>
+            <processName>/BusinessProcess/LogicalProcesses/CallInvokeCommit.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns1:mrstCmsCommandRequest>
+                <xsl:copy-of select="$Start/pfx4:businessTransactionWriteRequest/ns:Header"/>
+                <xsl:if test="$CallInvokeGet-TransactionId/ns1:mrstCmsCommandResponse/TRANSACTION_ID">
+                    <TRANSACTION_ID>
+                        <xsl:value-of select="$CallInvokeGet-TransactionId/ns1:mrstCmsCommandResponse/TRANSACTION_ID"/>
+                    </TRANSACTION_ID>
+                </xsl:if>
+            </ns1:mrstCmsCommandRequest>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="CallInvokeGet TransactionId">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>218</pd:x>
+        <pd:y>86</pd:y>
+        <config>
+            <processName>/BusinessProcess/LogicalProcesses/CallInvokeGetTransactionId.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns1:mrstCmsCommandRequest>
+                <xsl:copy-of select="$Start/pfx4:businessTransactionWriteRequest/ns:Header"/>
+            </ns1:mrstCmsCommandRequest>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="CallInvokeRollBack">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>479</pd:x>
+        <pd:y>252</pd:y>
+        <config>
+            <processName>/BusinessProcess/LogicalProcesses/CallInvokeRollBack.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns1:mrstCmsCommandRequest>
+                <xsl:copy-of select="$Start/pfx4:businessTransactionWriteRequest/ns:Header"/>
+                <xsl:if test="$CallInvokeGet-TransactionId/ns1:mrstCmsCommandResponse/TRANSACTION_ID">
+                    <TRANSACTION_ID>
+                        <xsl:value-of select="$CallInvokeGet-TransactionId/ns1:mrstCmsCommandResponse/TRANSACTION_ID"/>
+                    </TRANSACTION_ID>
+                </xsl:if>
+            </ns1:mrstCmsCommandRequest>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Generate Error">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>478</pd:x>
+        <pd:y>397</pd:y>
+        <config>
+            <faultName/>
+        </config>
+        <pd:inputBindings>
+            <pfx3:ActivityInput>
+                <message>
+                    <xsl:value-of select="concat('error when setting deposit request  : ',$_error/ns2:ErrorReport/Msg,' - ', $_error/ns2:ErrorReport/Msg)"/>
+                </message>
+                <messageCode>
+                    <xsl:value-of select="'SetDepositAmountException'"/>
+                </messageCode>
+            </pfx3:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>CallInvokeGet TransactionId</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallInvokeGet TransactionId</pd:from>
+        <pd:to>Call Business Transaction Write</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call Business Transaction Write</pd:from>
+        <pd:to>CallInvokeCommit</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallInvokeCommit</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call Business Transaction Write</pd:from>
+        <pd:to>CallInvokeRollBack</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallInvokeCommit</pd:from>
+        <pd:to>CallInvokeRollBack</pd:to>
+        <pd:xpathDescription>ERR</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallInvokeRollBack</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

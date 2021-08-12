@@ -1,0 +1,45 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<repository xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance" xmlns = "http://www.tibco.com/xmlns/repo/types/2002">
+	<globalVariables>
+		<globalVariable>
+			<name>ClientID</name>
+			<value></value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1523535488671</modTime>
+		</globalVariable>
+		<globalVariable>
+			<name>ContextURL</name>
+			<value>tcp://10.30.101.48:7223</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1523535489074</modTime>
+		</globalVariable>
+		<globalVariable>
+			<name>Password</name>
+			<value>#!D0LFh+mTYnZBD0s68wq1AAwQ2tI4R0UP</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>Password</type>
+			<modTime>1523535489434</modTime>
+		</globalVariable>
+		<globalVariable>
+			<name>QueueConnection</name>
+			<value>QueueConnectionFactory</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1523535489829</modTime>
+		</globalVariable>
+		<globalVariable>
+			<name>UsedID</name>
+			<value>admin</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1523535488281</modTime>
+		</globalVariable>
+	</globalVariables>
+</repository>

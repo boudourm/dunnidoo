@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:ns2="http://www.tibco.com/pe/DeployedVarsType" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.ooredoo.dz/common/header/v1" xmlns:ns="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pfx5="http://www.ooredoo.dz/ws/bscs/businessTransactionSearch" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx4="http://www.ooredoo.dz/ws/bscs/businessTransactionRead" xmlns:pfx3="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:pfx2="http://www.ooredoo.dz/common/exception/v1" xmlns:pfx="http://www.tibco.com/namespaces/tnt/plugins/jms">
+    <xsd:import namespace="http://www.ooredoo.dz/common/exception/v1" schemaLocation="/SharedResources/Schemas/XSD/COMMON/Exception.xsd"/>
+    <xsd:import namespace="http://www.ooredoo.dz/ws/bscs/businessTransactionSearch" schemaLocation="/SharedResources/Schemas/XSD/BSCS/BusinessTransactionSearch.xsd"/>
+    <xsd:import namespace="http://www.ooredoo.dz/ws/bscs/businessTransactionRead" schemaLocation="/SharedResources/Schemas/XSD/BSCS/BusinessTransactionRead.xsd"/>
+    <pd:name>BusinessProcess/LogicalProcesses/BSCSCMS/CallBusinessTransactionRead.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx4:businessTransactionReadRequest"/>
+    <pd:startX>150</pd:startX>
+    <pd:startY>64</pd:startY>
+    <pd:returnBindings>
+        <xsl:copy-of select="$JMS-Queue-Requestor/pfx:ActivityOutput/Body/root/pfx4:businessTransactionReadResponse"/>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx4:businessTransactionReadResponse"/>
+    <pd:endX>450</pd:endX>
+    <pd:endY>64</pd:endY>
+    <pd:errorSchemas>
+        <Exception ref="pfx2:Exception"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1417603473390</pd:targetNamespace>
+    <pd:activity name="Generate Error">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>459</pd:x>
+        <pd:y>225</pd:y>
+        <config>
+            <faultName>Exception</faultName>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <xsl:if test="$JMS-Queue-Requestor/pfx:ActivityOutput/Body/root/pfx2:Exception/pfx2:Msg">
+                    <message>
+                        <xsl:value-of select="$JMS-Queue-Requestor/pfx:ActivityOutput/Body/root/pfx2:Exception/pfx2:Msg"/>
+                    </message>
+                </xsl:if>
+                <xsl:if test="$JMS-Queue-Requestor/pfx:ActivityOutput/Body/root/pfx2:Exception/pfx2:MsgCode">
+                    <messageCode>
+                        <xsl:value-of select="$JMS-Queue-Requestor/pfx:ActivityOutput/Body/root/pfx2:Exception/pfx2:MsgCode"/>
+                    </messageCode>
+                </xsl:if>
+                <data>
+                    <xsl:copy-of select="$JMS-Queue-Requestor/pfx:ActivityOutput/Body/root/pfx2:Exception"/>
+                </data>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="JMS Queue Requestor">
+        <pd:type>com.tibco.plugin.jms.JMSQueueRequestReplyActivity</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueRequestReplyActivity</pd:resourceType>
+        <pd:x>284</pd:x>
+        <pd:y>72</pd:y>
+        <config>
+            <PermittedMessageType>XML Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>%%ExternalApplications/BSCSCMS/JMS/CMSCommande/BusinessTransactionReaQueue%%</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/SharedResources/Connections/JMS/JMS_Tech_Connection.sharedjmscon</ConnectionReference>
+            <InDataxsdString ref="pfx4:businessTransactionReadRequest"/>
+            <OutDataxsdString>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element ref="pfx4:businessTransactionReadResponse" minOccurs="0"/>
+                            <xsd:element ref="pfx2:Exception" minOccurs="0"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </OutDataxsdString>
+        </config>
+        <pd:inputBindings>
+            <pfx:ActivityInput>
+                <requestTimeout>
+                    <xsl:value-of select="$_globalVariables/ns2:GlobalVariables/Application/JMS/TimeOutRequestorCMS"/>
+                </requestTimeout>
+                <Body>
+                    <xsl:copy-of select="$Start/pfx4:businessTransactionReadRequest"/>
+                </Body>
+            </pfx:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Log">
+        <pd:type>com.tibco.pe.core.WriteToLogActivity</pd:type>
+        <pd:resourceType>ae.activities.log</pd:resourceType>
+        <pd:x>287</pd:x>
+        <pd:y>225</pd:y>
+        <config>
+            <role>User</role>
+        </config>
+        <pd:inputBindings>
+            <pfx3:ActivityInput>
+                <message>
+                    <xsl:value-of select="tib:render-xml($JMS-Queue-Requestor/pfx:ActivityOutput/Body/root/pfx2:Exception)"/>
+                </message>
+                <xsl:if test="$JMS-Queue-Requestor/pfx:ActivityOutput/Body/root/pfx2:Exception/pfx2:MsgCode">
+                    <msgCode>
+                        <xsl:value-of select="$JMS-Queue-Requestor/pfx:ActivityOutput/Body/root/pfx2:Exception/pfx2:MsgCode"/>
+                    </msgCode>
+                </xsl:if>
+            </pfx3:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>JMS Queue Requestor</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>JMS Queue Requestor</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>JMS Queue Requestor</pd:from>
+        <pd:to>Log</pd:to>
+        <pd:xpathDescription>error</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$JMS-Queue-Requestor/pfx:ActivityOutput/Body/root/pfx2:Exception/pfx2:StackTrace!='' or $JMS-Queue-Requestor/pfx:ActivityOutput/Body/root/pfx2:Exception/pfx2:Data!=''</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

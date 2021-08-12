@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="http://www.tibco.com/schemas/TRAINING/SharedResources/Schemas/XSD/Schema.xsd5"
+	 targetNamespace="http://www.tibco.com/schemas/TRAINING/SharedResources/Schemas/XSD/Schema.xsd5"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:element name="DunningServiceAvtivationRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="CO_ID" type="xs:string"/>
+				<xs:element name="Service">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="SN_CODE" type="xs:string"/>
+							<xs:element name="PARAM_ID" type="xs:string" minOccurs="0"/>
+							<xs:element name="PARAm_VALUE" type="xs:string" minOccurs="0"/>
+							<xs:element name="DESC" type="xs:string" minOccurs="0"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions">
+    <pd:name>BusinessProcess/Actions/SenIVRFileTimer.process</pd:name>
+    <pd:startName>Timer</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="Timer">
+        <pd:type>com.tibco.plugin.timer.TimerEventSource</pd:type>
+        <pd:resourceType>ae.activities.timer</pd:resourceType>
+        <pd:x>120</pd:x>
+        <pd:y>97</pd:y>
+        <config>
+            <StartTime>1527028441000</StartTime>
+            <Frequency>false</Frequency>
+            <TimeInterval>1</TimeInterval>
+            <FrequencyIndex>Day</FrequencyIndex>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>325</pd:endX>
+    <pd:endY>97</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1523546957039</pd:targetNamespace>
+    <pd:activity name="FTP Put">
+        <pd:type>com.tibco.plugin.ftp.FTPPutActivity</pd:type>
+        <pd:resourceType>ae.activities.FTPPutActivityUI</pd:resourceType>
+        <pd:x>224</pd:x>
+        <pd:y>97</pd:y>
+        <config>
+            <Timeout>120000</Timeout>
+            <FireWall>false</FireWall>
+            <isBinary>false</isBinary>
+            <Append>false</Append>
+            <useProcessData>false</useProcessData>
+            <Overwrite>true</Overwrite>
+            <SharedUserData>/SharedResources/Connections/FTP/FTP_Connection_IVR.sharedftp</SharedUserData>
+        </config>
+        <pd:inputBindings>
+            <FTPPutInputDataFile>
+                <RemoteFileName>
+                    <xsl:value-of select="concat( &quot;/list_dunny&quot; , tib:format-date( 'ddMMyyy',current-date()) , '.csv')"/>
+                </RemoteFileName>
+                <LocalFileName>
+                    <xsl:value-of select="concat( &quot;C:\IVR\list_dunny&quot; , tib:format-date( 'ddMMyyy',current-date()) , '.csv')"/>
+                </LocalFileName>
+                <Host>
+                    <xsl:value-of select="&quot;10.1.16.100&quot;"/>
+                </Host>
+                <Port>
+                    <xsl:value-of select="21"/>
+                </Port>
+                <UserName>
+                    <xsl:value-of select="&quot;soa_user&quot;"/>
+                </UserName>
+                <Password>
+                    <xsl:value-of select="&quot;Cisco@1414&quot;"/>
+                </Password>
+                <Timeout>
+                    <xsl:value-of select="60000"/>
+                </Timeout>
+            </FTPPutInputDataFile>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>FTP Put</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Timer</pd:from>
+        <pd:to>FTP Put</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

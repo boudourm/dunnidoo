@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BWSharedResource>
+    <name>DUNNIDOO_JDBC_Connection_ESB_BATCH</name>
+    <resourceType>ae.shared.JDBCSharedResource</resourceType>
+    <config>
+        <driver>oracle.jdbc.driver.OracleDriver (thin)</driver>
+        <maxConnections>10</maxConnections>
+        <loginTimeout>0</loginTimeout>
+        <connectionType>JDBC</connectionType>
+        <UseSharedJndiConfig>false</UseSharedJndiConfig>
+        <location>jdbc:oracle:thin:@10.1.2.16:1521:TIBCODEV</location>
+        <user>ESB_BATCH</user>
+        <password>#!0pGY3MennjCIdf4gqQ23XTUINqBB9hbZz5QQbUbvR9s=</password>
+    </config>
+</BWSharedResource>

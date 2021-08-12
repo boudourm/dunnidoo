@@ -1,0 +1,417 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.ooredoo.dz/ws/bscs/customersSearch" xmlns:ns1="http://www.ooredoo.dz/common/header/v1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:ns4="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns3="http://www.ooredoo.dz/bscsdb/contractsByCustomer" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx2="http://www.ooredoo.dz/common/exception/v1" xmlns:ns12="http://www.ooredoo.dz/ws/bscs/customerRead" xmlns:ns5="http://www.tibco.com/pe/EngineTypes" xmlns:ns13="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:pfx="http://www.ooredoo.dz/ws/party/getCustomerContracts">
+    <xsd:import namespace="http://www.ooredoo.dz/common/exception/v1" schemaLocation="/SharedResources/Schemas/XSD/COMMON/Exception.xsd"/>
+    <xsd:import namespace="http://www.ooredoo.dz/ws/party/getCustomerContracts" schemaLocation="/SharedResources/Schemas/PARTY/GetCustomerContracts.xsd"/>
+    <pd:name>BusinessProcess/Actions/GetCustomerContracts.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx:getCustomerContracts"/>
+    <pd:startX>152</pd:startX>
+    <pd:startY>62</pd:startY>
+    <pd:returnBindings>
+        <pfx:getCustomerContractsResponse>
+            <xsl:choose>
+                <xsl:when test="count ($GetCustomerContracts/ns3:getCustomerContractsResponse/CustomerContracts)>= $Start/pfx:getCustomerContracts/searchLimit">
+                    <limitReached>
+                        <xsl:value-of select="true()"/>
+                    </limitReached>
+                </xsl:when>
+                <xsl:otherwise>
+                    <limitReached>
+                        <xsl:value-of select="false()"/>
+                    </limitReached>
+                </xsl:otherwise>
+            </xsl:choose>
+            <xsl:for-each select="$GetCustomerContracts/ns3:getCustomerContractsResponse/CustomerContracts">
+                <contract>
+                    <msisdn>
+                        <xsl:value-of select="concat('213',DN_NUM)"/>
+                    </msisdn>
+                    <xsl:if test="CO_ID!=''">
+                        <xsl:if test="CO_ID">
+                            <coId>
+                                <xsl:value-of select="CO_ID"/>
+                            </coId>
+                        </xsl:if>
+                    </xsl:if>
+                    <xsl:if test="STATUS">
+                        <status>
+                            <xsl:value-of select="STATUS"/>
+                        </status>
+                    </xsl:if>
+                    <xsl:if test="REASON!=''">
+                        <xsl:if test="REASON">
+                            <statusReasonId>
+                                <xsl:value-of select="REASON"/>
+                            </statusReasonId>
+                        </xsl:if>
+                    </xsl:if>
+                    <xsl:if test="CO_ACTIVATED!=''">
+                        <xsl:if test="CO_ACTIVATED">
+                            <activationDate>
+                                <xsl:value-of select="CO_ACTIVATED"/>
+                            </activationDate>
+                        </xsl:if>
+                    </xsl:if>
+                    <xsl:if test="TMCODE!=''">
+                        <xsl:if test="TMCODE">
+                            <offerCode>
+                                <xsl:value-of select="TMCODE"/>
+                            </offerCode>
+                        </xsl:if>
+                    </xsl:if>
+                    <xsl:if test="SM_NUM">
+                        <ressourceId>
+                            <xsl:value-of select="SM_NUM"/>
+                        </ressourceId>
+                    </xsl:if>
+                    <xsl:if test="PORT_NUM">
+                        <ressourcePortNum>
+                            <xsl:value-of select="PORT_NUM"/>
+                        </ressourcePortNum>
+                    </xsl:if>
+                    <xsl:if test="TEXT01!=''">
+                        <xsl:if test="TEXT01">
+                            <signDate>
+                                <xsl:value-of select="TEXT01"/>
+                            </signDate>
+                        </xsl:if>
+                    </xsl:if>
+                    <xsl:if test="TEXT04!=''">
+                        <xsl:if test="TEXT04">
+                            <engagementDate>
+                                <xsl:value-of select="TEXT04"/>
+                            </engagementDate>
+                        </xsl:if>
+                    </xsl:if>
+                    <xsl:if test="TEXT05!=''">
+                        <xsl:if test="TEXT05">
+                            <engagementDuration>
+                                <xsl:value-of select="TEXT05"/>
+                            </engagementDuration>
+                        </xsl:if>
+                    </xsl:if>
+                </contract>
+            </xsl:for-each>
+        </pfx:getCustomerContractsResponse>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx:getCustomerContractsResponse"/>
+    <pd:endX>873</pd:endX>
+    <pd:endY>62</pd:endY>
+    <pd:errorSchemas>
+        <Exception ref="pfx2:Exception"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1443963269478</pd:targetNamespace>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>234</pd:x>
+        <pd:y>365</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="MandatoryParameter Exception">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>155</pd:x>
+        <pd:y>246</pd:y>
+        <config>
+            <faultName/>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <message>
+                    <xsl:value-of select="concat('At least one of the following criteria must be used:#customerId#&quot; ', $Start/pfx:getCustomerContracts/customerId,'#custCode#',  $Start/pfx:getCustomerContracts/custCode)"/>
+                </message>
+                <messageCode>
+                    <xsl:value-of select="'MandatoryParameterException'"/>
+                </messageCode>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="CallCustomerRead">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>441</pd:x>
+        <pd:y>60</pd:y>
+        <config>
+            <processName>/BusinessProcess/LogicalProcesses/BSCSCMS/CallCustomerRead.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns12:customerReadRequest>
+                <xsl:copy-of select="$Start/pfx:getCustomerContracts/ns1:Header"/>
+                <xsl:choose>
+                    <xsl:when test="$Start/pfx:getCustomerContracts/customerId!=''">
+                        <CS_ID>
+                            <xsl:value-of select="$Start/pfx:getCustomerContracts/customerId"/>
+                        </CS_ID>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <CS_ID>
+                            <xsl:value-of select="$Search-Customer/ns2:customersSearchResponse/SEARCH_RESULT[1]/CS_ID"/>
+                        </CS_ID>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </ns12:customerReadRequest>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="GetCustomerContracts">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>634</pd:x>
+        <pd:y>59</pd:y>
+        <config>
+            <processName>/BusinessProcess/LogicalProcesses/BSCSDB/GetCustomerContracts.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns3:contractsByCustomerRequest>
+                <xsl:copy-of select="$Start/pfx:getCustomerContracts/ns1:Header"/>
+                <xsl:choose>
+                    <xsl:when test="$Start/pfx:getCustomerContracts/customerId!=''">
+                        <xsl:if test="$Start/pfx:getCustomerContracts/customerId">
+                            <CUSTOMER_ID>
+                                <xsl:value-of select="$Start/pfx:getCustomerContracts/customerId"/>
+                            </CUSTOMER_ID>
+                        </xsl:if>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:if test="$Search-Customer/ns2:customersSearchResponse/SEARCH_RESULT[1]/CS_ID">
+                            <CUSTOMER_ID>
+                                <xsl:value-of select="$Search-Customer/ns2:customersSearchResponse/SEARCH_RESULT[1]/CS_ID"/>
+                            </CUSTOMER_ID>
+                        </xsl:if>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <xsl:if test="$Start/pfx:getCustomerContracts/contractStatus">
+                    <STATUS>
+                        <xsl:value-of select="$Start/pfx:getCustomerContracts/contractStatus"/>
+                    </STATUS>
+                </xsl:if>
+                <xsl:choose>
+                    <xsl:when test="$Start/pfx:getCustomerContracts/searchLimit!=''">
+                        <xsl:if test="$Start/pfx:getCustomerContracts/searchLimit">
+                            <searchLimit>
+                                <xsl:value-of select="$Start/pfx:getCustomerContracts/searchLimit"/>
+                            </searchLimit>
+                        </xsl:if>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:choose>
+                            <xsl:when test="$Start/pfx:getCustomerContracts/searchLimit!=''">
+                                <searchLimit>
+                                    <xsl:value-of select="$Start/pfx:getCustomerContracts/searchLimit"/>
+                                </searchLimit>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <searchLimit>
+                                    <xsl:value-of select="$_globalVariables/ns4:GlobalVariables/ProcessConfig/GetCustomerContracts/DefaultSearchLimit"/>
+                                </searchLimit>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </ns3:contractsByCustomerRequest>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Log Error">
+        <pd:type>com.tibco.pe.core.WriteToLogActivity</pd:type>
+        <pd:resourceType>ae.activities.log</pd:resourceType>
+        <pd:x>383</pd:x>
+        <pd:y>365</pd:y>
+        <config>
+            <role>User</role>
+        </config>
+        <pd:inputBindings>
+            <ns13:ActivityInput>
+                <xsl:choose>
+                    <xsl:when test="$_error/ns5:ErrorReport/MsgCode='CMS.RC6701'">
+                        <message>
+                            <xsl:value-of select="'SearchCustomerException'"/>
+                        </message>
+                    </xsl:when>
+                    <xsl:when test="$_error/ns5:ErrorReport/MsgCode='SearchCustomerException'">
+                        <message>
+                            <xsl:value-of select="concat('No custmer found for criteria  #custCode#', $Start/pfx:getCustomerContracts/custCode)"/>
+                        </message>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <message>
+                            <xsl:value-of select="concat('Error when getting contracts for customer',$Start/pfx:getCustomerContracts/customerId)"/>
+                        </message>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </ns13:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Search Customer">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>331</pd:x>
+        <pd:y>243</pd:y>
+        <config>
+            <processName>/BusinessProcess/LogicalProcesses/BSCSCMS/CallCustomerSearch.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns2:customersSearchRequest>
+                <xsl:copy-of select="$Start/pfx:getCustomerContracts/ns1:Header"/>
+                <CUSTOMERS.SEARCH>
+                    <xsl:if test="$Start/pfx:getCustomerContracts/custCode">
+                        <CS_CODE>
+                            <xsl:value-of select="$Start/pfx:getCustomerContracts/custCode"/>
+                        </CS_CODE>
+                    </xsl:if>
+                </CUSTOMERS.SEARCH>
+            </ns2:customersSearchRequest>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="SearchCustomer Exception">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>720</pd:x>
+        <pd:y>250</pd:y>
+        <config>
+            <faultName/>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <message>
+                    <xsl:value-of select="concat('No custmer found for criteria  #custCode#', $Start/pfx:getCustomerContracts/custCode)"/>
+                </message>
+                <messageCode>
+                    <xsl:value-of select="'SearchCustomerException'"/>
+                </messageCode>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Generate Error">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>593</pd:x>
+        <pd:y>361</pd:y>
+        <config>
+            <faultName/>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <xsl:choose>
+                    <xsl:when test="$_error/ns5:ErrorReport/MsgCode='CMS.RC6701'">
+                        <message>
+                            <xsl:value-of select="concat('No custmer found for criteria  #CustomerId#', $Start/pfx:getCustomerContracts/customerId)"/>
+                        </message>
+                    </xsl:when>
+                    <xsl:when test="$_error/ns5:ErrorReport/MsgCode='SearchCustomerException'">
+                        <message>
+                            <xsl:value-of select="concat('No customer found for criteria  #custCode#', $Start/pfx:getCustomerContracts/custCode)"/>
+                        </message>
+                    </xsl:when>
+                    <xsl:when test="$_error/ns5:ErrorReport/MsgCode='MandatoryParameterException'">
+                        <message>
+                            <xsl:value-of select="$_error/ns5:ErrorReport/Msg"/>
+                        </message>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <message>
+                            <xsl:value-of select="concat('Error when getting contracts for #customerId#',$Start/pfx:getCustomerContracts/customerId)"/>
+                        </message>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <xsl:choose>
+                    <xsl:when test="$_error/ns5:ErrorReport/MsgCode='CMS.RC6701'">
+                        <messageCode>
+                            <xsl:value-of select="'SearchCustomerException'"/>
+                        </messageCode>
+                    </xsl:when>
+                    <xsl:when test="$_error/ns5:ErrorReport/MsgCode='SearchCustomerException'">
+                        <messageCode>
+                            <xsl:value-of select="'SearchCustomerException'"/>
+                        </messageCode>
+                    </xsl:when>
+                    <xsl:when test="$_error/ns5:ErrorReport/MsgCode='MandatoryParameterException'">
+                        <messageCode>
+                            <xsl:value-of select="$_error/ns5:ErrorReport/MsgCode"/>
+                        </messageCode>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <messageCode>
+                            <xsl:value-of select="'GetCustomerContractsException'"/>
+                        </messageCode>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>MandatoryParameter Exception</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-52429</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>CallCustomerRead</pd:to>
+        <pd:xpathDescription>custId exists</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Start/pfx:getCustomerContracts/customerId!=''</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Search Customer</pd:to>
+        <pd:xpathDescription>custId ! exists</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>(not ($Start/pfx:getCustomerContracts/customerId) or $Start/pfx:getCustomerContracts/customerId='') and $Start/pfx:getCustomerContracts/custCode!=''</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>GetCustomerContracts</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Search Customer</pd:from>
+        <pd:to>SearchCustomer Exception</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-65536</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallCustomerRead</pd:from>
+        <pd:to>GetCustomerContracts</pd:to>
+        <pd:xpathDescription/>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Search Customer</pd:from>
+        <pd:to>CallCustomerRead</pd:to>
+        <pd:xpathDescription>Cust Exist</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>count($Search-Customer/ns2:customersSearchResponse/SEARCH_RESULT)!=0</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>Log Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log Error</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

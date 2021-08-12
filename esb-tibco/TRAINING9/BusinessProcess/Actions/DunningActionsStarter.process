@@ -1,0 +1,883 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:ns5="http://www.tibco.com/pe/EngineTypes" xmlns:ns12="http://www.ooredoo.dz/log/logStarterSchema" xmlns:ns6="http://www.ooredoo.dz/log/logSchema" xmlns:ns13="http://www.ooredoo.dz/common/nJAMSTemplate" xmlns:pfx="http://www.ooredoo.dz/ws/offer/changeContractOffer" xmlns:ns2="http://www.ooredoo.dz/common/header/v1" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns4="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:ns3="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx5="http://www.ooredoo.dz/osp/updateJobStatus" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx4="http://www.ooredoo.dz/osp/putCMSOutputCS" xmlns:pfx3="http://www.ooredoo.dz/ws/offer/refill" xmlns:pfx2="http://www.ooredoo.dz/common/exception/v1" xmlns:pfx7="http://www.tibco.com/schemas/TRAINING/SharedResources/Schemas/XSD/Schema.xsd2" xmlns:pfx6="http://www.tibco.com/ns/no_namespace_schema_location/SharedResources/Schemas/XSD/Notification.xsd">
+    <xsd:import namespace="http://www.ooredoo.dz/common/exception/v1" schemaLocation="/SharedResources/Schemas/XSD/COMMON/Exception.xsd"/>
+    <xsd:import namespace="http://www.ooredoo.dz/ws/offer/changeContractOffer" schemaLocation="/SharedResources/Schemas/XSD/OFFER/ChangeContractOffer.xsd"/>
+    <xsd:import namespace="http://www.ooredoo.dz/ws/offer/refill" schemaLocation="/SharedResources/Schemas/XSD/OFFER/Refill.xsd"/>
+    <xsd:import namespace="http://www.ooredoo.dz/osp/updateJobStatus" schemaLocation="/SharedResources/Schemas/XSD/Batch/UpdateJobStatus.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/SharedResources/Schemas/XSD/Notification.xsd" schemaLocation="/SharedResources/Schemas/XSD/Notification.xsd"/>
+    <xsd:import namespace="http://www.ooredoo.dz/osp/putCMSOutputCS" schemaLocation="/SharedResources/Schemas/XSD/Batch/PutCMSOutputCS.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/schemas/TRAINING/SharedResources/Schemas/XSD/Schema.xsd2" schemaLocation="/SharedResources/Schemas/XSD/DunningActions.xsd"/>
+    <pd:name>BusinessProcess/Actions/DunningActionsStarter.process</pd:name>
+    <pd:startName>Dunning Actions Receiver</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings>
+        <pfx:changeContractOfferResponse>
+            <transactionId>
+                <xsl:value-of select="$ChangeContractOffer-Requestor/ns:ActivityOutput/Body/root/pfx:changeContractOfferResponse/transactionId"/>
+            </transactionId>
+        </pfx:changeContractOfferResponse>
+    </pd:returnBindings>
+    <pd:starter name="Dunning Actions Receiver">
+        <pd:type>com.tibco.plugin.jms.JMSQueueEventSource</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueEventSource</pd:resourceType>
+        <pd:x>93</pd:x>
+        <pd:y>119</pd:y>
+        <config>
+            <PermittedMessageType>Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>2</acknowledgeMode>
+                <maxSessions>%%ProcessConfig/Dunning/MaxSessionsRetry%%</maxSessions>
+                <destination>%%ProcessConfig/Batch/BridgeQueueDunning%%</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/SharedResources/Connections/JMS/JMS_Tech_Connection.sharedjmscon</ConnectionReference>
+            <ApplicationProperties>/SharedResources/Connections/JMS/Retry Message Properties.sharedjmsapp</ApplicationProperties>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>1117</pd:endX>
+    <pd:endY>117</pd:endY>
+    <pd:errorSchemas>
+        <Exception ref="pfx2:Exception"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1423144514497</pd:targetNamespace>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>562</pd:x>
+        <pd:y>257</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Call Dunning Actions">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>442</pd:x>
+        <pd:y>121</pd:y>
+        <config>
+            <processName>/BusinessProcess/Actions/DunningActionsProcess.process</processName>
+        </config>
+        <pd:inputBindings>
+            <xsl:copy-of select="$Parse-XML/pfx7:DunningAction"/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Confirm Error">
+        <pd:type>com.tibco.pe.core.ConfirmActivity</pd:type>
+        <pd:resourceType>activity.confirm</pd:resourceType>
+        <pd:x>1047</pd:x>
+        <pd:y>260</pd:y>
+        <config>
+            <ConfirmEvent>Dunning Actions Receiver</ConfirmEvent>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Confirm Success">
+        <pd:type>com.tibco.pe.core.ConfirmActivity</pd:type>
+        <pd:resourceType>activity.confirm</pd:resourceType>
+        <pd:x>999</pd:x>
+        <pd:y>115</pd:y>
+        <config>
+            <ConfirmEvent>Dunning Actions Receiver</ConfirmEvent>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Exist">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>296</pd:x>
+        <pd:y>325</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Parse XML">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>183</pd:x>
+        <pd:y>113</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>false</validateOutput>
+            <term ref="pfx7:DunningAction"/>
+        </config>
+        <pd:inputBindings>
+            <xmlString>
+                <xsl:value-of select="$Dunning-Actions-Receiver/ns:ActivityOutput/Body"/>
+            </xmlString>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="PutRequest">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>296</pd:x>
+        <pd:y>195</pd:y>
+        <config>
+            <processName>/Utility/LOG/Action/Put.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns12:putStarterRequest>
+                <xsl:for-each select="$Parse-XML/pfx7:DunningAction/pfx7:Header">
+                    <ns2:Header>
+                        <xsl:if test="pfx7:TransactionID">
+                            <ns2:TransactionID>
+                                <xsl:value-of select="pfx7:TransactionID"/>
+                            </ns2:TransactionID>
+                        </xsl:if>
+                        <xsl:if test="pfx7:TimeStamp">
+                            <ns2:TimeStamp>
+                                <xsl:value-of select="pfx7:TimeStamp"/>
+                            </ns2:TimeStamp>
+                        </xsl:if>
+                        <xsl:if test="pfx7:UserName">
+                            <ns2:UserName>
+                                <xsl:value-of select="pfx7:UserName"/>
+                            </ns2:UserName>
+                        </xsl:if>
+                        <xsl:for-each select="pfx7:NotificationParam">
+                            <ns2:NotificationParam>
+                                <ns2:NotificationTemplate>
+                                    <xsl:value-of select="pfx7:NotificationTemplate"/>
+                                </ns2:NotificationTemplate>
+                                <ns2:Msisdn>
+                                    <xsl:value-of select="pfx7:Msisdn"/>
+                                </ns2:Msisdn>
+                            </ns2:NotificationParam>
+                        </xsl:for-each>
+                        <xsl:if test="pfx7:Msisdn">
+                            <ns2:Msisdn>
+                                <xsl:value-of select="pfx7:Msisdn"/>
+                            </ns2:Msisdn>
+                        </xsl:if>
+                        <xsl:if test="pfx7:Property1">
+                            <ns2:Property1>
+                                <xsl:value-of select="pfx7:Property1"/>
+                            </ns2:Property1>
+                        </xsl:if>
+                        <xsl:if test="pfx7:Property2">
+                            <ns2:Property2>
+                                <xsl:value-of select="pfx7:Property2"/>
+                            </ns2:Property2>
+                        </xsl:if>
+                    </ns2:Header>
+                </xsl:for-each>
+                <TRANSACTION_ID>
+                    <xsl:value-of select="$Parse-XML/pfx7:DunningAction/pfx7:Header/pfx7:TransactionID"/>
+                </TRANSACTION_ID>
+                <STATUS>
+                    <xsl:value-of select="'INIT'"/>
+                </STATUS>
+                <ADDITIONAL_INPUT>
+                    <xsl:value-of select="''"/>
+                </ADDITIONAL_INPUT>
+                <MAIN_INPUT>
+                    <xsl:value-of select="$Parse-XML/pfx7:DunningAction/pfx7:DunningEligibleCustomersInfo/pfx7:MSISDN"/>
+                </MAIN_INPUT>
+                <REQUESTXML>
+                    <xsl:value-of select="$Dunning-Actions-Receiver/ns:ActivityOutput/Body"/>
+                </REQUESTXML>
+                <PROCESS_SERVICES>
+                    <xsl:value-of select="'Dunning'"/>
+                </PROCESS_SERVICES>
+            </ns12:putStarterRequest>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="LogError">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>741</pd:x>
+        <pd:y>259</pd:y>
+        <config>
+            <processName>/Utility/Monitoring/LogError.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns13:Template>
+                <xsl:if test="$_error/ns5:ErrorReport/MsgCode">
+                    <ns13:EventMsgCode>
+                        <xsl:value-of select="$_error/ns5:ErrorReport/MsgCode"/>
+                    </ns13:EventMsgCode>
+                </xsl:if>
+                <xsl:if test="$_error/ns5:ErrorReport/Msg">
+                    <ns13:EventMsg>
+                        <xsl:value-of select="$_error/ns5:ErrorReport/Msg"/>
+                    </ns13:EventMsg>
+                </xsl:if>
+                <ns13:StackTrace>
+                    <xsl:value-of select="tib:render-xml($_error/ns5:ErrorReport/StackTrace)"/>
+                </ns13:StackTrace>
+                <ns13:LogContext>
+                    <ns13:BusinessService>
+                        <xsl:value-of select="'Refill'"/>
+                    </ns13:BusinessService>
+                    <ns13:BusinessObject>
+                        <xsl:value-of select="'OFFER'"/>
+                    </ns13:BusinessObject>
+                </ns13:LogContext>
+            </ns13:Template>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Log">
+        <pd:type>com.tibco.pe.core.WriteToLogActivity</pd:type>
+        <pd:resourceType>ae.activities.log</pd:resourceType>
+        <pd:x>654</pd:x>
+        <pd:y>258</pd:y>
+        <config>
+            <role>Error</role>
+        </config>
+        <pd:inputBindings>
+            <ns4:ActivityInput>
+                <message>
+                    <xsl:value-of select="$_error/ns5:ErrorReport/Msg"/>
+                </message>
+                <msgCode>
+                    <xsl:value-of select="$_error/ns5:ErrorReport/MsgCode"/>
+                </msgCode>
+            </ns4:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="LogInfo">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>343</pd:x>
+        <pd:y>113</pd:y>
+        <config>
+            <processName>/Utility/Monitoring/LogInfo.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns13:Template>
+                <ns13:EventMsgCode>
+                    <xsl:value-of select="&quot;Dunning Process&quot;"/>
+                </ns13:EventMsgCode>
+                <ns13:Payload>
+                    <xsl:value-of select="$Dunning-Actions-Receiver/ns:ActivityOutput/Body"/>
+                </ns13:Payload>
+                <ns13:Attributes>
+                    <ns13:Attribute>
+                        <ns13:Name>
+                            <xsl:value-of select="&quot;TransactionId&quot;"/>
+                        </ns13:Name>
+                        <ns13:Value>
+                            <xsl:value-of select="$Parse-XML/pfx7:DunningAction/pfx7:Header/pfx7:TransactionID"/>
+                        </ns13:Value>
+                    </ns13:Attribute>
+                    <ns13:Attribute>
+                        <ns13:Name>
+                            <xsl:value-of select="&quot;MSISDN&quot;"/>
+                        </ns13:Name>
+                        <ns13:Value>
+                            <xsl:value-of select="$Parse-XML/pfx7:DunningAction/pfx7:DunningEligibleCustomersInfo/pfx7:MSISDN"/>
+                        </ns13:Value>
+                    </ns13:Attribute>
+                </ns13:Attributes>
+                <ns13:LogContext>
+                    <ns13:BusinessService>
+                        <xsl:value-of select="'DunningActions'"/>
+                    </ns13:BusinessService>
+                    <ns13:BusinessObject>
+                        <xsl:value-of select="'DUNNING'"/>
+                    </ns13:BusinessObject>
+                </ns13:LogContext>
+            </ns13:Template>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="BatchSuccess">
+        <pd:type>com.tibco.plugin.jms.JMSQueueSendActivity</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueSendActivity</pd:resourceType>
+        <pd:x>565</pd:x>
+        <pd:y>58</pd:y>
+        <config>
+            <PermittedMessageType>XML Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>%%ProcessConfig/Batch/JMS/UpdateJobStatus%%</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>NON_PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration/>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/SharedResources/Connections/JMS/JMS_Tech_Connection.sharedjmscon</ConnectionReference>
+            <InDataxsdString ref="pfx5:updateJobStatusRequest"/>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <Body>
+                    <pfx5:updateJobStatusRequest>
+                        <xsl:for-each select="$Parse-XML/pfx7:DunningAction/pfx7:Header">
+                            <ns2:Header>
+                                <xsl:if test="pfx7:TransactionID">
+                                    <ns2:TransactionID>
+                                        <xsl:value-of select="pfx7:TransactionID"/>
+                                    </ns2:TransactionID>
+                                </xsl:if>
+                                <xsl:if test="pfx7:TimeStamp">
+                                    <ns2:TimeStamp>
+                                        <xsl:value-of select="pfx7:TimeStamp"/>
+                                    </ns2:TimeStamp>
+                                </xsl:if>
+                                <xsl:if test="pfx7:UserName">
+                                    <ns2:UserName>
+                                        <xsl:value-of select="pfx7:UserName"/>
+                                    </ns2:UserName>
+                                </xsl:if>
+                                <xsl:for-each select="pfx7:NotificationParam">
+                                    <ns2:NotificationParam>
+                                        <ns2:NotificationTemplate>
+                                            <xsl:value-of select="pfx7:NotificationTemplate"/>
+                                        </ns2:NotificationTemplate>
+                                        <ns2:Msisdn>
+                                            <xsl:value-of select="pfx7:Msisdn"/>
+                                        </ns2:Msisdn>
+                                    </ns2:NotificationParam>
+                                </xsl:for-each>
+                                <xsl:if test="pfx7:Msisdn">
+                                    <ns2:Msisdn>
+                                        <xsl:value-of select="pfx7:Msisdn"/>
+                                    </ns2:Msisdn>
+                                </xsl:if>
+                                <xsl:if test="pfx7:Property1">
+                                    <ns2:Property1>
+                                        <xsl:value-of select="pfx7:Property1"/>
+                                    </ns2:Property1>
+                                </xsl:if>
+                                <xsl:if test="pfx7:Property2">
+                                    <ns2:Property2>
+                                        <xsl:value-of select="pfx7:Property2"/>
+                                    </ns2:Property2>
+                                </xsl:if>
+                            </ns2:Header>
+                        </xsl:for-each>
+                        <pfx5:TransactionID>
+                            <xsl:value-of select="$Parse-XML/pfx7:DunningAction/pfx7:Header/pfx7:TransactionID"/>
+                        </pfx5:TransactionID>
+                        <pfx5:Status>
+                            <xsl:value-of select="'SUCCESS'"/>
+                        </pfx5:Status>
+                    </pfx5:updateJobStatusRequest>
+                </Body>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Null">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>691</pd:x>
+        <pd:y>114</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="LogSuccess">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>893</pd:x>
+        <pd:y>115</pd:y>
+        <config>
+            <processName>/Utility/Monitoring/LogSuccess.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns13:Template>
+                <ns13:EventMsgCode>
+                    <xsl:value-of select="&quot;Dunning Actions: Succeffully processed &quot;"/>
+                </ns13:EventMsgCode>
+                <ns13:EventMsg>
+                    <xsl:value-of select="concat('uuid :',$Parse-XML/pfx7:DunningAction/pfx7:Header/pfx7:TransactionID,'User : ',$Parse-XML/pfx7:DunningAction/pfx7:Header/pfx7:UserName,' IPAdress : ',$Parse-XML/pfx7:DunningAction/pfx7:Header/pfx7:UserAdress)"/>
+                </ns13:EventMsg>
+                <ns13:Payload>
+                    <xsl:value-of select="$Dunning-Actions-Receiver/ns:ActivityOutput/Body"/>
+                </ns13:Payload>
+                <ns13:Attributes>
+                    <ns13:Attribute>
+                        <ns13:Name>
+                            <xsl:value-of select="'TransactionId'"/>
+                        </ns13:Name>
+                        <ns13:Value>
+                            <xsl:value-of select="$Parse-XML/pfx7:DunningAction/pfx7:Header/pfx7:TransactionID"/>
+                        </ns13:Value>
+                    </ns13:Attribute>
+                </ns13:Attributes>
+                <ns13:LogContext>
+                    <ns13:BusinessService>
+                        <xsl:value-of select="&quot;DunningActionsProcess&quot;"/>
+                    </ns13:BusinessService>
+                    <ns13:BusinessObject>
+                        <xsl:value-of select="&quot;DUNNING&quot;"/>
+                    </ns13:BusinessObject>
+                </ns13:LogContext>
+            </ns13:Template>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="BatchFailure">
+        <pd:type>com.tibco.plugin.jms.JMSQueueSendActivity</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueSendActivity</pd:resourceType>
+        <pd:x>847</pd:x>
+        <pd:y>196</pd:y>
+        <config>
+            <PermittedMessageType>XML Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>%%ProcessConfig/Batch/JMS/UpdateJobStatus%%</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>NON_PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/SharedResources/Connections/JMS/JMS_Tech_Connection.sharedjmscon</ConnectionReference>
+            <InDataxsdString ref="pfx5:updateJobStatusRequest"/>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <Body>
+                    <pfx5:updateJobStatusRequest>
+                        <xsl:for-each select="$Parse-XML/pfx7:DunningAction/pfx7:Header">
+                            <ns2:Header>
+                                <xsl:if test="pfx7:TransactionID">
+                                    <ns2:TransactionID>
+                                        <xsl:value-of select="pfx7:TransactionID"/>
+                                    </ns2:TransactionID>
+                                </xsl:if>
+                                <xsl:if test="pfx7:TimeStamp">
+                                    <ns2:TimeStamp>
+                                        <xsl:value-of select="pfx7:TimeStamp"/>
+                                    </ns2:TimeStamp>
+                                </xsl:if>
+                                <xsl:if test="pfx7:UserName">
+                                    <ns2:UserName>
+                                        <xsl:value-of select="pfx7:UserName"/>
+                                    </ns2:UserName>
+                                </xsl:if>
+                                <xsl:for-each select="pfx7:NotificationParam">
+                                    <ns2:NotificationParam>
+                                        <ns2:NotificationTemplate>
+                                            <xsl:value-of select="pfx7:NotificationTemplate"/>
+                                        </ns2:NotificationTemplate>
+                                        <ns2:Msisdn>
+                                            <xsl:value-of select="pfx7:Msisdn"/>
+                                        </ns2:Msisdn>
+                                    </ns2:NotificationParam>
+                                </xsl:for-each>
+                                <xsl:if test="pfx7:Msisdn">
+                                    <ns2:Msisdn>
+                                        <xsl:value-of select="pfx7:Msisdn"/>
+                                    </ns2:Msisdn>
+                                </xsl:if>
+                                <xsl:if test="pfx7:Property1">
+                                    <ns2:Property1>
+                                        <xsl:value-of select="pfx7:Property1"/>
+                                    </ns2:Property1>
+                                </xsl:if>
+                                <xsl:if test="pfx7:Property2">
+                                    <ns2:Property2>
+                                        <xsl:value-of select="pfx7:Property2"/>
+                                    </ns2:Property2>
+                                </xsl:if>
+                            </ns2:Header>
+                        </xsl:for-each>
+                        <pfx5:TransactionID>
+                            <xsl:value-of select="$Parse-XML/pfx7:DunningAction/pfx7:Header/pfx7:TransactionID"/>
+                        </pfx5:TransactionID>
+                        <pfx5:Status>
+                            <xsl:value-of select="'FAILED'"/>
+                        </pfx5:Status>
+                    </pfx5:updateJobStatusRequest>
+                </Body>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Error">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>971</pd:x>
+        <pd:y>258</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="GetTransactionStatus">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>183</pd:x>
+        <pd:y>232</pd:y>
+        <config>
+            <processName>/Utility/LOG/Action/GetTransactionStatus.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns6:getTransactionStatusRequest>
+                <xsl:for-each select="$Parse-XML/pfx7:DunningAction/pfx7:Header">
+                    <ns2:Header>
+                        <xsl:if test="pfx7:TransactionID">
+                            <ns2:TransactionID>
+                                <xsl:value-of select="pfx7:TransactionID"/>
+                            </ns2:TransactionID>
+                        </xsl:if>
+                        <xsl:if test="pfx7:TimeStamp">
+                            <ns2:TimeStamp>
+                                <xsl:value-of select="pfx7:TimeStamp"/>
+                            </ns2:TimeStamp>
+                        </xsl:if>
+                        <xsl:if test="pfx7:UserName">
+                            <ns2:UserName>
+                                <xsl:value-of select="pfx7:UserName"/>
+                            </ns2:UserName>
+                        </xsl:if>
+                        <xsl:for-each select="pfx7:NotificationParam">
+                            <ns2:NotificationParam>
+                                <ns2:NotificationTemplate>
+                                    <xsl:value-of select="pfx7:NotificationTemplate"/>
+                                </ns2:NotificationTemplate>
+                                <ns2:Msisdn>
+                                    <xsl:value-of select="pfx7:Msisdn"/>
+                                </ns2:Msisdn>
+                            </ns2:NotificationParam>
+                        </xsl:for-each>
+                        <xsl:if test="pfx7:Msisdn">
+                            <ns2:Msisdn>
+                                <xsl:value-of select="pfx7:Msisdn"/>
+                            </ns2:Msisdn>
+                        </xsl:if>
+                        <xsl:if test="pfx7:Property1">
+                            <ns2:Property1>
+                                <xsl:value-of select="pfx7:Property1"/>
+                            </ns2:Property1>
+                        </xsl:if>
+                        <xsl:if test="pfx7:Property2">
+                            <ns2:Property2>
+                                <xsl:value-of select="pfx7:Property2"/>
+                            </ns2:Property2>
+                        </xsl:if>
+                    </ns2:Header>
+                </xsl:for-each>
+                <xsl:if test="$Parse-XML/pfx7:DunningAction/pfx7:Header/pfx7:TransactionID">
+                    <transactionId>
+                        <xsl:value-of select="$Parse-XML/pfx7:DunningAction/pfx7:Header/pfx7:TransactionID"/>
+                    </transactionId>
+                </xsl:if>
+            </ns6:getTransactionStatusRequest>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="UpdateRequestSuccess">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>788</pd:x>
+        <pd:y>114</pd:y>
+        <config>
+            <processName>/Utility/LOG/Action/Update.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns12:updateStarterRequest>
+                <xsl:for-each select="$Parse-XML/pfx7:DunningAction/pfx7:Header">
+                    <ns2:Header>
+                        <xsl:if test="pfx7:TransactionID">
+                            <ns2:TransactionID>
+                                <xsl:value-of select="pfx7:TransactionID"/>
+                            </ns2:TransactionID>
+                        </xsl:if>
+                        <xsl:if test="pfx7:TimeStamp">
+                            <ns2:TimeStamp>
+                                <xsl:value-of select="pfx7:TimeStamp"/>
+                            </ns2:TimeStamp>
+                        </xsl:if>
+                        <xsl:if test="pfx7:UserAdress">
+                            <ns2:UserAddress>
+                                <xsl:value-of select="pfx7:UserAdress"/>
+                            </ns2:UserAddress>
+                        </xsl:if>
+                        <xsl:if test="pfx7:UserName">
+                            <ns2:UserName>
+                                <xsl:value-of select="pfx7:UserName"/>
+                            </ns2:UserName>
+                        </xsl:if>
+                        <xsl:for-each select="pfx7:NotificationParam">
+                            <ns2:NotificationParam>
+                                <ns2:NotificationTemplate>
+                                    <xsl:value-of select="pfx7:NotificationTemplate"/>
+                                </ns2:NotificationTemplate>
+                                <ns2:Msisdn>
+                                    <xsl:value-of select="pfx7:Msisdn"/>
+                                </ns2:Msisdn>
+                            </ns2:NotificationParam>
+                        </xsl:for-each>
+                        <xsl:if test="pfx7:Msisdn">
+                            <ns2:Msisdn>
+                                <xsl:value-of select="pfx7:Msisdn"/>
+                            </ns2:Msisdn>
+                        </xsl:if>
+                        <xsl:if test="pfx7:Property1">
+                            <ns2:Property1>
+                                <xsl:value-of select="pfx7:Property1"/>
+                            </ns2:Property1>
+                        </xsl:if>
+                        <xsl:if test="pfx7:Property2">
+                            <ns2:Property2>
+                                <xsl:value-of select="pfx7:Property2"/>
+                            </ns2:Property2>
+                        </xsl:if>
+                    </ns2:Header>
+                </xsl:for-each>
+                <MSISDN>
+                    <xsl:value-of select="&quot;(MAIN_INPUT like '%' or MAIN_INPUT IS NULL)&quot;"/>
+                </MSISDN>
+                <PROCESS_NAME>
+                    <xsl:value-of select="&quot;Dunning Actions&quot;"/>
+                </PROCESS_NAME>
+                <STATUS>
+                    <xsl:value-of select="&quot;SUCCESS&quot;"/>
+                </STATUS>
+                <Additionnal_Cond>
+                    <xsl:value-of select="concat(&quot; transaction_id  = '&quot;,$Parse-XML/pfx7:DunningAction/pfx7:Header/pfx7:TransactionID,&quot;' &quot;)"/>
+                </Additionnal_Cond>
+                <Update_Info>
+                    <xsl:value-of select="&quot;STEP='End'&quot;"/>
+                </Update_Info>
+            </ns12:updateStarterRequest>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="UpdatePlanificationTableStatus">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>570</pd:x>
+        <pd:y>183</pd:y>
+        <config>
+            <processName>/BusinessProcess/Actions/UpdatePlanificationTableStatus.process</processName>
+        </config>
+        <pd:inputBindings>
+            <updateParams>
+                <ID>
+                    <xsl:value-of select="$Parse-XML/pfx7:DunningAction/pfx7:ExtraData/pfx7:VALUE"/>
+                </ID>
+                <STATUS>
+                    <xsl:value-of select="'SUCCESS'"/>
+                </STATUS>
+            </updateParams>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="UpdatePlanificationTableStatus-1">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>861</pd:x>
+        <pd:y>331</pd:y>
+        <config>
+            <processName>/BusinessProcess/Actions/UpdatePlanificationTableStatus.process</processName>
+        </config>
+        <pd:inputBindings>
+            <updateParams>
+                <ID>
+                    <xsl:value-of select="$Parse-XML/pfx7:DunningAction/pfx7:ExtraData/pfx7:VALUE"/>
+                </ID>
+                <STATUS>
+                    <xsl:value-of select="'FAIL'"/>
+                </STATUS>
+            </updateParams>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Dunning Actions Receiver</pd:from>
+        <pd:to>Parse XML</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call Dunning Actions</pd:from>
+        <pd:to>Null</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse XML</pd:from>
+        <pd:to>GetTransactionStatus</pd:to>
+        <pd:xpathDescription>IS BATCH</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Parse-XML/pfx7:DunningAction/pfx7:Header/pfx7:Property2 = $_globalVariables/ns1:GlobalVariables/ProcessConfig/Batch/JobFile/UserHeader
+or $Parse-XML/pfx7:DunningAction/pfx7:Header/pfx7:Property2 = $_globalVariables/ns1:GlobalVariables/ProcessConfig/CMS/UserHeader</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Confirm Success</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>Log</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Confirm Error</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse XML</pd:from>
+        <pd:to>LogInfo</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Exist</pd:from>
+        <pd:to>LogInfo</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>PutRequest</pd:from>
+        <pd:to>LogInfo</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogError</pd:from>
+        <pd:to>Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log</pd:from>
+        <pd:to>LogError</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogInfo</pd:from>
+        <pd:to>Call Dunning Actions</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call Dunning Actions</pd:from>
+        <pd:to>BatchSuccess</pd:to>
+        <pd:xpathDescription>IS Batch</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Parse-XML/pfx7:DunningAction/pfx7:Header/pfx7:Property2 =$_globalVariables/ns1:GlobalVariables/ProcessConfig/Batch/JobFile/UserHeader
+or $Parse-XML/pfx7:DunningAction/pfx7:Header/pfx7:Property2 =$_globalVariables/ns1:GlobalVariables/ProcessConfig/Dunning/UserHeader</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>BatchSuccess</pd:from>
+        <pd:to>Null</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogSuccess</pd:from>
+        <pd:to>Confirm Success</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogError</pd:from>
+        <pd:to>BatchFailure</pd:to>
+        <pd:xpathDescription>Is Batch</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Parse-XML/pfx7:DunningAction/pfx7:Header/pfx7:Property2 = $_globalVariables/ns1:GlobalVariables/ProcessConfig/Batch/JobFile/UserHeader
+or $Parse-XML/pfx7:DunningAction/pfx7:Header/pfx7:Property2 = $_globalVariables/ns1:GlobalVariables/ProcessConfig/CMS/UserHeader</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>BatchFailure</pd:from>
+        <pd:to>Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Error</pd:from>
+        <pd:to>Confirm Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>GetTransactionStatus</pd:from>
+        <pd:to>PutRequest</pd:to>
+        <pd:xpathDescription>Error</pd:xpathDescription>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>GetTransactionStatus</pd:from>
+        <pd:to>Exist</pd:to>
+        <pd:xpathDescription>Exist</pd:xpathDescription>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null</pd:from>
+        <pd:to>UpdateRequestSuccess</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>UpdateRequestSuccess</pd:from>
+        <pd:to>LogSuccess</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Call Dunning Actions</pd:from>
+        <pd:to>UpdatePlanificationTableStatus</pd:to>
+        <pd:xpathDescription>isDunning</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Parse-XML/pfx7:DunningAction/pfx7:Header/pfx7:Property2 =$_globalVariables/ns1:GlobalVariables/ProcessConfig/Dunning/UserHeader</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>UpdatePlanificationTableStatus</pd:from>
+        <pd:to>Null</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogError</pd:from>
+        <pd:to>UpdatePlanificationTableStatus-1</pd:to>
+        <pd:xpathDescription>isDunning</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Parse-XML/pfx7:DunningAction/pfx7:Header/pfx7:Property2 =$_globalVariables/ns1:GlobalVariables/ProcessConfig/Dunning/UserHeader</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>UpdatePlanificationTableStatus-1</pd:from>
+        <pd:to>Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

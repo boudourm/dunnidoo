@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns:tns="http://www.ooredoo.dz/ws/party/customerInfos"
+	 xmlns:ns0="http://www.ooredoo.dz/common/header/v1"
+	 xmlns:ns1="http://www.ooredoo.dz/common/types"
+	 targetNamespace="http://www.ooredoo.dz/ws/party/customerInfos"
+	 elementFormDefault="unqualified"
+	 attributeFormDefault="unqualified">
+	<xs:import namespace="http://www.ooredoo.dz/common/header/v1" schemaLocation="../COMMON/Header.xsd"/>
+	<xs:import namespace="http://www.ooredoo.dz/common/types" schemaLocation="../COMMON/Types.xsd"/>
+	<xs:simpleType name="TypeContact">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="BILL"/>
+			<xs:enumeration value="PREVIOUS"/>
+			<xs:enumeration value="TEMPORARY"/>
+			<xs:enumeration value="CONTRACT"/>
+			<xs:enumeration value="MAGAZINE"/>
+			<xs:enumeration value="DIRECTORY"/>
+			<xs:enumeration value="SHIPMENT"/>
+			<xs:enumeration value="USER"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:element name="customerInfosRequest" type="tns:CustomerInfosRequest"/>
+	<xs:complexType name="CustomerInfosRequest">
+		<xs:sequence>
+			<xs:element name="customerId" type="xs:long" minOccurs="0"/>
+			<xs:element name="custCode" type="xs:string" minOccurs="0"/>
+			<xs:element name="msisdn" type="ns1:MsisdnType" minOccurs="0"/>
+			<xs:element name="contactType" type="tns:TypeContact" minOccurs="0"/>
+			<xs:element name="contactSeqno" type="xs:int" minOccurs="0"/>
+			<xs:element name="templateName" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="customerInfos" type="tns:CustomerInfos"/>
+	<xs:complexType name="CustomerInfos">
+		<xs:sequence>
+			<xs:element ref="ns0:Header" minOccurs="0"/>
+			<xs:element name="customerId" type="xs:long" minOccurs="0"/>
+			<xs:element name="custCode" type="xs:string" minOccurs="0"/>
+			<xs:element name="msisdn" type="ns1:MsisdnType" minOccurs="0"/>
+			<xs:element name="contactType" type="tns:TypeContact" minOccurs="0"/>
+			<xs:element name="contactSeqno" type="xs:int" minOccurs="0"/>
+			<xs:element name="templateName" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="customerInfosResponse" type="tns:CustomerInfosResponse"/>
+	<xs:complexType name="CustomerInfosResponse">
+		<xs:sequence>
+			<xs:element name="Customer" type="tns:CustomerType" minOccurs="0"/>
+			<xs:sequence>
+				<xs:element name="ContactList" type="tns:ContactType" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ContactType">
+		<xs:sequence>
+			<xs:element name="title" type="ns1:TitleType" minOccurs="0"/>
+			<xs:element name="smsNo" type="xs:string" minOccurs="0"/>
+			<xs:element name="firstName" type="xs:string" minOccurs="0"/>
+			<xs:element name="lastName" type="xs:string" minOccurs="0"/>
+			<xs:element name="companyName" type="xs:string" minOccurs="0"/>
+			<xs:element name="street" type="xs:string" minOccurs="0"/>
+			<xs:element name="streetNbr" type="xs:string" minOccurs="0"/>
+			<xs:element name="zip" type="xs:string" minOccurs="0"/>
+			<xs:element name="city" type="xs:string" minOccurs="0"/>
+			<xs:element name="languageCode" type="xs:long" minOccurs="0"/>
+			<xs:element name="countryId" type="xs:long" minOccurs="0"/>
+			<xs:element name="adr1" type="xs:string" minOccurs="0"/>
+			<xs:element name="adr2" type="xs:string" minOccurs="0"/>
+			<xs:element name="adr3" type="xs:string" minOccurs="0"/>
+			<xs:element name="jobDescription" type="xs:string" minOccurs="0"/>
+			<xs:element name="phone1" type="xs:string" minOccurs="0"/>
+			<xs:element name="phoneArea1" type="xs:string" minOccurs="0"/>
+			<xs:element name="phone2" type="xs:string" minOccurs="0"/>
+			<xs:element name="phoneArea2" type="xs:string" minOccurs="0"/>
+			<xs:element name="taxNbr" type="xs:string" minOccurs="0"/>
+			<xs:element name="fax" type="xs:string" minOccurs="0"/>
+			<xs:element name="faxArea" type="xs:string" minOccurs="0"/>
+			<xs:element name="email" type="xs:string" minOccurs="0"/>
+			<xs:element name="state" type="xs:string" minOccurs="0"/>
+			<xs:element name="birthDate" type="xs:string" minOccurs="0"/>
+			<xs:element name="socialSecurityNbr" type="xs:string" minOccurs="0"/>
+			<xs:element name="sex" type="ns1:GenderType" minOccurs="0"/>
+			<xs:element name="custType" type="xs:string" minOccurs="0"/>
+			<xs:element name="maritalStatus" type="ns1:MaritalStatusType" minOccurs="0"/>
+			<xs:element name="nationality" type="xs:long" minOccurs="0"/>
+			<xs:element name="identityTypeCode" type="xs:long" minOccurs="0"/>
+			<xs:element name="identityValue" type="xs:string" minOccurs="0"/>
+			<xs:element name="adrForward" type="xs:boolean" minOccurs="0"/>
+			<xs:element name="adrUrgent" type="xs:boolean" minOccurs="0"/>
+			<xs:element name="adrValiddate" type="xs:dateTime" minOccurs="0"/>
+			<xs:element name="adrCompno" type="xs:string" minOccurs="0"/>
+			<xs:element name="adrRemark" type="xs:string" minOccurs="0"/>
+			<xs:element name="adrBill" type="xs:boolean" minOccurs="0"/>
+			<xs:element name="adrPrevious" type="xs:boolean" minOccurs="0"/>
+			<xs:element name="adrTemporary" type="xs:boolean" minOccurs="0"/>
+			<xs:element name="adrContact" type="xs:boolean" minOccurs="0"/>
+			<xs:element name="adrMagazine" type="xs:boolean" minOccurs="0"/>
+			<xs:element name="adrDirectory" type="xs:boolean" minOccurs="0"/>
+			<xs:element name="adrShipment" type="xs:boolean" minOccurs="0"/>
+			<xs:element name="adrUser" type="xs:boolean" minOccurs="0"/>
+			<xs:element name="adrSeqno" type="xs:integer" minOccurs="0"/>
+			<xs:element name="IdentityIssueDate" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CustomerType">
+		<xs:sequence>
+			<xs:element name="csIdHigh" type="xs:long" minOccurs="0"/>
+			<xs:element name="priceGroup" type="xs:string" minOccurs="0"/>
+			<xs:element name="termCode" type="xs:long" minOccurs="0"/>
+			<xs:element name="status" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:length value="1"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="reasonCode" type="xs:long" minOccurs="0"/>
+			<xs:element name="occRpCode" type="xs:long" minOccurs="0"/>
+			<xs:element name="password" type="xs:string" minOccurs="0"/>
+			<xs:element name="depositAmount" type="xs:double" minOccurs="0"/>
+			<xs:element name="creditLimit" type="xs:double" minOccurs="0"/>
+			<xs:element name="openAmountThr1" type="xs:long" minOccurs="0"/>
+			<xs:element name="openAmountThr2" type="xs:long" minOccurs="0"/>
+			<xs:element name="openAmountThr3" type="xs:long" minOccurs="0"/>
+			<xs:element name="billCycle" type="xs:string" minOccurs="0"/>
+			<xs:element name="dunning" type="xs:boolean" minOccurs="0"/>
+			<xs:element name="primaryCurrencyCode" type="xs:long" minOccurs="0"/>
+			<xs:element name="prepayment" type="xs:boolean" minOccurs="0"/>
+			<xs:element name="sumaddr" type="xs:string" minOccurs="0"/>
+			<xs:element name="codeDeveloper" type="xs:string" minOccurs="0"/>
+			<xs:element name="customerRemark1" type="xs:string" minOccurs="0"/>
+			<xs:element name="customerRemark2" type="xs:string" minOccurs="0"/>
+			<xs:element name="paymentType" type="xs:long" minOccurs="0"/>
+			<xs:element name="lbcDate" type="xs:dateTime" minOccurs="0"/>
+			<xs:element name="paymentResp" type="xs:boolean" minOccurs="0"/>
+			<xs:element name="contractResp" type="xs:boolean" minOccurs="0"/>
+			<xs:element name="isDummyCustomer" type="xs:boolean" minOccurs="0"/>
+			<xs:element name="customerSegment" type="xs:string" minOccurs="0"/>
+			<xs:element name="CustomertInfo" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Check" minOccurs="0" maxOccurs="20">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="CheckId">
+										<xs:simpleType>
+											<xs:restriction base="xs:integer">
+												<xs:minInclusive value="1"/>
+												<xs:maxInclusive value="20"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="CheckValue" type="xs:string"/>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="Combo" minOccurs="0" maxOccurs="20">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="ComboId">
+										<xs:simpleType>
+											<xs:restriction base="xs:integer">
+												<xs:minInclusive value="1"/>
+												<xs:maxInclusive value="20"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="ComboValue" type="xs:string"/>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="Text" minOccurs="0" maxOccurs="30">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="TextId">
+										<xs:simpleType>
+											<xs:restriction base="xs:integer">
+												<xs:minInclusive value="1"/>
+												<xs:maxInclusive value="30"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="TextValue" type="xs:string"/>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

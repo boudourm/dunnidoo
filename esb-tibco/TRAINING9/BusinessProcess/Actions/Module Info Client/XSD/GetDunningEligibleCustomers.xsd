@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="http://www.tibco.com/schemas/TRAINING9/SharedResources/Schemas/XSD/Schema.xsd"
+	 targetNamespace="http://www.tibco.com/schemas/TRAINING9/SharedResources/Schemas/XSD/Schema.xsd"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:element name="GetDunningEligibleCystomersResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="customerId" type="xs:integer" minOccurs="0"/>
+				<xs:element name="custCode" type="xs:string" minOccurs="0"/>
+				<xs:element name="segment" type="xs:string" minOccurs="0"/>
+				<xs:element name="openAmount" type="xs:float" minOccurs="0"/>
+				<xs:element name="invoiceAmount" type="xs:integer" minOccurs="0"/>
+				<xs:element name="dueDate" type="xs:dateTime" minOccurs="0"/>
+				<xs:element name="lbcDate" type="xs:dateTime" minOccurs="0"/>
+				<xs:element name="msisdn" type="xs:string" minOccurs="0"/>
+				<xs:element name="ccEmail" type="xs:string" minOccurs="0"/>
+				<xs:element name="cclName" type="xs:string" minOccurs="0"/>
+				<xs:element name="ccfName" type="xs:string" minOccurs="0"/>
+				<xs:element name="raisonSociale" type="xs:string" minOccurs="0"/>
+				<xs:element name="coId" type="xs:integer" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="DunningEligibleCustomersList">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Customers" minOccurs="0" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="customerId" type="xs:integer" minOccurs="0"/>
+							<xs:element name="custCode" type="xs:normalizedString" minOccurs="0"/>
+							<xs:element name="segment" type="xs:string" minOccurs="0"/>
+							<xs:element name="openAmount" type="xs:float" minOccurs="0"/>
+							<xs:element name="invoiceAmount" type="xs:integer" minOccurs="0"/>
+							<xs:element name="dueDate" type="xs:dateTime" minOccurs="0"/>
+							<xs:element name="lbcDate" type="xs:dateTime" minOccurs="0"/>
+							<xs:element name="msisdn" type="xs:string" minOccurs="0"/>
+							<xs:element name="ccEmail" type="xs:string" minOccurs="0"/>
+							<xs:element name="cclName" type="xs:string" minOccurs="0"/>
+							<xs:element name="ccfName" type="xs:string" minOccurs="0"/>
+							<xs:element name="raisonSociale" type="xs:string" minOccurs="0"/>
+							<xs:element name="coId" type="xs:integer" minOccurs="0"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="DunningEligibleCustomersInput">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="parameter" type="xs:integer"/>
+				<xs:element name="customerId" type="xs:string" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

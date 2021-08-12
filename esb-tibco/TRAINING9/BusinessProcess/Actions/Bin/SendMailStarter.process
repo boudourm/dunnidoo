@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:pfx="http://www.tibco.com/schemas/TRAINING/SharedResources/Schemas/XSD/Schema.xsd3">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://www.tibco.com/schemas/TRAINING/SharedResources/Schemas/XSD/Schema.xsd3" schemaLocation="/SharedResources/Schemas/XSD/SmtpMailRequest.xsd"/>
+    <pd:name>BusinessProcess/Actions/Bin/SendMailStarter.process</pd:name>
+    <pd:startName>SendMailStarter</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="SendMailStarter">
+        <pd:type>com.tibco.plugin.jms.JMSQueueEventSource</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueEventSource</pd:resourceType>
+        <pd:x>118</pd:x>
+        <pd:y>111</pd:y>
+        <config>
+            <PermittedMessageType>XML Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>DUNNIDOO_TEST_QUEUE</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <OutDataxsdString ref="pfx:SmtpMailRequest"/>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>770</pd:endX>
+    <pd:endY>114</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1522698429221</pd:targetNamespace>
+    <pd:activity name="SendMail">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>363</pd:x>
+        <pd:y>113</pd:y>
+        <config>
+            <processName>/BusinessProcess/Actions/Bin/SendMail.process</processName>
+        </config>
+        <pd:inputBindings>
+            <pfx:SmtpMailRequest>
+                <pfx:to>
+                    <xsl:value-of select="$SendMailStarter/ns:ActivityOutput/Body/pfx:SmtpMailRequest/pfx:to"/>
+                </pfx:to>
+                <pfx:from>
+                    <xsl:value-of select="$SendMailStarter/ns:ActivityOutput/Body/pfx:SmtpMailRequest/pfx:from"/>
+                </pfx:from>
+                <xsl:if test="$SendMailStarter/ns:ActivityOutput/Body/pfx:SmtpMailRequest/pfx:cc">
+                    <pfx:cc>
+                        <xsl:value-of select="$SendMailStarter/ns:ActivityOutput/Body/pfx:SmtpMailRequest/pfx:cc"/>
+                    </pfx:cc>
+                </xsl:if>
+                <xsl:if test="$SendMailStarter/ns:ActivityOutput/Body/pfx:SmtpMailRequest/pfx:bcc">
+                    <pfx:bcc>
+                        <xsl:value-of select="$SendMailStarter/ns:ActivityOutput/Body/pfx:SmtpMailRequest/pfx:bcc"/>
+                    </pfx:bcc>
+                </xsl:if>
+                <pfx:subject>
+                    <xsl:value-of select="$SendMailStarter/ns:ActivityOutput/Body/pfx:SmtpMailRequest/pfx:subject"/>
+                </pfx:subject>
+                <xsl:if test="$SendMailStarter/ns:ActivityOutput/Body/pfx:SmtpMailRequest/pfx:replyT">
+                    <pfx:replyT>
+                        <xsl:value-of select="$SendMailStarter/ns:ActivityOutput/Body/pfx:SmtpMailRequest/pfx:replyT"/>
+                    </pfx:replyT>
+                </xsl:if>
+                <pfx:body>
+                    <xsl:value-of select="$SendMailStarter/ns:ActivityOutput/Body/pfx:SmtpMailRequest/pfx:body"/>
+                </pfx:body>
+                <xsl:copy-of select="$SendMailStarter/ns:ActivityOutput/Body/pfx:SmtpMailRequest/pfx:mimeEnveloppe"/>
+            </pfx:SmtpMailRequest>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>SendMailStarter</pd:from>
+        <pd:to>SendMail</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SendMail</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

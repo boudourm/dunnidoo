@@ -1,0 +1,13 @@
+SMS
+
+$GetVariable/pfx3:LOAD_DUNNING_NOTIFICATION_LIST/pfx3:LOAD_DUNNING_NOTIFICATION [ 
+pfx3:NOTIFICATION_NAME = 
+$Start/pfx2:DunningNotification/pfx2:NOTIFICATION_NAME   ]/pfx3:TYPE = 
+$_globalVariables/pfx4:GlobalVariables/ProcessConfig/DunningNotificationProcess/SmsType
+
+
+MAIL
+
+$GetVariable/pfx3:LOAD_DUNNING_NOTIFICATION_LIST/pfx3:LOAD_DUNNING_NOTIFICATION [
+ pfx3:NOTIFICATION_NAME  =  $Start/pfx2:DunningNotification/pfx2:NOTIFICATION_NAME ] /pfx3:TYPE = 
+$_globalVariables/pfx4:GlobalVariables/ProcessConfig/DunningNotificationProcess/MailType

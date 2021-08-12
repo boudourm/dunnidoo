@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:ns12="http://www.ooredoo.dz/common/nJAMSTemplate" xmlns:ns5="http://www.ooredoo.dz/osp/updateJobStatus" xmlns:pfx="http://www.ooredoo.dz/ws/contract/setContractAndServices" xmlns:ns2="www.tibco.com/plugin/Sleep" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.ooredoo.dz/common/header/v1" xmlns:ns4="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns3="http://www.tibco.com/pe/EngineTypes" xmlns:pfx5="http://www.ooredoo.dz/ws/billing/setOcc" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx4="http://www.ooredoo.dz/ws/contract/changeContractCustomer" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://www.ooredoo.dz/ws/resource/changeContractMsisdn" xmlns:pfx2="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:pfx7="http://www.tibco.com/schemas/TRAINING/SharedResources/Schemas/XSD/Schema.xsd2" xmlns:pfx6="http://www.ooredoo.dz/ws/offer/refill">
+    <xsd:import namespace="http://www.ooredoo.dz/ws/contract/setContractAndServices" schemaLocation="/SharedResources/Schemas/XSD/Batch/setContractAndServices.xsd"/>
+    <xsd:import namespace="http://www.ooredoo.dz/ws/resource/changeContractMsisdn" schemaLocation="/SharedResources/Schemas/XSD/Batch/ChangeContractMsisdn.xsd"/>
+    <xsd:import namespace="http://www.ooredoo.dz/ws/contract/changeContractCustomer" schemaLocation="/SharedResources/Schemas/XSD/Batch/ChangeContractCustomer.xsd"/>
+    <xsd:import namespace="http://www.ooredoo.dz/ws/billing/setOcc" schemaLocation="/SharedResources/Schemas/XSD/Batch/SetOcc.xsd"/>
+    <xsd:import namespace="http://www.ooredoo.dz/ws/offer/refill" schemaLocation="/SharedResources/Schemas/XSD/Batch/Refill.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/schemas/TRAINING/SharedResources/Schemas/XSD/Schema.xsd2" schemaLocation="/SharedResources/Schemas/XSD/DunningActions.xsd"/>
+    <pd:name>BusinessProcess/Actions/BridgeQueueDunning.process</pd:name>
+    <pd:startName>Bridge Queue Receiver</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="Bridge Queue Receiver">
+        <pd:type>com.tibco.plugin.jms.JMSQueueEventSource</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueEventSource</pd:resourceType>
+        <pd:x>75</pd:x>
+        <pd:y>86</pd:y>
+        <config>
+            <PermittedMessageType>Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>2</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>%%ProcessConfig/Batch/BridgeQueueDunning%%%%ProcessConfig/Batch/AiguillerBridgeQueue/QueueSuffixe%%</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/SharedResources/Connections/JMS/JMS_Tech_Connection.sharedjmscon</ConnectionReference>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>1041</pd:endX>
+    <pd:endY>78</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1415267799305</pd:targetNamespace>
+    <pd:activity name="CallUpdateStatusSuccess">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>729</pd:x>
+        <pd:y>78</pd:y>
+        <config>
+            <processName>/BusinessProcess/LogicalProcesses (BILLING)/CallUpdateStatus.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns5:updateJobStatusRequest>
+                <xsl:for-each select="$Parse-request-Dunning/pfx7:DunningAction/pfx7:Header">
+                    <ns1:Header>
+                        <xsl:if test="pfx7:TransactionID">
+                            <ns1:TransactionID>
+                                <xsl:value-of select="pfx7:TransactionID"/>
+                            </ns1:TransactionID>
+                        </xsl:if>
+                        <xsl:if test="pfx7:TimeStamp">
+                            <ns1:TimeStamp>
+                                <xsl:value-of select="pfx7:TimeStamp"/>
+                            </ns1:TimeStamp>
+                        </xsl:if>
+                        <xsl:if test="pfx7:UserName">
+                            <ns1:UserName>
+                                <xsl:value-of select="pfx7:UserName"/>
+                            </ns1:UserName>
+                        </xsl:if>
+                        <xsl:for-each select="pfx7:NotificationParam">
+                            <ns1:NotificationParam>
+                                <ns1:NotificationTemplate>
+                                    <xsl:value-of select="pfx7:NotificationTemplate"/>
+                                </ns1:NotificationTemplate>
+                                <ns1:Msisdn>
+                                    <xsl:value-of select="pfx7:Msisdn"/>
+                                </ns1:Msisdn>
+                            </ns1:NotificationParam>
+                        </xsl:for-each>
+                        <xsl:if test="pfx7:Msisdn">
+                            <ns1:Msisdn>
+                                <xsl:value-of select="pfx7:Msisdn"/>
+                            </ns1:Msisdn>
+                        </xsl:if>
+                        <xsl:if test="pfx7:Property1">
+                            <ns1:Property1>
+                                <xsl:value-of select="pfx7:Property1"/>
+                            </ns1:Property1>
+                        </xsl:if>
+                        <xsl:if test="pfx7:Property2">
+                            <ns1:Property2>
+                                <xsl:value-of select="pfx7:Property2"/>
+                            </ns1:Property2>
+                        </xsl:if>
+                    </ns1:Header>
+                </xsl:for-each>
+                <xsl:if test="$Parse-request-Dunning/pfx7:DunningAction/pfx7:Header/pfx7:TransactionID">
+                    <ns5:TransactionID>
+                        <xsl:value-of select="$Parse-request-Dunning/pfx7:DunningAction/pfx7:Header/pfx7:TransactionID"/>
+                    </ns5:TransactionID>
+                </xsl:if>
+                <ns5:Status>
+                    <xsl:value-of select="'SUBMITED'"/>
+                </ns5:Status>
+            </ns5:updateJobStatusRequest>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Catch">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>544</pd:x>
+        <pd:y>159</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Confirm Error">
+        <pd:type>com.tibco.pe.core.ConfirmActivity</pd:type>
+        <pd:resourceType>activity.confirm</pd:resourceType>
+        <pd:x>951</pd:x>
+        <pd:y>159</pd:y>
+        <config>
+            <ConfirmEvent>Bridge Queue Receiver</ConfirmEvent>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Confirm success">
+        <pd:type>com.tibco.pe.core.ConfirmActivity</pd:type>
+        <pd:resourceType>activity.confirm</pd:resourceType>
+        <pd:x>614</pd:x>
+        <pd:y>78</pd:y>
+        <config>
+            <ConfirmEvent>Bridge Queue Receiver</ConfirmEvent>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Execution Delay">
+        <pd:type>com.tibco.plugin.timer.SleepActivity</pd:type>
+        <pd:resourceType>ae.activities.sleep</pd:resourceType>
+        <pd:x>395</pd:x>
+        <pd:y>78</pd:y>
+        <config/>
+        <pd:inputBindings>
+            <ns2:SleepInputSchema>
+                <IntervalInMillisec>
+                    <xsl:value-of select="1000"/>
+                </IntervalInMillisec>
+            </ns2:SleepInputSchema>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Log End">
+        <pd:type>com.tibco.pe.core.WriteToLogActivity</pd:type>
+        <pd:resourceType>ae.activities.log</pd:resourceType>
+        <pd:x>839</pd:x>
+        <pd:y>78</pd:y>
+        <config>
+            <role>User</role>
+        </config>
+        <pd:inputBindings>
+            <pfx2:ActivityInput>
+                <message>
+                    <xsl:value-of select="$Send-to-DunningActions/ns:aEmptyOutputClass/ns:MessageID"/>
+                </message>
+                <msgCode>
+                    <xsl:value-of select="'Bridge Queue Dunning End'"/>
+                </msgCode>
+            </pfx2:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Log Error">
+        <pd:type>com.tibco.pe.core.WriteToLogActivity</pd:type>
+        <pd:resourceType>ae.activities.log</pd:resourceType>
+        <pd:x>672</pd:x>
+        <pd:y>159</pd:y>
+        <config>
+            <role>Error</role>
+        </config>
+        <pd:inputBindings>
+            <pfx2:ActivityInput>
+                <message>
+                    <xsl:value-of select="$_error/ns3:ErrorReport/StackTrace"/>
+                </message>
+                <xsl:if test="$_error/ns3:ErrorReport/MsgCode">
+                    <msgCode>
+                        <xsl:value-of select="$_error/ns3:ErrorReport/MsgCode"/>
+                    </msgCode>
+                </xsl:if>
+            </pfx2:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Log start">
+        <pd:type>com.tibco.pe.core.WriteToLogActivity</pd:type>
+        <pd:resourceType>ae.activities.log</pd:resourceType>
+        <pd:x>175</pd:x>
+        <pd:y>78</pd:y>
+        <config>
+            <role>Infos</role>
+        </config>
+        <pd:inputBindings>
+            <pfx2:ActivityInput>
+                <message>
+                    <xsl:value-of select="$Bridge-Queue-Receiver/ns:ActivityOutput/Body"/>
+                </message>
+                <msgCode>
+                    <xsl:value-of select="'Bridge Queue Dunning  start'"/>
+                </msgCode>
+            </pfx2:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="LogException">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>810</pd:x>
+        <pd:y>159</pd:y>
+        <config>
+            <processName>/Utility/Monitoring/LogError.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns12:Template>
+                <ns12:EventMsgCode>
+                    <xsl:value-of select="$_error/ns3:ErrorReport/MsgCode"/>
+                </ns12:EventMsgCode>
+                <ns12:EventMsg>
+                    <xsl:value-of select="$_error/ns3:ErrorReport/Msg"/>
+                </ns12:EventMsg>
+                <ns12:StackTrace>
+                    <xsl:value-of select="$_error/ns3:ErrorReport/StackTrace"/>
+                </ns12:StackTrace>
+            </ns12:Template>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="LogInfo End">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>932</pd:x>
+        <pd:y>78</pd:y>
+        <config>
+            <processName>/Utility/Monitoring/LogInfo.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns12:Template>
+                <ns12:EventMsgCode>
+                    <xsl:value-of select="'End Bridge Queue Dunning'"/>
+                </ns12:EventMsgCode>
+                <ns12:EventMsg>
+                    <xsl:value-of select="'End Bridge Queue Dunning'"/>
+                </ns12:EventMsg>
+                <ns12:Payload>
+                    <xsl:value-of select="tib:render-xml($Send-to-DunningActions/ns:aEmptyOutputClass)"/>
+                </ns12:Payload>
+                <ns12:Attributes>
+                    <ns12:Attribute>
+                        <ns12:Name>
+                            <xsl:value-of select="'Queue Message'"/>
+                        </ns12:Name>
+                        <ns12:Value>
+                            <xsl:value-of select="$Send-to-DunningActions/ns:aEmptyOutputClass/ns:MessageID"/>
+                        </ns12:Value>
+                    </ns12:Attribute>
+                </ns12:Attributes>
+            </ns12:Template>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Parse request Dunning">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>282</pd:x>
+        <pd:y>86</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>true</validateOutput>
+            <term ref="pfx7:DunningAction"/>
+        </config>
+        <pd:inputBindings>
+            <xmlString>
+                <xsl:value-of select="$Bridge-Queue-Receiver/ns:ActivityOutput/Body"/>
+            </xmlString>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Send to DunningActions">
+        <pd:type>com.tibco.plugin.jms.JMSQueueSendActivity</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueSendActivity</pd:resourceType>
+        <pd:x>507</pd:x>
+        <pd:y>86</pd:y>
+        <config>
+            <PermittedMessageType>Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>%%ProcessConfig/Batch/BridgeQueueDunning%%</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/SharedResources/Connections/JMS/JMS_Tech_Connection.sharedjmscon</ConnectionReference>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <Body>
+                    <xsl:value-of select="$Bridge-Queue-Receiver/ns:ActivityOutput/Body"/>
+                </Body>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Bridge Queue Receiver</pd:from>
+        <pd:to>Log start</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Execution Delay</pd:from>
+        <pd:to>Send to DunningActions</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Send to DunningActions</pd:from>
+        <pd:to>Confirm success</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch</pd:from>
+        <pd:to>Log Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log Error</pd:from>
+        <pd:to>LogException</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Confirm Error</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log start</pd:from>
+        <pd:to>Parse request Dunning</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log End</pd:from>
+        <pd:to>LogInfo End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogInfo End</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogException</pd:from>
+        <pd:to>Confirm Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse request Dunning</pd:from>
+        <pd:to>Execution Delay</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Confirm success</pd:from>
+        <pd:to>CallUpdateStatusSuccess</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallUpdateStatusSuccess</pd:from>
+        <pd:to>Log End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

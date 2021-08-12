@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:ns2="http://www.tibco.com/pe/DeployedVarsType" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.ooredoo.dz/common/header/v1" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://www.ooredoo.dz/ws/billing/getInvoicesSummary" xmlns:pfx2="http://www.ooredoo.dz/common/exception/v1" xmlns:ns12="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:ns13="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:pfx="http://www.ooredoo.dz/bscsdb/getUnpaidInvoices">
+    <xsd:import namespace="http://www.ooredoo.dz/bscsdb/getUnpaidInvoices" schemaLocation="/SharedResources/Schemas/XSD/BSCSDB/GetUnpaidInvoices.xsd"/>
+    <xsd:import namespace="http://www.ooredoo.dz/ws/billing/getInvoicesSummary" schemaLocation="/SharedResources/Schemas/XSD/BILLING/GetInvoicesSummary.xsd"/>
+    <xsd:import namespace="http://www.ooredoo.dz/common/exception/v1" schemaLocation="/SharedResources/Schemas/XSD/COMMON/Exception.xsd"/>
+    <pd:name>BusinessProcess/LogicalProcesses/BSCSDB/CallGet Unpaid Invoices.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx:getUnpaidInvoicesRequest"/>
+    <pd:startX>150</pd:startX>
+    <pd:startY>57</pd:startY>
+    <pd:returnBindings>
+        <xsl:copy-of select="$CallGet-Unpaid-Invoices-Requestor/ns:ActivityOutput/Body/root/pfx:getUnpaidInvoicesResponse"/>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx:getUnpaidInvoicesResponse"/>
+    <pd:endX>450</pd:endX>
+    <pd:endY>57</pd:endY>
+    <pd:errorSchemas>
+        <Exception ref="pfx2:Exception"/>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1417614494073</pd:targetNamespace>
+    <pd:activity name="CallGet Unpaid Invoices Requestor">
+        <pd:type>com.tibco.plugin.jms.JMSQueueRequestReplyActivity</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueRequestReplyActivity</pd:resourceType>
+        <pd:x>288</pd:x>
+        <pd:y>65</pd:y>
+        <config>
+            <PermittedMessageType>XML Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>%%ExternalApplications/BSCSDB/JMS/GetUnpaidInvoices%%</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/SharedResources/Connections/JMS/JMS_Tech_Connection.sharedjmscon</ConnectionReference>
+            <InDataxsdString ref="pfx:getUnpaidInvoicesRequest"/>
+            <OutDataxsdString>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element ref="pfx:getUnpaidInvoicesResponse" minOccurs="0"/>
+                            <xsd:element ref="pfx2:Exception" minOccurs="0"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </OutDataxsdString>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <requestTimeout>
+                    <xsl:value-of select="$_globalVariables/ns2:GlobalVariables/Application/JMS/TimeOutRequestorJDBC"/>
+                </requestTimeout>
+                <Body>
+                    <xsl:copy-of select="$Start/pfx:getUnpaidInvoicesRequest"/>
+                </Body>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Generate Error">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>451</pd:x>
+        <pd:y>188</pd:y>
+        <config>
+            <faultName>Exception</faultName>
+        </config>
+        <pd:inputBindings>
+            <ns13:ActivityInput>
+                <xsl:if test="$CallGet-Unpaid-Invoices-Requestor/ns:ActivityOutput/Body/root/pfx2:Exception/pfx2:Msg">
+                    <message>
+                        <xsl:value-of select="$CallGet-Unpaid-Invoices-Requestor/ns:ActivityOutput/Body/root/pfx2:Exception/pfx2:Msg"/>
+                    </message>
+                </xsl:if>
+                <xsl:if test="$CallGet-Unpaid-Invoices-Requestor/ns:ActivityOutput/Body/root/pfx2:Exception/pfx2:MsgCode">
+                    <messageCode>
+                        <xsl:value-of select="$CallGet-Unpaid-Invoices-Requestor/ns:ActivityOutput/Body/root/pfx2:Exception/pfx2:MsgCode"/>
+                    </messageCode>
+                </xsl:if>
+                <data>
+                    <xsl:copy-of select="$CallGet-Unpaid-Invoices-Requestor/ns:ActivityOutput/Body/root/pfx2:Exception"/>
+                </data>
+            </ns13:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="LogException">
+        <pd:type>com.tibco.pe.core.WriteToLogActivity</pd:type>
+        <pd:resourceType>ae.activities.log</pd:resourceType>
+        <pd:x>287</pd:x>
+        <pd:y>195</pd:y>
+        <config>
+            <role>Error</role>
+        </config>
+        <pd:inputBindings>
+            <ns12:ActivityInput>
+                <message>
+                    <xsl:value-of select="tib:render-xml($CallGet-Unpaid-Invoices-Requestor/ns:ActivityOutput/Body/root/pfx2:Exception)"/>
+                </message>
+                <msgCode>
+                    <xsl:value-of select="'BW - CallGet Unpaid Invoices Exception'"/>
+                </msgCode>
+            </ns12:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>CallGet Unpaid Invoices Requestor</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallGet Unpaid Invoices Requestor</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CallGet Unpaid Invoices Requestor</pd:from>
+        <pd:to>LogException</pd:to>
+        <pd:xpathDescription>error</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$CallGet-Unpaid-Invoices-Requestor/ns:ActivityOutput/Body/root/pfx2:Exception/pfx2:StackTrace!='' or $CallGet-Unpaid-Invoices-Requestor/ns:ActivityOutput/Body/root/pfx2:Exception/pfx2:Data!=''</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LogException</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

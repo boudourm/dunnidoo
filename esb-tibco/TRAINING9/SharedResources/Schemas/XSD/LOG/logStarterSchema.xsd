@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns:tns="http://www.ooredoo.dz/log/logStarterSchema"
+	 xmlns:ns0="http://www.ooredoo.dz/common/header/v1"
+	 targetNamespace="http://www.ooredoo.dz/log/logStarterSchema"
+	 elementFormDefault="unqualified"
+	 attributeFormDefault="unqualified">
+	<xs:import namespace="http://www.ooredoo.dz/common/header/v1" schemaLocation="../COMMON/Header.xsd"/>
+	<xs:element name="putStarterRequest" type="tns:PutStarterRequest"/>
+	<xs:complexType name="PutStarterRequest">
+		<xs:sequence>
+			<xs:element ref="ns0:Header" minOccurs="0"/>
+			<xs:element name="TRANSACTION_ID" type="xs:string" minOccurs="0"/>
+			<xs:element name="STATUS" type="xs:string" minOccurs="0"/>
+			<xs:element name="ADDITIONAL_INPUT" type="xs:string" minOccurs="0"/>
+			<xs:element name="MAIN_INPUT" type="xs:string" minOccurs="0"/>
+			<xs:element name="REQUESTXML" type="xs:string" minOccurs="0"/>
+			<xs:element name="PROCESS_SERVICES" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="updateStarterRequest" type="tns:UpdateStarterRequest"/>
+	<xs:complexType name="UpdateStarterRequest">
+		<xs:sequence>
+			<xs:element ref="ns0:Header" minOccurs="0"/>
+			<xs:element name="MSISDN" type="xs:string"/>
+			<xs:element name="PROCESS_NAME" type="xs:string"/>
+			<xs:element name="STATUS" type="xs:string"/>
+			<xs:element name="Additionnal_Cond" type="xs:string" minOccurs="0"/>
+			<xs:element name="Update_Info" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="checkStarterRequest" type="tns:CheckStarterRequest"/>
+	<xs:complexType name="CheckStarterRequest">
+		<xs:sequence>
+			<xs:element ref="ns0:Header" minOccurs="0"/>
+			<xs:element name="MSISDN" type="xs:string"/>
+			<xs:element name="PROCESS_NAME" type="xs:string" minOccurs="0"/>
+			<xs:element name="Additionnal_Cond" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="checkStarterResponse" type="tns:CheckStarterResponse"/>
+	<xs:complexType name="CheckStarterResponse">
+		<xs:sequence>
+			<xs:element name="EXIST" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

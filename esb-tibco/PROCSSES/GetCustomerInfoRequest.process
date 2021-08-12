@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx3="http://www.ooredoo.dz/ws/party/customerInfos" xmlns:pfx2="http://www.tibco.com/schemas/TRAINING/SharedResources/Schemas/XSD/Schema.xsd4" xmlns:pfx="http://www.ooredoo.dz/osp/notification">
+    <xsd:import namespace="http://www.ooredoo.dz/osp/notification" schemaLocation="/SharedResources/Schemas/XSD/HttpSmsRequest.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/schemas/TRAINING/SharedResources/Schemas/XSD/Schema.xsd4" schemaLocation="/SharedResources/Schemas/XSD/NotificationResponse.xsd"/>
+    <xsd:import namespace="http://www.ooredoo.dz/ws/party/customerInfos" schemaLocation="/SharedResources/Schemas/XSD/CustomerInfos.xsd"/>
+    <pd:name>BusinessProcess/Actions/GetCustomerInfoRequest.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx3:customerInfos"/>
+    <pd:startX>134</pd:startX>
+    <pd:startY>112</pd:startY>
+    <pd:returnBindings>
+        <xsl:copy-of select="$GetCustomerAndCintactsRequest/ns:ActivityOutput/Body/pfx3:customerInfosResponse"/>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx3:customerInfosResponse"/>
+    <pd:endX>548</pd:endX>
+    <pd:endY>112</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1522147765702</pd:targetNamespace>
+    <pd:activity name="GetCustomerAndCintactsRequest">
+        <pd:type>com.tibco.plugin.jms.JMSQueueRequestReplyActivity</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueRequestReplyActivity</pd:resourceType>
+        <pd:x>335</pd:x>
+        <pd:y>112</pd:y>
+        <config>
+            <PermittedMessageType>XML Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>%%ProcessConfig/SendSmsStarter/sendSms%%</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/SharedResources/Connections/JMS/JMS_Tech_Connection_SMS.sharedjmscon</ConnectionReference>
+            <InDataxsdString ref="pfx3:customerInfos"/>
+            <OutDataxsdString ref="pfx3:customerInfosResponse"/>
+        </config>
+        <pd:inputBindings>
+            <ns:ActivityInput>
+                <Body>
+                    <xsl:copy-of select="$Start/pfx3:customerInfos"/>
+                </Body>
+            </ns:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>GetCustomerAndCintactsRequest</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>GetCustomerAndCintactsRequest</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

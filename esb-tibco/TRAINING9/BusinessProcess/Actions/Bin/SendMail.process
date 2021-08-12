@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/mail" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx3="http://www.tibco.com/schemas/TRAINING/SharedResources/Schemas/XSD/Schema.xsd3" xmlns:pfx2="http://xmlns.tibco.com/body" xmlns:pfx="http://www.tibco.com/namespaces/tnt/plugins/file/v2">
+    <xsd:import namespace="http://www.tibco.com/schemas/TRAINING/SharedResources/Schemas/XSD/Schema.xsd3" schemaLocation="/SharedResources/Schemas/XSD/SmtpMailRequest.xsd"/>
+    <pd:name>BusinessProcess/Actions/Bin/SendMail.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx3:SmtpMailRequest"/>
+    <pd:startX>29</pd:startX>
+    <pd:startY>129</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>448</pd:endX>
+    <pd:endY>129</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1521123114867</pd:targetNamespace>
+    <pd:activity name="Send Mail">
+        <pd:type>com.tibco.plugin.mail.MailPubActivity</pd:type>
+        <pd:resourceType>ae.activities.MailActivityResource</pd:resourceType>
+        <pd:x>319</pd:x>
+        <pd:y>128</pd:y>
+        <config>
+            <newMimeSupport>true</newMimeSupport>
+            <inputOutputVersion>5.2.0</inputOutputVersion>
+            <host>smtprelay.wataniya-algerie.com</host>
+            <authenticate>false</authenticate>
+            <username/>
+            <password/>
+            <InputHeaders>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="Content-Type" type="xsd:string" minOccurs="0"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </InputHeaders>
+        </config>
+        <pd:inputBindings>
+            <ns2:mailActivityInput>
+                <from>
+                    <xsl:value-of select="$Start/pfx3:SmtpMailRequest/pfx3:from"/>
+                </from>
+                <to>
+                    <xsl:value-of select="$Start/pfx3:SmtpMailRequest/pfx3:to"/>
+                </to>
+                <xsl:if test="$Start/pfx3:SmtpMailRequest/pfx3:cc">
+                    <cc>
+                        <xsl:value-of select="$Start/pfx3:SmtpMailRequest/pfx3:cc"/>
+                    </cc>
+                </xsl:if>
+                <xsl:if test="$Start/pfx3:SmtpMailRequest/pfx3:bcc">
+                    <bcc>
+                        <xsl:value-of select="$Start/pfx3:SmtpMailRequest/pfx3:bcc"/>
+                    </bcc>
+                </xsl:if>
+                <xsl:if test="$Start/pfx3:SmtpMailRequest/pfx3:replyT">
+                    <replyTo>
+                        <xsl:value-of select="$Start/pfx3:SmtpMailRequest/pfx3:replyT"/>
+                    </replyTo>
+                </xsl:if>
+                <subject>
+                    <xsl:value-of select="$Start/pfx3:SmtpMailRequest/pfx3:subject"/>
+                </subject>
+                <pfx2:bodyElement>
+                    <bodyText>
+                        <xsl:value-of select="$Start/pfx3:SmtpMailRequest/pfx3:body"/>
+                    </bodyText>
+                </pfx2:bodyElement>
+            </ns2:mailActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Send Mail</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Send Mail</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>
